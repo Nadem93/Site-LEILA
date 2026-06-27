@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Congés — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout"><div class="main">
+  <header class="header">
+    <div class="header-info"><div class="header-title">Congés</div></div>
+    <div class="header-right"><button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button></div>
+  </header>
+  <main class="content" style="max-width:1200px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <div>
+        <div style="font-weight:700;font-size:1rem">🗓 Demandes de congés</div>
+        <div style="font-size:.78rem;color:var(--muted)">Congés, RTT, arrêts maladie</div>
+      </div>
+      <button class="btn btn-primary" onclick="openDemandeConge()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouvelle demande
+      </button>
+    </div>
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;gap:1rem;padding:.75rem 1rem">
+        <div style="flex:1;text-align:center"><div id="cgStatEnAttente" style="font-weight:800;font-size:1.4rem;color:#d97706">0</div><div style="font-size:.72rem;color:var(--muted)">En attente</div></div>
+        <div style="flex:1;text-align:center"><div id="cgStatAcceptes" style="font-weight:800;font-size:1.4rem;color:#16a34a">0</div><div style="font-size:.72rem;color:var(--muted)">Acceptés</div></div>
+        <div style="flex:1;text-align:center"><div id="cgStatRefuses" style="font-weight:800;font-size:1.4rem;color:#ef4444">0</div><div style="font-size:.72rem;color:var(--muted)">Refusés</div></div>
+      </div>
+    </div>
+    <div class="card" id="cgPendingCard" style="margin-bottom:1rem;display:none;border:1px solid #d9770640">
+      <div style="padding:.75rem 1rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.9rem;color:#d97706">⏳ Demandes en attente de validation</div>
+      <div id="cgPendingList" style="padding:.5rem 1rem"></div>
+    </div>
+    <div style="display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
+      <select id="cgFiltreStatut" class="form-input" style="width:160px" onchange="renderConges()"><option value="">Tous</option><option value="en_attente">En attente</option><option value="accepte">Acceptés</option><option value="refuse">Refusés</option></select>
+      <select id="cgFiltreEmploye" class="form-input" style="width:200px" onchange="renderConges()"><option value="">Tous</option></select>
+    </div>
+    <div id="cgList"><div class="empty" style="padding:3rem;text-align:center"><p>Aucune demande de congés</p></div></div>
+  </main>
+</div></div>
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/conges-supabase.js"></script>
+<script src="js/conges-card.js"></script>
+<script src="js/conges.js"></script>
+<script>Auth.requireAuth();</script>
+</body></html>

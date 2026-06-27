@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Tableau de bord RH — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Tableau de bord RH</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <a href="pilotage.html" class="btn btn-ghost btn-sm">Portail</a>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:1150px">
+      <div id="rhStats" class="grid grid-4" style="margin-bottom:1.5rem"></div>
+
+      <div class="grid grid-2" style="gap:1rem;align-items:stretch">
+        <div class="card">
+          <div class="card-header"><span class="card-title">📑 Contrats — échéances</span><a href="contrats.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a></div>
+          <div class="card-body" id="rhContrats" style="padding:0"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">🩺 Absences en cours</span><a href="absences.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a></div>
+          <div class="card-body" id="rhAbsences" style="padding:0"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1rem;align-items:stretch;margin-top:1rem">
+        <div class="card">
+          <div class="card-header"><span class="card-title">🏖️ Congés en attente</span><a href="conges.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a></div>
+          <div class="card-body" id="rhConges" style="padding:0"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">🧑‍💼 Entretiens à planifier</span><a href="entretiens.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a></div>
+          <div class="card-body" id="rhEntretiens" style="padding:0"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:1rem;align-items:stretch;margin-top:1rem">
+        <div class="card">
+          <div class="card-header"><span class="card-title">🎓 Formations à venir</span><a href="formations.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a></div>
+          <div class="card-body" id="rhFormations" style="padding:0"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">📋 Pipeline recrutement</span><a href="recrutement.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a></div>
+          <div class="card-body" id="rhRecrutement" style="padding:0"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/contrats-supabase.js"></script>
+<script src="js/absences-supabase.js"></script>
+<script src="js/conges-supabase.js"></script>
+<script src="js/entretiens-supabase.js"></script>
+<script src="js/formations-supabase.js"></script>
+<script src="js/candidats-supabase.js"></script>
+<script src="js/rh-dashboard.js"></script>
+</body>
+</html>

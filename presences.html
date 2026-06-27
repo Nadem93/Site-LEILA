@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+  <title>Présences — FTR</title>
+  <link rel="stylesheet" href="css/style.css?v=2"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Présences</div></div>
+    </header>
+
+    <main class="content">
+      <!-- Stats du jour -->
+      <div class="grid grid-4" style="margin-bottom:1.5rem">
+        <div class="stat-card" style="background:linear-gradient(135deg,#10b98125,#34d39915)"><div class="stat-card-top"><span class="stat-label">Présents</span><div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div></div><div class="stat-num" id="countPresent">0</div></div>
+        <div class="stat-card" style="background:linear-gradient(135deg,#ef444425,#fca5a515)"><div class="stat-card-top"><span class="stat-label">Absents</span><div class="stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div></div><div class="stat-num" id="countAbsent">0</div></div>
+        <div class="stat-card" style="background:linear-gradient(135deg,#e85d0425,#fb923c15)"><div class="stat-card-top"><span class="stat-label">Sortie temp.</span><div class="stat-icon orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div></div><div class="stat-num" id="countSortie">0</div></div>
+        <div class="stat-card" style="background:linear-gradient(135deg,#06b6d425,#67e8f915)"><div class="stat-card-top"><span class="stat-label">Non renseigné</span><div class="stat-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div></div><div class="stat-num" id="countUnknown">0</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Feuille de présence</span>
+          <span id="presenceDateLabel" style="font-size:.8rem;color:var(--muted);margin-left:.5rem"></span>
+          <div class="presence-actions" style="margin-left:auto;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+            <div class="presence-legend" style="display:flex;gap:.5rem;font-size:.75rem;color:var(--muted);align-items:center">
+              <span style="display:inline-flex;align-items:center;gap:.3rem"><span style="width:12px;height:12px;border-radius:2px;background:#ecfdf5;border:1px solid #a7f3d0"></span>Présent</span>
+              <span style="display:inline-flex;align-items:center;gap:.3rem"><span style="width:12px;height:12px;border-radius:2px;background:#fef2f2;border:1px solid #fecaca"></span>Absent</span>
+              <span style="display:inline-flex;align-items:center;gap:.3rem"><span style="width:12px;height:12px;border-radius:2px;background:#fffbeb;border:1px solid #fde68a"></span>Sortie</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.35rem">
+              <button class="btn btn-outline btn-sm" id="prevDay">&#8592;</button>
+              <input type="date" id="presenceDate" style="font-weight:600;font-size:.8rem;padding:.3rem .4rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--glass);color:var(--text)"/>
+              <button class="btn btn-outline btn-sm" id="nextDay">&#8594;</button>
+              <button class="btn btn-ghost btn-sm" id="todayBtn">Aujourd'hui</button>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="openExportModal()" title="Export des absences">📥 <span class="btn-add-label">Export</span></button>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div id="presenceTable"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<!-- Modal Export Absences -->
+<div id="modalExportAbs" class="modal-overlay" onclick="closeModal('modalExportAbs')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:420px">
+    <div class="modal-header"><span class="modal-title">Export des absences</span><button class="modal-close" onclick="closeModal('modalExportAbs')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Date début</label>
+        <input type="date" id="exportStart" class="form-control" value=""/>
+      </div>
+      <div class="form-group">
+        <label>Date fin</label>
+        <input type="date" id="exportEnd" class="form-control" value=""/>
+      </div>
+      <button class="btn btn-accent" onclick="exportPresencesPDF()" style="width:100%;margin-top:.5rem">📥 Exporter PDF</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>Auth.requireAuth();</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/presences-supabase.js"></script>
+<script src="js/presences.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Diagnostic des droits — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    .dd-pill{display:inline-flex;align-items:center;font-size:.68rem;font-weight:600;padding:2px 9px;border-radius:99px;background:#eef2ff;color:#4338ca;margin:2px}
+    .dd-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    .dd-table th{text-align:left;padding:.5rem .65rem;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--border)}
+    .dd-table td{padding:.55rem .65rem;border-bottom:1px solid var(--border);vertical-align:top}
+    .dd-ok{color:#16a34a;font-weight:700}
+    .dd-bad{color:#dc2626;font-weight:700}
+    .dd-warn{color:#d97706;font-weight:700}
+    .dd-row{display:flex;align-items:flex-start;gap:.6rem;padding:.6rem .85rem;border-radius:10px;margin-bottom:.5rem}
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Diagnostic des droits</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <a href="rh.html" class="btn btn-ghost btn-sm">RH</a>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:1000px">
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.25rem">Cet outil lit le stockage local et explique, établissement par établissement, pourquoi un utilisateur a (ou n'a pas) accès aux modules.</p>
+
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="card-header"><span class="card-title">👤 Utilisateur à analyser</span></div>
+        <div class="card-body" style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+          <select id="who" style="width:280px"></select>
+          <button class="btn btn-accent btn-sm" onclick="run()">🔍 Analyser</button>
+        </div>
+      </div>
+
+      <div id="ddStats" class="grid grid-3" style="margin-bottom:1.25rem;display:none"></div>
+
+      <div id="out"></div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  function esc(s){ const d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
+  function read(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch{ return null; } }
+  function norm(s){ return (s||'').toLowerCase().trim(); }
+
+  function allKnownUsers() {
+    const etabs = read('ftr_etablissements') || [];
+    const map = {};
+    etabs.forEach(e => (read(`ftr_users__${e.id}`) || []).forEach(u => { if (u.username) map[u.username] = u; }));
+    (read('ftr_users') || []).forEach(u => { if (u.username && !map[u.username]) map[u.username] = u; });
+    return Object.values(map);
+  }
+
+  function populateUserSelect() {
+    const sel = document.getElementById('who');
+    const users = allKnownUsers();
+    const current = sel.value;
+    sel.innerHTML = users
+      .slice()
+      .sort((a,b) => `${a.prenom||''} ${a.nom||''}`.localeCompare(`${b.prenom||''} ${b.nom||''}`,'fr'))
+      .map(u => `<option value="${esc(u.username)}">${esc((u.prenom||'')+' '+(u.nom||''))} — ${esc(u.username)}${u.role==='admin'?' (admin)':''}</option>`)
+      .join('');
+    if (current) sel.value = current;
+  }
+
+  function run() {
+    const username = document.getElementById('who').value.trim();
+    const etabs = read('ftr_etablissements') || [];
+    const globalUsers = allKnownUsers();
+    const gu = globalUsers.find(u => u.username === username);
+    let html = '';
+    const statsEl = document.getElementById('ddStats');
+
+    // 1) Présence globale
+    html += `<div class="card" style="margin-bottom:1.25rem"><div class="card-header"><span class="card-title">1. Compte (tous établissements confondus)</span></div><div class="card-body">`;
+    if (!gu) {
+      html += `<p class="dd-bad">❌ Aucun compte « ${esc(username)} » dans la liste globale. La connexion elle-même échouerait.</p>`;
+    } else {
+      html += `<table class="dd-table"><tr><th>Champ</th><th>Valeur</th></tr>
+        <tr><td>id</td><td>${esc(gu.id)} <span style="color:var(--muted)">(type ${typeof gu.id})</span></td></tr>
+        <tr><td>role</td><td>${esc(gu.role)||'<span class="dd-bad">vide</span>'}</td></tr>
+        <tr><td>fonction</td><td>${gu.fonction?esc(gu.fonction):'<span class="dd-bad">VIDE — cause fréquente du « accès à rien »</span>'}</td></tr>
+        <tr><td>super</td><td>${gu.super?'oui':'non'}</td></tr></table>`;
+      if (gu.role === 'admin' || gu.role === 'superadmin' || gu.super)
+        html += `<p class="dd-warn" style="margin-top:.5rem">⚠️ Ce compte est admin/superadmin : il devrait tout voir sans permissions. Si ce n'est pas le cas, le souci est ailleurs (session).</p>`;
+    }
+    html += `</div></div>`;
+
+    if (!etabs.length) {
+      html += `<div class="card"><div class="card-body"><p class="dd-bad">Aucun établissement défini.</p></div></div>`;
+      document.getElementById('out').innerHTML = html;
+      statsEl.style.display = 'none';
+      return;
+    }
+
+    // 2) Analyse par établissement
+    html += `<div class="card" style="margin-bottom:1.25rem"><div class="card-header"><span class="card-title">2. Résolution des droits par établissement</span></div>
+      <div class="card-body">
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">Pour chaque établissement : le compte est-il présent ? sa fonction correspond-elle à un rôle ? combien de droits en résultent ?</p>
+      <table class="dd-table"><tr><th>Établissement</th><th>Compte présent</th><th>Fonction</th><th>Rôle correspondant</th><th>Droits</th></tr>`;
+
+    const problems = [];
+    let totalPerms = 0;
+    etabs.forEach(e => {
+      const users = read(`ftr_users__${e.id}`) || [];
+      const roles = read(`ftr_fonction_colors__${e.id}`) || [];
+      const u = gu ? users.find(x => String(x.id) === String(gu.id)) : users.find(x => x.username === username);
+      const present = !!u;
+      const fonction = (u && u.fonction) || (gu && gu.fonction) || '';
+      let match = null;
+      if (fonction) {
+        match = roles.find(r => norm(r.fonction) === norm(fonction))
+             || roles.find(r => { const rn = norm(r.fonction); return rn && (norm(fonction).includes(rn) || rn.includes(norm(fonction))); });
+      }
+      const permCount = match ? (match.permissions||[]).length : 0;
+      totalPerms += permCount;
+      let etat;
+      if (!present) { etat = '<span class="dd-bad">❌ absent</span>'; problems.push(`Absent de « ${e.nom} »`); }
+      else etat = '<span class="dd-ok">✓</span>';
+      let mtxt;
+      if (!fonction) { mtxt = '<span class="dd-bad">aucune fonction</span>'; if(present) problems.push(`Pas de fonction dans « ${e.nom} »`); }
+      else if (!match) { mtxt = '<span class="dd-bad">aucun rôle ne correspond</span>'; problems.push(`Fonction « ${fonction} » sans rôle correspondant dans « ${e.nom} »`); }
+      else mtxt = `<span class="dd-ok">${esc(match.fonction)}</span>`;
+
+      html += `<tr>
+        <td><strong>${esc(e.nom||e.id)}</strong></td>
+        <td>${etat}</td>
+        <td>${fonction?esc(fonction):'<span class="dd-bad">—</span>'}</td>
+        <td>${mtxt}</td>
+        <td>${match ? `<span class="${permCount?'dd-ok':'dd-bad'}">${permCount} droit(s)</span>` : '<span class="dd-bad">0</span>'}</td>
+      </tr>`;
+      if (match && permCount) {
+        html += `<tr><td colspan="5" style="padding-top:0">${(match.permissions||[]).map(p=>`<span class="dd-pill">${esc(p)}</span>`).join('')}</td></tr>`;
+      }
+    });
+    html += `</table></div></div>`;
+
+    // Stats résumé
+    statsEl.style.display = '';
+    statsEl.innerHTML = `
+      <div class="stat-card" style="border-left:3px solid #6366f1"><div class="stat-card-top"><span class="stat-label">Établissements</span></div><div class="stat-num">${etabs.length}</div></div>
+      <div class="stat-card" style="border-left:3px solid ${problems.length?'#dc2626':'#16a34a'}"><div class="stat-card-top"><span class="stat-label">Problèmes détectés</span></div><div class="stat-num">${problems.length}</div></div>
+      <div class="stat-card" style="border-left:3px solid #16a34a"><div class="stat-card-top"><span class="stat-label">Droits cumulés</span></div><div class="stat-num">${totalPerms}</div></div>`;
+
+    // 3) Verdict + réparation
+    html += `<div class="card"><div class="card-header"><span class="card-title">3. Verdict</span></div><div class="card-body">`;
+    if (!problems.length && gu) {
+      html += `<p class="dd-ok">✓ Aucun problème de résolution détecté. Si l'accès est toujours refusé, vide le cache (Ctrl/Cmd + Shift + R) car le service worker peut servir une ancienne version de l'app.</p>`;
+    } else {
+      html += `<ul style="color:var(--muted);margin:0 0 0 1.2rem">${problems.map(p=>`<li class="dd-bad">${esc(p)}</li>`).join('')}</ul>`;
+      const anyRoles = (read(`ftr_fonction_colors__${etabs[0].id}`) || []);
+      html += `<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+        <div style="font-weight:700;font-size:.88rem;margin-bottom:.4rem">🔧 Réparer</div>
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:.6rem">Assigne une fonction valide à « ${esc(username)} » dans tous les établissements où il est présent (et resynchronise la liste globale).</p>
+        <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+          <select id="fixFonction" style="width:auto">${anyRoles.map(r=>`<option value="${esc(r.fonction)}">${esc(r.fonction)} (${(r.permissions||[]).length} droits)</option>`).join('')}</select>
+          <button class="btn btn-primary btn-sm" onclick="repair()">Appliquer la fonction</button>
+        </div>
+      </div>`;
+    }
+    html += `</div></div>`;
+
+    document.getElementById('out').innerHTML = html;
+  }
+
+  function repair() {
+    const username = document.getElementById('who').value.trim();
+    const fonction = document.getElementById('fixFonction').value;
+    const etabs = read('ftr_etablissements') || [];
+    let touched = 0;
+    etabs.forEach(e => {
+      const k = `ftr_users__${e.id}`;
+      const users = read(k) || [];
+      let changed = false;
+      users.forEach(u => { if (u.username === username) { u.fonction = fonction; changed = true; } });
+      if (changed) { localStorage.setItem(k, JSON.stringify(users)); touched++; }
+    });
+    // Resynchronise la liste globale (union de tous les établissements)
+    const map = {};
+    etabs.forEach(e => (read(`ftr_users__${e.id}`) || []).forEach(u => { map[u.id] = u; }));
+    const g = read('ftr_users') || [];
+    g.forEach(u => { if (!map[u.id]) map[u.id] = u; });
+    g.forEach(u => { if (u.username === username) u.fonction = fonction; });
+    Object.values(map).forEach(u => { if (u.username === username) u.fonction = fonction; });
+    localStorage.setItem('ftr_users', JSON.stringify(Object.values(map)));
+    toast(`Fonction « ${fonction} » appliquée dans ${touched} établissement(s). Reconnecte-toi avec ${username} pour que la session prenne effet.`, 'success');
+    run();
+  }
+
+  Auth.requireAuth();
+  populateUserSelect();
+  document.addEventListener('DOMContentLoaded', run);
+</script>
+<div id="toast-container" class="toast-container"></div>
+</body>
+</html>

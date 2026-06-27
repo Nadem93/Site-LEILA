@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><link rel="manifest" href="manifest.json"/><meta name="theme-color" content="#0f2b4a"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Aide & guide — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    .help-wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
+    .help-hero{background:linear-gradient(135deg,#14b8a6,#0891b2);border-radius:var(--r-lg);padding:2rem;color:#fff;margin-bottom:1.5rem}
+    .help-hero h1{font-size:1.8rem;font-weight:800;margin:0 0 .35rem}
+    .help-hero p{opacity:.9;font-size:.95rem;margin:0}
+    /* Sommaire */
+    .help-toc{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .help-toc a{font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:999px;background:#fff;border:1px solid var(--border);color:var(--g700);text-decoration:none;transition:all .15s}
+    .help-toc a:hover{border-color:var(--accent);color:var(--accent)}
+    /* Section */
+    .help-sec{margin-bottom:2.75rem;scroll-margin-top:1rem}
+    .help-sec h2{font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:.5rem;margin:0 0 .35rem}
+    .help-sec .lead{color:var(--muted);font-size:.9rem;margin:0 0 1rem;line-height:1.6}
+    .admin-tag{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#fee2e2;color:#dc2626;padding:.15rem .5rem;border-radius:999px}
+    /* Maquette d'écran */
+    .screen{position:relative;border-radius:14px;border:1px solid var(--border);background:#fff;box-shadow:0 10px 30px rgba(15,43,74,.1);overflow:visible;margin-bottom:1rem}
+    .screen-bar{border-radius:14px 14px 0 0}
+    .screen-bar{height:30px;background:#0f2b4a;display:flex;align-items:center;gap:6px;padding:0 12px}
+    .screen-bar i{width:10px;height:10px;border-radius:50%;display:inline-block}
+    .screen-bar .r{background:#ff5f57}.screen-bar .y{background:#febc2e}.screen-bar .g{background:#28c840}
+    .screen-bar span{margin-left:10px;color:rgba(255,255,255,.6);font-size:.7rem}
+    .screen-body{position:relative;padding:16px;background:linear-gradient(135deg,#eef4fb,#f7fafc);min-height:180px}
+    /* éléments de maquette */
+    .mk-row{display:flex;gap:10px;margin-bottom:10px}
+    .mk-tile{flex:1;background:#fff;border-radius:10px;padding:12px 10px;box-shadow:0 1px 4px rgba(15,43,74,.08);font-size:.72rem;font-weight:600;color:var(--g700);text-align:center;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+    .mk-tile .ic{font-size:1.1rem}
+    .mk-head{background:#fff;border-radius:8px;padding:8px 12px;font-weight:700;font-size:.8rem;color:var(--primary);box-shadow:0 1px 4px rgba(15,43,74,.08);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+    .mk-card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(15,43,74,.08);font-size:.74rem;color:var(--g700)}
+    .mk-badge{display:inline-block;font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#e0f2fe;color:#0369a1}
+    .mk-btn{display:inline-block;font-size:.7rem;font-weight:700;padding:5px 12px;border-radius:8px;background:#14b8a6;color:#fff}
+    .mk-line{height:8px;border-radius:4px;background:#e2e8f0;margin:6px 0}
+    .mk-line.s{width:60%}.mk-line.m{width:80%}
+    /* Pins / bulles */
+    .pin{position:absolute;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #fff,0 3px 10px rgba(0,0,0,.35);z-index:30;cursor:default}
+    .pin .bub{display:none}
+    /* Légende détaillée sous chaque écran */
+    .legend{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.55rem;background:var(--g50);border:1px solid var(--border);border-radius:var(--r-sm);padding:.85rem 1rem}
+    .legend li{display:flex;gap:.7rem;align-items:flex-start}
+    .legend .num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:.76rem;display:flex;align-items:center;justify-content:center;margin-top:1px}
+    .legend .lg-title{font-weight:700;font-size:.85rem;color:var(--primary)}
+    .legend .lg-desc{font-size:.8rem;color:var(--g700);line-height:1.5;margin-top:1px}
+    .tip{background:#ecfeff;border:1px solid #a5f3fc;border-radius:var(--r-sm);padding:.6rem .85rem;font-size:.82rem;color:#0e7490;margin-top:.75rem}
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Aide & guide d'utilisation</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="help-wrap">
+        <div class="help-hero">
+          <h1>❓ Guide d'utilisation</h1>
+          <p>Survolez les pastilles numérotées sur chaque écran pour voir à quoi sert chaque zone. Une légende détaillée accompagne chaque écran.</p>
+        </div>
+
+        <div class="help-toc">
+          <a href="#s-login">Connexion</a>
+          <a href="#s-accueil">Accueil</a>
+          <a href="#s-dashboard">Tableau de bord</a>
+          <a href="#s-residents">Résidents</a>
+          <a href="#s-chambres">Chambres & repas</a>
+          <a href="#s-quotidien">Vie quotidienne</a>
+          <a href="#s-echeances">Échéancier</a>
+          <a href="#s-fiche">Fiche résident</a>
+          <a href="#s-journal">Journal</a>
+          <a href="#s-avenant">Avenants (PPE)</a>
+          <a href="#s-dossiers">Dossiers & suivi</a>
+          <a href="#s-planning">Planning & présences</a>
+          <a href="#s-portail">Portail employé</a>
+          <a href="#s-interventions">Interventions</a>
+          <a href="#s-recherche">Recherche & notes</a>
+          <a href="#s-admin" class="admin-only">Administration</a>
+        </div>
+
+        <!-- CONNEXION -->
+        <section class="help-sec" id="s-login">
+          <h2>🔐 Connexion & choix de l'établissement</h2>
+          <p class="lead">Au lancement, identifiez-vous puis sélectionnez votre établissement (si vous en gérez plusieurs).</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>connexion</span></div>
+            <div class="screen-body" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px">
+              <div class="mk-card" style="width:240px;text-align:center">
+                <div style="font-weight:800;color:var(--primary);letter-spacing:.1em">INTERNALIS</div>
+                <div class="mk-line m" style="margin:12px auto"></div>
+                <div class="mk-line m" style="margin:12px auto"></div>
+                <div class="mk-btn" style="margin-top:8px;width:100%">Se connecter</div>
+              </div>
+              <div class="pin" style="top:54px;left:calc(50% + 130px)">1<span class="bub">Saisissez votre identifiant et mot de passe. Après 15 min d'inactivité, la session se verrouille automatiquement.</span></div>
+              <div class="pin" style="bottom:30px;left:calc(50% + 130px)">2<span class="bub">Bouton de connexion. Vos accès dépendent de votre fonction (éducateur, admin…).</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Identifiants</div><div class="lg-desc">Saisissez votre identifiant et votre mot de passe (chiffré). Après 15 minutes d'inactivité, la session se verrouille automatiquement pour protéger les données.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Bouton de connexion</div><div class="lg-desc">Valide l'accès. L'interface et les menus affichés s'adaptent ensuite à votre fonction (éducateur, chef de service, administrateur…).</div></div></li>
+          </ul>
+          <div class="tip">💡 Si plusieurs établissements existent, un écran de sélection s'affiche juste après la connexion.</div>
+        </section>
+
+        <!-- ACCUEIL -->
+        <section class="help-sec" id="s-accueil">
+          <h2>🏠 Accueil</h2>
+          <p class="lead">Le menu principal : chaque carte ouvre un module. Les boutons flottants permettent des actions rapides.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>accueil</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">📊</span>Tableau de bord</div>
+                <div class="mk-tile"><span class="ic">👥</span>Résidents</div>
+                <div class="mk-tile"><span class="ic">📔</span>Journal</div>
+                <div class="mk-tile"><span class="ic">📄</span>Avenants</div>
+              </div>
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">📅</span>Planning</div>
+                <div class="mk-tile"><span class="ic">🔍</span>Recherche</div>
+                <div class="mk-tile"><span class="ic">🗒️</span>Notes</div>
+                <div class="mk-tile"><span class="ic">❓</span>Aide</div>
+              </div>
+              <div class="pin" style="top:26px;left:20px">1<span class="bub">Cartes des modules : un clic ouvre la section correspondante.</span></div>
+              <div class="pin" style="bottom:34px;left:calc(50% - 6px)">2<span class="bub">Recherche globale (aussi accessible par Ctrl/⌘ + K) et bloc-notes personnel.</span></div>
+              <div class="pin" style="bottom:16px;right:14px">3<span class="bub">Boutons flottants : demander une intervention, signaler un incident, réserver un véhicule.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Cartes des modules</div><div class="lg-desc">Chaque carte mène à une section (résidents, journal, planning…). Seules les cartes correspondant à vos droits sont affichées ; les pastilles rouges signalent des nouveautés non lues.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Recherche & notes</div><div class="lg-desc">La recherche globale retrouve instantanément un résident, une note ou un document. Le bloc-notes garde vos pense-bêtes personnels.</div></div></li>
+            <li><span class="num">3</span><div><div class="lg-title">Boutons flottants</div><div class="lg-desc">En bas à droite : demander une intervention technique, signaler un incident, ou réserver un véhicule — sans changer de page.</div></div></li>
+          </ul>
+        </section>
+
+        <!-- TABLEAU DE BORD -->
+        <section class="help-sec" id="s-dashboard">
+          <h2>📊 Tableau de bord</h2>
+          <p class="lead">Vue d'ensemble en un coup d'œil : présence du jour, événements, indicateurs et suivi.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>tableau de bord</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">🟢</span>Présents</div>
+                <div class="mk-tile"><span class="ic">📅</span>À venir</div>
+                <div class="mk-tile"><span class="ic">🎂</span>Anniversaires</div>
+                <div class="mk-tile"><span class="ic">🚗</span>Véhicules</div>
+              </div>
+              <div class="mk-card"><div class="mk-line m"></div><div class="mk-line s"></div><div class="mk-line"></div></div>
+              <div class="pin" style="top:26px;left:24px">1<span class="bub">Indicateurs clés du jour : présents, événements, anniversaires, véhicules réservés.</span></div>
+              <div class="pin" style="bottom:30px;left:30px">2<span class="bub">Courbe de présence et suivi des résidents (RDV, soldes, vaccins…).</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Indicateurs du jour</div><div class="lg-desc">Nombre de résidents présents, événements à venir, anniversaires du jour et véhicules réservés. Mise à jour automatique.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Graphiques & suivi</div><div class="lg-desc">Courbe de présence et suivi transversal de tous les résidents : prochains RDV, soldes budgétaires, rappels de vaccins…</div></div></li>
+          </ul>
+        </section>
+
+        <!-- RESIDENTS -->
+        <section class="help-sec" id="s-residents">
+          <h2>👥 Liste des résidents</h2>
+          <p class="lead">Recherchez, filtrez et ouvrez la fiche d'un résident. Basculez entre vue grille et liste.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>résidents</span></div>
+            <div class="screen-body">
+              <div class="mk-head">🔍 Rechercher… <span class="mk-badge" style="margin-left:auto">Trier</span></div>
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">👤</span>Dupont</div>
+                <div class="mk-tile"><span class="ic">👤</span>Martin</div>
+                <div class="mk-tile"><span class="ic">👤</span>Bernard</div>
+              </div>
+              <div class="pin" style="top:42px;left:24px">1<span class="bub">Barre de recherche + filtres (objectif) + tri (nom, chambre, âge…).</span></div>
+              <div class="pin" style="top:96px;left:60px">2<span class="bub">Une carte par résident : photo, âge, chambre, statut. Un clic ouvre la fiche.</span></div>
+              <div class="pin" style="top:42px;right:18px">3<span class="bub">Basculer entre l'affichage en grille et en liste. Le bouton « + » (admin) ajoute un résident.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Recherche, filtres & tri</div><div class="lg-desc">Tapez un nom pour filtrer la liste, filtrez par objectif, ou triez par nom, prénom, chambre, date d'entrée ou âge.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Cartes résidents</div><div class="lg-desc">Une carte par résident avec photo, âge, chambre et statut de présence. Un clic ouvre la fiche complète.</div></div></li>
+            <li><span class="num">3</span><div><div class="lg-title">Affichage & ajout</div><div class="lg-desc">Basculez entre la vue grille et la vue liste. Le bouton « + Ajouter un résident » (réservé aux administrateurs) crée un nouveau dossier.</div></div></li>
+          </ul>
+        </section>
+
+        <!-- CHAMBRES & REPAS -->
+        <section class="help-sec" id="s-chambres">
+          <h2>🛏️ Chambres & repas</h2>
+          <p class="lead">Le quotidien de l'internat : plan d'occupation des chambres, attribution des lits, états des lieux, et gestion des repas avec régimes alimentaires.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>chambres</span></div>
+            <div class="screen-body">
+              <div class="mk-head">🏢 Unité A <span class="mk-badge" style="margin-left:auto">12 chambres</span></div>
+              <div class="mk-row">
+                <div class="mk-card" style="flex:1;border-left:3px solid #16a34a">Ch. 101<div class="mk-badge" style="margin-top:4px;background:#dcfce7;color:#16a34a">Libre</div></div>
+                <div class="mk-card" style="flex:1;border-left:3px solid #d97706">Ch. 102<div class="mk-badge" style="margin-top:4px;background:#fef3c7;color:#d97706">1/1</div></div>
+                <div class="mk-card" style="flex:1;border-left:3px solid #d97706">Ch. 103<div class="mk-badge" style="margin-top:4px">📋 EDL</div></div>
+              </div>
+              <div class="pin" style="top:80px;left:30px">1<span class="bub">Une carte par chambre : état coloré (libre, complète, sur-occupée), occupants cliquables.</span></div>
+              <div class="pin" style="top:80px;right:60px">2<span class="bub">États des lieux d'entrée et de sortie avec historique par chambre.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Plan d'occupation</div><div class="lg-desc">Vue par unité/étage. Attribuer un lit met à jour automatiquement la fiche du résident ; les chambres existantes sont importées automatiquement à la première ouverture.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">États des lieux</div><div class="lg-desc">Grille murs / sol / mobilier / literie / sanitaires (Bon, Moyen, Dégradé) avec observations, à l'entrée comme à la sortie. Tout l'historique reste consultable.</div></div></li>
+          </ul>
+          <div class="tip">🍽️ Le module <strong>Repas</strong> fonctionne par jour : tous les résidents actifs sont inscrits midi et soir par défaut, on décoche les absents. La synthèse « Effectifs cuisine par régime » et la feuille imprimable donnent à la cuisine exactement ce dont elle a besoin. Les allergies remontent de la fiche santé.</div>
+        </section>
+
+        <!-- VIE QUOTIDIENNE -->
+        <section class="help-sec" id="s-quotidien">
+          <h2>🏠 Vie quotidienne</h2>
+          <p class="lead">Le hub du quotidien : présences, chambres & repas, visites, cahier de nuit, activités éducatives et distribution des médicaments.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>vie quotidienne</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">✅</span>Présences</div>
+                <div class="mk-tile"><span class="ic">🛏️</span>Chambres</div>
+                <div class="mk-tile"><span class="ic">🍽️</span>Repas</div>
+                <div class="mk-tile"><span class="ic">👪</span>Visites</div>
+              </div>
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">🌙</span>Cahier de nuit</div>
+                <div class="mk-tile"><span class="ic">🎨</span>Activités</div>
+                <div class="mk-tile"><span class="ic">💊</span>Médicaments</div>
+              </div>
+              <div class="pin" style="top:26px;left:20px">1<span class="bub">Chaque carte ouvre un module du quotidien. Seules celles correspondant à vos droits s'affichent.</span></div>
+              <div class="pin" style="bottom:20px;left:calc(50% - 6px)">2<span class="bub">Le pointage des présences alimente directement la facturation et les statistiques d'occupation.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Présences</div><div class="lg-desc">Pointez chaque résident jour par jour (présent / absent / sorti). Ces données servent ensuite à générer les factures (prix de journée) et les statistiques d'occupation.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Visites, cahier de nuit, activités & médicaments</div><div class="lg-desc">Suivi des visites de la famille, observations du veilleur de nuit, programmation des activités éducatives (ateliers, sorties) et suivi de la distribution des médicaments.</div></div></li>
+          </ul>
+          <div class="tip">💡 Les modules « Chambres & repas » ont leur propre section détaillée ci-dessus.</div>
+        </section>
+
+        <!-- ÉCHÉANCIER -->
+        <section class="help-sec" id="s-echeances">
+          <h2>⏰ Échéancier administratif</h2>
+          <p class="lead">Les renouvellements à ne jamais manquer : MDPH, jugements, pièces d'identité, CSS, contrats de séjour…</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>échéancier</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-card" style="flex:1;border-left:3px solid #dc2626;text-align:center">En retard<div style="font-weight:800;color:#dc2626">2</div></div>
+                <div class="mk-card" style="flex:1;border-left:3px solid #d97706;text-align:center">Sous 30 j<div style="font-weight:800;color:#d97706">5</div></div>
+                <div class="mk-card" style="flex:1;border-left:3px solid #0891b2;text-align:center">Sous 90 j<div style="font-weight:800;color:#0891b2">8</div></div>
+              </div>
+              <div class="mk-card" style="border-left:3px solid #dc2626">🧾 Renouvellement MDPH — <span style="color:#dc2626;font-weight:700">12 j de retard</span></div>
+              <div class="pin" style="top:30px;left:30px">1<span class="bub">Tri automatique par urgence : retard (rouge), sous 30 jours (orange), sous 90 jours (cyan).</span></div>
+              <div class="pin" style="bottom:30px;left:30px">2<span class="bub">Chaque échéance est liée au résident, avec compte des jours restants et bouton « traité ✓ ».</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Alertes par urgence</div><div class="lg-desc">Le tableau de bord affiche aussi une carte « Échéances urgentes » dès qu'une échéance approche ou est dépassée — impossible de manquer un renouvellement.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Suivi par résident</div><div class="lg-desc">Types métier : notification MDPH, jugement/mesure, pièce d'identité, CSS/mutuelle, contrat de séjour, révision PPE, visite médicale. Filtrable par résident et par type.</div></div></li>
+          </ul>
+        </section>
+
+        <!-- FICHE RESIDENT -->
+        <section class="help-sec" id="s-fiche">
+          <h2>🗂️ Fiche résident</h2>
+          <p class="lead">Le dossier complet : santé, sorties, budget, objectifs, évaluations, radar de vigilance, fil de vie et bilan IA.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>fiche résident</span></div>
+            <div class="screen-body">
+              <div class="mk-head">👤 Résident <span class="mk-badge" style="margin-left:auto">Présent</span></div>
+              <div class="mk-card" style="border-left:3px solid #dc2626;margin-bottom:10px">📡 Radar de vigilance — <span class="mk-badge" style="background:#fee2e2;color:#dc2626">2 signaux</span></div>
+              <div class="mk-row">
+                <div class="mk-card" style="flex:1">🏥 Médical</div>
+                <div class="mk-card" style="flex:1">💰 Budget</div>
+              </div>
+              <div class="mk-card" style="margin-top:10px">🧬 Fil de vie <span class="mk-btn" style="float:right">🤖 Bilan</span></div>
+              <div class="pin" style="top:60px;left:24px">1<span class="bub">Radar de vigilance : signaux faibles détectés automatiquement (absences, incidents, budget négatif, RDV manqués…).</span></div>
+              <div class="pin" style="top:110px;left:40px">2<span class="bub">Cartes thématiques : santé (traitements, RDV, vaccins), sorties, budget, objectifs, évaluations.</span></div>
+              <div class="pin" style="bottom:24px;left:30px">3<span class="bub">Fil de vie : tout l'historique du résident, filtrable par type.</span></div>
+              <div class="pin" style="bottom:24px;right:20px">4<span class="bub">Bilan de synthèse généré par IA à partir du quotidien (à relire et valider).</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Radar de vigilance</div><div class="lg-desc">Détecte automatiquement les signaux faibles : absences répétées, incidents fréquents, budget négatif, RDV non honorés, journal silencieux… avec un niveau de vigilance global.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Cartes thématiques</div><div class="lg-desc">Santé (traitements, RDV, vaccins), sorties & permissions, budget personnel, objectifs et grilles d'évaluation. Chaque carte est modifiable selon vos droits.</div></div></li>
+            <li><span class="num">3</span><div><div class="lg-title">Fil de vie</div><div class="lg-desc">Tout l'historique du résident réuni sur une frise unique (journal, incidents, RDV, sorties, budget, avenants…), filtrable par type d'événement.</div></div></li>
+            <li><span class="num">4</span><div><div class="lg-title">Bilan IA</div><div class="lg-desc">Génère un bilan de synthèse à partir du quotidien du résident, prêt pour la réunion de projet. À relire et valider avant tout usage officiel.</div></div></li>
+          </ul>
+          <div class="tip">💡 Le bouton « ✎ Modifier » (en haut de la fiche) n'apparaît qu'aux personnes autorisées à éditer.</div>
+        </section>
+
+        <!-- JOURNAL -->
+        <section class="help-sec" id="s-journal">
+          <h2>📔 Journal de bord</h2>
+          <p class="lead">Consignez les observations quotidiennes, classées par catégorie, avec un niveau de confidentialité.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>journal</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-card" style="flex:2">
+                  <span class="mk-badge">Autonomie</span> <span style="color:var(--muted)">12 mars</span>
+                  <div class="mk-line m"></div><div class="mk-line s"></div>
+                </div>
+                <div class="mk-card" style="flex:1;text-align:center"><div class="mk-btn">+ Note</div></div>
+              </div>
+              <div class="pin" style="top:30px;left:24px">1<span class="bub">Chaque entrée : catégorie, date, auteur et contenu de l'observation.</span></div>
+              <div class="pin" style="top:30px;right:30px">2<span class="bub">Rédiger une nouvelle observation, la rattacher à un résident et choisir sa visibilité (normale ou confidentielle).</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Liste des observations</div><div class="lg-desc">Chaque entrée affiche sa catégorie, sa date, son auteur et son contenu. Les collègues peuvent réagir / accuser réception.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Nouvelle observation</div><div class="lg-desc">Rédigez une note, rattachez-la à un résident, choisissez une catégorie et un niveau de visibilité (normale ou confidentielle).</div></div></li>
+          </ul>
+          <div class="tip">🔒 Une note « confidentielle » n'est visible que par son auteur et les administrateurs.</div>
+        </section>
+
+        <!-- AVENANT -->
+        <section class="help-sec" id="s-avenant">
+          <h2>📄 Avenants (Projet personnalisé)</h2>
+          <p class="lead">Rédigez les avenants au projet par domaine. L'IA peut pré-rédiger l'avenant à partir du journal de bord.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>avenant</span></div>
+            <div class="screen-body">
+              <div class="mk-head">Avenant — Résident <span class="mk-btn" style="margin-left:auto">🤖 Générer depuis le journal</span></div>
+              <div class="mk-card">🧍 Autonomie<div class="mk-line m"></div><div class="mk-line"></div></div>
+              <div class="pin" style="top:30px;right:24px">1<span class="bub">Génère automatiquement le contenu de l'avenant à partir de TOUTES les observations du journal du résident.</span></div>
+              <div class="pin" style="bottom:34px;left:34px">2<span class="bub">Un bilan + des objectifs par domaine (autonomie, santé, vie sociale…). Modifiable manuellement.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Génération par IA</div><div class="lg-desc">Pré-rédige l'avenant à partir de l'ensemble des observations du journal du résident. Gagnez du temps, puis ajustez le texte.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Bilan & objectifs par domaine</div><div class="lg-desc">Pour chaque domaine (autonomie, santé, vie sociale…) : un bilan et des objectifs avec moyens et évaluation. Tout est éditable, puis exportable en PDF.</div></div></li>
+          </ul>
+        </section>
+
+        <!-- DOSSIERS & SUIVI -->
+        <section class="help-sec" id="s-dossiers">
+          <h2>📂 Dossiers & suivi</h2>
+          <p class="lead">Le hub des dossiers transversaux : admissions, avenants, documents, échéancier, ViaTrajectoire, répertoire, registre EIG et vie sociale (CVS).</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>dossiers & suivi</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">🧑‍🤝‍🧑</span>Admissions</div>
+                <div class="mk-tile"><span class="ic">📄</span>Avenants</div>
+                <div class="mk-tile"><span class="ic">📎</span>Documents</div>
+                <div class="mk-tile"><span class="ic">⏰</span>Échéancier</div>
+              </div>
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">🧭</span>ViaTrajectoire</div>
+                <div class="mk-tile"><span class="ic">📇</span>Répertoire</div>
+                <div class="mk-tile"><span class="ic">🚨</span>Registre EIG</div>
+                <div class="mk-tile"><span class="ic">🤝</span>CVS</div>
+              </div>
+              <div class="pin" style="top:26px;left:20px">1<span class="bub">Chaque carte ouvre un module de suivi. Seules celles correspondant à vos droits s'affichent.</span></div>
+              <div class="pin" style="bottom:20px;left:calc(50% - 6px)">2<span class="bub">Admissions : gérez la liste d'attente des candidats avant leur entrée à l'internat.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Admissions / liste d'attente</div><div class="lg-desc">Enregistrez les candidats en attente d'admission (coordonnées, situation, organisme orienteur). Suivez leur statut (en attente, admis, refusé) ; un candidat admis peut être transformé directement en fiche résident.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">ViaTrajectoire, répertoire, EIG & CVS</div><div class="lg-desc">ViaTrajectoire pour le suivi des orientations, le répertoire des contacts utiles, le registre des événements indésirables graves (EIG), et le suivi du Conseil de la Vie Sociale (CVS).</div></div></li>
+          </ul>
+          <div class="tip">💡 Les avenants (PPE) et l'échéancier ont leur propre section détaillée ci-dessus.</div>
+        </section>
+
+        <!-- PLANNING -->
+        <section class="help-sec" id="s-planning">
+          <h2>📅 Planning & présences</h2>
+          <p class="lead">Gérez rendez-vous, activités et réservations de véhicules. Pointez les présences au quotidien.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>planning</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-card" style="flex:1;text-align:center">Lun</div>
+                <div class="mk-card" style="flex:1;text-align:center;border:2px solid #14b8a6">Mar<div class="mk-badge" style="margin-top:4px">RDV</div></div>
+                <div class="mk-card" style="flex:1;text-align:center">Mer</div>
+              </div>
+              <div class="pin" style="top:40px;left:calc(50% - 6px)">1<span class="bub">Cliquez un jour pour ajouter un événement (RDV, activité, véhicule). Les RDV médicaux se synchronisent avec la fiche du résident.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Ajout & synchronisation</div><div class="lg-desc">Cliquez un jour pour ajouter un RDV, une activité ou une réservation de véhicule. Un RDV médical saisi ici apparaît automatiquement dans la fiche du résident concerné (et inversement).</div></div></li>
+          </ul>
+          <div class="tip">✅ Le module Présences permet de pointer chaque résident (présent / absent / sorti) jour par jour.</div>
+        </section>
+
+        <!-- PORTAIL EMPLOYÉ -->
+        <section class="help-sec" id="s-portail">
+          <h2>💼 Portail employé</h2>
+          <p class="lead">Votre espace personnel : planning d'équipe, congés, notes, messages, documentation, budget, paie, entretiens, annuaire, facturation et plan de formation.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>portail employé</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">📆</span>Planning équipe</div>
+                <div class="mk-tile"><span class="ic">🏖️</span>Congés</div>
+                <div class="mk-tile"><span class="ic">🗒️</span>Notes</div>
+                <div class="mk-tile"><span class="ic">💬</span>Messages</div>
+              </div>
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">📚</span>Documentation</div>
+                <div class="mk-tile"><span class="ic">💰</span>Budget</div>
+                <div class="mk-tile"><span class="ic">🧾</span>Paie</div>
+                <div class="mk-tile"><span class="ic">🧑‍💼</span>Entretiens</div>
+              </div>
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">📇</span>Annuaire</div>
+                <div class="mk-tile"><span class="ic">💳</span>Facturation</div>
+                <div class="mk-tile"><span class="ic">🎓</span>Formations</div>
+              </div>
+              <div class="pin" style="top:26px;left:20px">1<span class="bub">Chaque carte ouvre un module du portail. Seules celles correspondant à vos droits s'affichent.</span></div>
+              <div class="pin" style="bottom:16px;right:18px">2<span class="bub">Congés : déposez une demande, votre responsable la valide ou la refuse.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Planning équipe & congés</div><div class="lg-desc">Consultez le planning de toute l'équipe et déposez vos demandes de congés. Chaque demande suit un circuit de validation par la hiérarchie.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Notes, messages & documentation</div><div class="lg-desc">Bloc-notes partagé, messagerie interne entre collègues, et documentation de l'établissement (protocoles, procédures, fichiers utiles).</div></div></li>
+            <li><span class="num">3</span><div><div class="lg-title">Budget, paie, entretiens & annuaire</div><div class="lg-desc">Suivi du budget et des dépenses, consultation des fiches de paie, comptes-rendus d'entretiens professionnels périodiques et annuaire de tout le personnel.</div></div></li>
+            <li><span class="num">4</span><div><div class="lg-title">Facturation & plan de formation</div><div class="lg-desc">Facturation : définissez les tarifs (prix de journée) par catégorie, rattachez chaque résident à un organisme payeur, et générez chaque mois les factures à partir des présences. Plan de formation : recensez et suivez les formations du personnel (organisme, domaine, dates, coût, statut et participants).</div></div></li>
+          </ul>
+          <div class="tip">🔒 Les fiches de paie ne sont visibles que par leur titulaire et les administrateurs.</div>
+        </section>
+
+        <!-- INTERVENTIONS -->
+        <section class="help-sec" id="s-interventions">
+          <h2>🔧 Interventions</h2>
+          <p class="lead">Signalez un problème technique (maintenance, réparation) et suivez son traitement jusqu'à sa résolution.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>interventions</span></div>
+            <div class="screen-body">
+              <div class="mk-card" style="border-left:3px solid #ef4444;margin-bottom:8px">🚨 Chambre 104 — <span class="mk-badge" style="background:#fee2e2;color:#ef4444">critique</span> <span class="mk-badge" style="margin-left:6px;background:#fef3c7;color:#d97706">En attente</span></div>
+              <div class="mk-card" style="border-left:3px solid #94a3b8;opacity:.75">⬇ Couloir étage — <span class="mk-badge">basse</span> <span class="mk-badge badge-green" style="margin-left:6px">✔ Fait</span></div>
+              <div class="pin" style="top:30px;left:24px">1<span class="bub">Niveau d'urgence : basse, normale, haute ou critique — code couleur et icône associés.</span></div>
+              <div class="pin" style="bottom:24px;left:24px">2<span class="bub">Le technicien joint une photo des travaux réalisés pour clôturer ; un administrateur peut aussi marquer « Fait » sans photo.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Signalement</div><div class="lg-desc">Chaque demande indique le lieu, une description du problème, le niveau d'urgence, la date et la personne qui a signalé. Accessible aux administrateurs et aux techniciens de maintenance.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Traitement & clôture</div><div class="lg-desc">Une intervention « en attente » passe à « fait » lorsqu'une photo des travaux (avec commentaire) est jointe, ou directement par un administrateur.</div></div></li>
+          </ul>
+          <div class="tip">💡 N'importe qui peut signaler une intervention via le bouton flottant de la page d'accueil (voir section « Accueil »).</div>
+        </section>
+
+        <!-- RECHERCHE / NOTES -->
+        <section class="help-sec" id="s-recherche">
+          <h2>🔍 Recherche globale & notes</h2>
+          <p class="lead">Retrouvez instantanément n'importe quel élément, et gardez vos pense-bêtes personnels.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>recherche</span></div>
+            <div class="screen-body">
+              <div class="mk-head">🔍 Tapez votre recherche…</div>
+              <div class="mk-card">👤 Résidents · 📔 Journal · 📎 Documents · 📅 Planning · 📇 Répertoire</div>
+              <div class="pin" style="top:30px;left:30px">1<span class="bub">Recherche transversale. Raccourci clavier : Ctrl/⌘ + K depuis l'accueil.</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Recherche transversale</div><div class="lg-desc">Cherche en même temps dans les résidents, le journal, les documents, le planning et le répertoire. Chaque résultat est cliquable. Raccourci : Ctrl/⌘ + K depuis l'accueil.</div></div></li>
+          </ul>
+          <div class="tip">🗒️ La carte « Notes rapides » ouvre un bloc-notes personnel, enregistré automatiquement.</div>
+        </section>
+
+        <!-- ADMINISTRATION (réservé admin) -->
+        <section class="help-sec admin-only" id="s-admin">
+          <h2>⚙️ Administration <span class="admin-tag">Administrateur uniquement</span></h2>
+          <p class="lead">Réservé aux administrateurs : configuration de l'établissement, des fonctions, des utilisateurs, des permissions et des statistiques.</p>
+          <div class="screen">
+            <div class="screen-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>administration</span></div>
+            <div class="screen-body">
+              <div class="mk-row">
+                <div class="mk-tile"><span class="ic">📈</span>Statistiques</div>
+                <div class="mk-tile"><span class="ic">🏠</span>Établissement</div>
+                <div class="mk-tile"><span class="ic">🧑‍🤝‍🧑</span>Utilisateurs</div>
+                <div class="mk-tile"><span class="ic">🔐</span>Permissions</div>
+              </div>
+              <div class="pin" style="top:26px;left:24px">1<span class="bub">Statistiques & rapport d'activité (taux d'occupation, file active, indicateurs réglementaires).</span></div>
+              <div class="pin" style="top:26px;left:calc(25% + 30px)">2<span class="bub">Identité de l'établissement, couleurs, fond d'écran, logo, capacité, clé IA.</span></div>
+              <div class="pin" style="top:26px;right:90px">3<span class="bub">Création des comptes, fonctions et rôles des membres de l'équipe.</span></div>
+              <div class="pin" style="top:26px;right:20px">4<span class="bub">Définition fine des permissions par fonction (qui voit / modifie quoi).</span></div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="num">1</span><div><div class="lg-title">Statistiques & rapport</div><div class="lg-desc">Tableaux et graphiques d'activité : taux d'occupation, file active, mouvements, profil du public, taux de PPE — exportables pour le rapport d'activité.</div></div></li>
+            <li><span class="num">2</span><div><div class="lg-title">Établissement</div><div class="lg-desc">Identité (nom, FINESS, coordonnées), couleurs, couleur de fond, logo, capacité d'accueil et clé API de l'assistant IA.</div></div></li>
+            <li><span class="num">3</span><div><div class="lg-title">Utilisateurs & fonctions</div><div class="lg-desc">Créez et gérez les comptes des membres de l'équipe, leurs fonctions (éducateur, AMP, chef de service…) et leurs accès.</div></div></li>
+            <li><span class="num">4</span><div><div class="lg-title">Permissions</div><div class="lg-desc">Définissez finement, par fonction, qui peut voir et modifier quoi (résidents, incidents, santé, documents…).</div></div></li>
+          </ul>
+          <div class="tip superadmin-only">👑 La <strong>Console groupe</strong> (super administrateur) permet de gérer plusieurs établissements, une vue consolidée, les rôles globaux et l'audit.</div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  Auth.requireAuth();
+  // Masquer les sections réservées selon les droits
+  if (!Auth.isAdmin()) document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+  if (!Auth.isSuperAdmin()) document.querySelectorAll('.superadmin-only').forEach(el => el.classList.add('hidden'));
+</script>
+</body>
+</html>

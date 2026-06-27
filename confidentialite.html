@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Confidentialité — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    body { background: #f8fafc; }
+    .pp { max-width:720px; margin:2rem auto; padding:0 1rem }
+    .pp h1 { font-size:1.5rem; margin-bottom:.25rem }
+    .pp h2 { font-size:1.1rem; margin:1.5rem 0 .5rem }
+    .pp p, .pp li { font-size:.875rem; line-height:1.7; color:#475569 }
+    .pp ul { padding-left:1.5rem }
+    .pp hr { margin:1.5rem 0; border:none; border-top:1px solid #e2e8f0 }
+  </style>
+</head><body>
+<div class="pp">
+  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem">
+    <a href="accueil.html" class="btn btn-ghost btn-sm">← Retour</a>
+    <span style="font-size:.78rem;color:var(--muted)">Confidentialité</span>
+  </div>
+
+  <h1>🔐 Politique de confidentialité</h1>
+  <p style="margin-top:.25rem">INTERNALIS — FTR (Fiche de Transmission et de Résident)</p>
+  <p style="font-size:.78rem;color:#94a3b8">Dernière mise à jour : juin 2026</p>
+
+  <hr>
+
+  <h2>1. Responsable du traitement</h2>
+  <p>L'établissement ESMS utilisant INTERNALIS est responsable du traitement des données à caractère personnel. L'application est conçue comme un outil interne de gestion des résidents, du personnel et des activités.</p>
+
+  <h2>2. Données collectées</h2>
+  <p>INTERNALIS stocke exclusivement en local (navigateur) les catégories de données suivantes :</p>
+  <ul>
+    <li><strong>Données d'identité</strong> : nom, prénom, date de naissance, photo (facultative)</li>
+    <li><strong>Données de santé</strong> : antécédents, allergies, traitements, vaccinations, groupe sanguin, NIR, INS, DMP, consentement</li>
+    <li><strong>Données de séjour</strong> : dates d'entrée/sortie, chambre, statut, notes de suivi</li>
+    <li><strong>Données socio-éducatives</strong> : scolarité, situation professionnelle, mesures de protection, sorties, budget</li>
+    <li><strong>Données de connexion</strong> : historique de connexion, journal d'accès (audit log)</li>
+  </ul>
+
+  <h2>3. Base légale du traitement</h2>
+  <p>Le traitement est fondé sur :</p>
+  <ul>
+    <li>L'exécution de la mission d'intérêt public ou relevant de l'exercice de l'autorité publique (ESMS)</li>
+    <li>Le consentement explicite des résidents ou de leurs représentants légaux pour les données de santé</li>
+    <li>L'obligation légale de tenue de dossiers et de traçabilité (loi Santé 2022, Ségur Vague 2)</li>
+  </ul>
+
+  <h2>4. Destinataires des données</h2>
+  <p>Les données sont stockées dans le <strong>localStorage du navigateur</strong> de l'utilisateur. Aucune donnée n'est transmise à des tiers. L'application ne contient pas de serveur distant, de tracking, ni de publicité.</p>
+
+  <h2>5. Durée de conservation</h2>
+  <p>Les données sont conservées jusqu'à la suppression explicite par l'administrateur ou la réinitialisation du navigateur. Conformément à la réglementation, les données de santé peuvent être conservées pendant la durée du séjour et jusqu'à 5 ans après la sortie du résident.</p>
+
+  <h2>6. Droits des personnes</h2>
+  <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+  <ul>
+    <li><strong>Droit d'accès</strong> : consulter l'intégralité des données d'un résident (fiche résident + export JSON)</li>
+    <li><strong>Droit de rectification</strong> : modifier les données via les formulaires d'édition</li>
+    <li><strong>Droit à l'effacement</strong> : anonymiser un résident (bouton "Anonymiser" dans la fiche)</li>
+    <li><strong>Droit à la portabilité</strong> : exporter les données au format JSON depuis la fiche résident ou depuis l'admin</li>
+    <li><strong>Droit d'opposition</strong> : cesser l'utilisation de l'application à tout moment</li>
+  </ul>
+
+  <h2>7. Sécurité des données de santé (HDS)</h2>
+  <p>L'application en mode local (<code>file://</code>) <strong>n'est pas certifiée HDS</strong>. Pour une conformité HDS complète, l'application doit être déployée sur un serveur respectant les exigences de la certification HDS (hébergement de données de santé).</p>
+  <p>Les mesures de sécurité actuelles incluent :</p>
+  <ul>
+    <li>Authentification par mot de passe (hashé en local)</li>
+    <li>Journalisation exhaustive des accès (audit log)</li>
+    <li>Gestion des permissions par fonction</li>
+    <li>Consentement explicite pour le partage des données de santé</li>
+    <li>Anonymisation possible des résidents</li>
+  </ul>
+
+  <h2>8. Contact</h2>
+  <p>Pour toute question relative à la protection des données, veuillez contacter votre référent RGPD ou l'administrateur de l'établissement.</p>
+
+  <hr>
+  <p style="font-size:.72rem;color:#94a3b8;text-align:center">INTERNALIS — Application ESMS locale. Aucune donnée transmise à des tiers.</p>
+</div>
+</body></html>

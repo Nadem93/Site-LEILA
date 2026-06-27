@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Mes congés — INTERNALIS</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Mes congés</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <button id="btnAddConge" class="btn btn-accent btn-sm" onclick="openMesCongeModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouvelle demande
+        </button>
+        <a href="pilotage.html" class="btn btn-ghost btn-sm">Portail</a>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:1200px">
+      <div id="mcInfo" style="margin-bottom:1rem"></div>
+      <div id="mcStats" class="grid grid-3" style="margin-bottom:1.25rem"></div>
+      <div id="mcList"></div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalMesConge">
+  <div class="modal" style="max-width:460px;--mc:#0891b2">
+    <div class="mdx-hero">
+      <button class="mdx-close" onclick="closeModal('modalMesConge')" aria-label="Fermer">✕</button>
+      <div class="mdx-badge">🗓</div>
+      <div class="mdx-hero-txt">
+        <div class="mdx-title">Nouvelle demande de congés</div>
+        <div class="mdx-sub">Votre demande</div>
+      </div>
+    </div>
+    <div class="modal-body mdx-body">
+      <div class="mdx-section">
+        <div class="mdx-sec-head"><span>📋</span> Type &amp; période</div>
+        <div class="form-group"><label class="required">Type</label>
+          <select id="mcType" onchange="mcModalSync()">
+            <option value="cp">Congés payés</option>
+            <option value="rtt">RTT</option>
+            <option value="enfant_malade">Enfant malade</option>
+            <option value="formation">Formation</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+        <div class="grid grid-2" style="gap:.75rem">
+          <div class="form-group"><label class="required">Date début</label><input type="date" id="mcDebut"/></div>
+          <div class="form-group"><label class="required">Date fin</label><input type="date" id="mcFin"/></div>
+        </div>
+        <div class="form-group"><label>Motif</label><textarea id="mcMotif" rows="2" placeholder="Raison de la demande…"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modalMesConge')">Annuler</button>
+      <button class="btn btn-primary" id="mcSaveBtn" onclick="saveMesConge()">Envoyer la demande</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/conges-supabase.js"></script>
+<script src="js/conges-card.js"></script>
+<script>
+const MC_TYPE_L = { cp: 'Congés payés', rtt: 'RTT', maladie: 'Arrêt maladie', enfant_malade: 'Enfant malade', formation: 'Formation', autre: 'Autre' };
+const MC_STATUT = {
+  en_attente: { bg: '#d9770618', c: '#d97706', l: 'En attente' },
+  accepte:    { bg: '#16a34a18', c: '#16a34a', l: 'Accepté' },
+  refuse:     { bg: '#ef444418', c: '#ef4444', l: 'Refusé' }
+};
+
+let _mcFiche = null;
+let _mcCache = [];
+
+function mcJours(d) { return Math.ceil((new Date(d.fin) - new Date(d.debut)) / 86400000) + 1; }
+
+async function initMesConges() {
+  const s = Auth.requireAuth();
+  if (!s) return;
+  const info = document.getElementById('mcInfo');
+  try {
+    const employes = await sbGetEmployes();
+    _mcFiche = employes.find(e => String(e.profileId) === String(s.userId)) || null;
+    if (!_mcFiche) {
+      document.getElementById('btnAddConge').style.display = 'none';
+      info.innerHTML = `<div class="card" style="padding:1.25rem;text-align:center;color:var(--muted)">Votre compte n'est pas encore relié à une fiche salarié.<br>Contactez votre administrateur pour pouvoir faire une demande de congés.</div>`;
+      return;
+    }
+    _mcCache = (await sbGetConges()).filter(c => String(c.employeId) === String(_mcFiche.id));
+    renderMesConges();
+  } catch (e) {
+    console.error('[initMesConges]', e);
+    info.innerHTML = `<div class="card" style="padding:1.25rem;text-align:center;color:var(--red)">Erreur de chargement : ${escHtml(e?.message || e)}</div>`;
+  }
+}
+
+function renderMesConges() {
+  const year = new Date().getFullYear();
+  const joursPris = _mcCache
+    .filter(c => c.statut === 'accepte' && new Date(c.debut).getFullYear() === year)
+    .reduce((sum, c) => sum + mcJours(c), 0);
+  const enAttente = _mcCache.filter(c => c.statut === 'en_attente').length;
+  const refuses = _mcCache.filter(c => c.statut === 'refuse').length;
+
+  document.getElementById('mcStats').innerHTML = `
+    <div class="stat-card" style="border-left:3px solid #16a34a"><div class="stat-card-top"><span class="stat-label">Jours pris (${year})</span></div><div class="stat-num">${joursPris}</div></div>
+    <div class="stat-card" style="border-left:3px solid #d97706"><div class="stat-card-top"><span class="stat-label">En attente</span></div><div class="stat-num">${enAttente}</div></div>
+    <div class="stat-card" style="border-left:3px solid #ef4444"><div class="stat-card-top"><span class="stat-label">Refusées</span></div><div class="stat-num">${refuses}</div></div>`;
+
+  const el = document.getElementById('mcList');
+  const list = [..._mcCache].sort((a, b) => (b.dateDemande || '').localeCompare(a.dateDemande || ''));
+  if (!list.length) {
+    el.innerHTML = `<div class="empty" style="padding:2.5rem;text-align:center"><div style="font-size:2.5rem;margin-bottom:.5rem">🗓</div><h3>Aucune demande</h3><p>Cliquez sur « Nouvelle demande » pour poser des congés.</p></div>`;
+    return;
+  }
+  el.innerHTML = `<div class="cgx-grid">` + list.map(c => congeCardHtml(c, 'portal')).join('') + `</div>`;
+}
+
+function mcModalSync() {
+  const modalEl = document.querySelector('#modalMesConge .modal');
+  const sub = document.querySelector('#modalMesConge .mdx-sub');
+  if (!modalEl || !sub) return;
+  const type = document.getElementById('mcType').value || 'cp';
+  const meta = (typeof CONGE_TYPE_META !== 'undefined' && CONGE_TYPE_META[type]) ? CONGE_TYPE_META[type] : { label: type, color: '#0891b2' };
+  modalEl.style.setProperty('--mc', meta.color);
+  sub.textContent = meta.label;
+}
+
+function openMesCongeModal() {
+  document.getElementById('mcType').value = 'cp';
+  document.getElementById('mcDebut').value = '';
+  document.getElementById('mcFin').value = '';
+  document.getElementById('mcMotif').value = '';
+  mcModalSync();
+  openModal('modalMesConge');
+}
+
+async function saveMesConge() {
+  if (!_mcFiche) return;
+  const type = document.getElementById('mcType').value;
+  const debut = document.getElementById('mcDebut').value;
+  const fin = document.getElementById('mcFin').value;
+  const motif = document.getElementById('mcMotif').value.trim();
+  if (!debut || !fin) { toast('Dates obligatoires', 'error'); return; }
+  if (debut > fin) { toast('La date de fin doit être après la date de début', 'error'); return; }
+
+  const btn = document.getElementById('mcSaveBtn');
+  btn.disabled = true; const lbl = btn.textContent; btn.textContent = '⏳ Envoi…';
+  try {
+    const saved = await sbSaveConge({
+      employeId: _mcFiche.id,
+      employeNom: `${_mcFiche.prenom || ''} ${_mcFiche.nom || ''}`.trim(),
+      type, debut, fin, motif, statut: 'en_attente'
+    });
+    _mcCache.unshift(saved);
+    closeModal('modalMesConge');
+    toast('Demande envoyée ✓', 'success');
+    renderMesConges();
+  } catch (e) {
+    const msg = e?.message || e?.details || JSON.stringify(e) || 'Erreur inconnue';
+    toast('Erreur : ' + msg, 'error');
+    console.error('[saveMesConge]', e);
+  } finally {
+    btn.disabled = false; btn.textContent = lbl;
+  }
+}
+
+function cancelMesConge(id) {
+  confirmDialog('Annuler cette demande de congés ?', async () => {
+    try {
+      await sbDeleteConge(id);
+      _mcCache = _mcCache.filter(c => c.id !== id);
+      renderMesConges();
+      toast('Demande annulée', 'info');
+    } catch (e) {
+      toast('Erreur : ' + (e?.message || e), 'error');
+      console.error('[cancelMesConge]', e);
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initMesConges);
+</script>
+</body>
+</html>

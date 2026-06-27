@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Mes absences — INTERNALIS</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Mes absences</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <button id="btnAddMesAbs" class="btn btn-accent btn-sm" onclick="openMesAbsModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Déclarer une absence
+        </button>
+        <a href="pilotage.html" class="btn btn-ghost btn-sm">Portail</a>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:760px">
+      <div id="mesAbsInfo" style="margin-bottom:1rem"></div>
+      <div id="mesAbsList"></div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalMesAbs">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title" id="maModalTitle">Déclarer une absence</span>
+      <button class="modal-close" onclick="closeModal('modalMesAbs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:.85rem">
+      <div class="form-group"><label class="required">Type</label>
+        <select id="maType">
+          <option value="maladie">🤒 Arrêt maladie</option>
+          <option value="at">⚠️ Accident du travail</option>
+          <option value="maladie_pro">🏭 Maladie professionnelle</option>
+          <option value="maternite">👶 Congé maternité/paternité</option>
+          <option value="longue_maladie">🩺 Longue maladie</option>
+          <option value="autre">📋 Autre absence</option>
+        </select>
+      </div>
+      <div class="grid grid-2" style="gap:.75rem">
+        <div class="form-group"><label class="required">Date début</label><input type="date" id="maDebut"/></div>
+        <div class="form-group"><label>Date fin (si connue)</label><input type="date" id="maFin"/></div>
+      </div>
+      <div class="form-group"><label>Motif / précisions</label><textarea id="maNotes" rows="2" placeholder="Optionnel…"></textarea></div>
+      <div class="form-group">
+        <label>Justificatif (arrêt de travail…)</label>
+        <input type="file" id="maFichier" accept="image/*,application/pdf"/>
+        <div id="maJustifInfo" style="font-size:.72rem;color:var(--muted);margin-top:.25rem">PDF ou image, max 5 Mo.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modalMesAbs')">Annuler</button>
+      <button class="btn btn-primary" id="maSaveBtn" onclick="saveMesAbs()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/absences-supabase.js"></script>
+<script>
+const MA_TYPE_L = { maladie:'Arrêt maladie', at:'Accident du travail', maladie_pro:'Maladie professionnelle', maternite:'Congé maternité/paternité', longue_maladie:'Longue maladie', autre:'Autre absence' };
+const MA_TYPE_C = { maladie:'#d97706', at:'#dc2626', maladie_pro:'#9333ea', maternite:'#8b5cf6', longue_maladie:'#b91c1c', autre:'#64748b' };
+
+let _maFiche = null;     // fiche salarié de l'utilisateur connecté
+let _maCache = [];       // ses absences
+
+function maDays(a, b) { if (!a) return 0; const f = b || a; return Math.round((new Date(f) - new Date(a)) / 86400000) + 1; }
+
+async function initMesAbs() {
+  const s = Auth.requireAuth();
+  if (!s) return;
+  const info = document.getElementById('mesAbsInfo');
+  try {
+    const employes = await sbGetEmployes();
+    _maFiche = employes.find(e => String(e.profileId) === String(s.userId)) || null;
+    if (!_maFiche) {
+      document.getElementById('btnAddMesAbs').style.display = 'none';
+      info.innerHTML = `<div class="card" style="padding:1.25rem;text-align:center;color:var(--muted)">Votre compte n'est pas encore relié à une fiche salarié.<br>Contactez votre administrateur pour pouvoir déclarer vos absences.</div>`;
+      return;
+    }
+    _maCache = (await sbGetAbsences()).filter(a => String(a.employeId) === String(_maFiche.id));
+    renderMesAbs();
+  } catch (e) {
+    console.error('[initMesAbs]', e);
+    info.innerHTML = `<div class="card" style="padding:1.25rem;text-align:center;color:var(--red)">Erreur de chargement : ${escHtml(e?.message || e)}</div>`;
+  }
+}
+
+function renderMesAbs() {
+  const el = document.getElementById('mesAbsList');
+  const list = [..._maCache].sort((a, b) => (b.debut || '').localeCompare(a.debut || ''));
+  if (!list.length) {
+    el.innerHTML = `<div class="empty" style="padding:2.5rem;text-align:center"><div style="font-size:2.5rem;margin-bottom:.5rem">🤒</div><h3>Aucune absence déclarée</h3><p>Cliquez sur « Déclarer une absence » pour en ajouter une.</p></div>`;
+    return;
+  }
+  el.innerHTML = list.map(a => {
+    const color = MA_TYPE_C[a.type] || '#64748b';
+    const jours = maDays(a.debut, a.fin);
+    const enCours = !a.fin || a.fin >= new Date().toISOString().slice(0, 10);
+    return `<div style="display:flex;align-items:flex-start;gap:.85rem;padding:.85rem 1rem;background:#fff;border-radius:10px;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,.06);border-left:3px solid ${color}">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+          <span style="font-weight:600;font-size:.85rem">${escHtml(MA_TYPE_L[a.type] || a.type)}</span>
+          <span style="font-size:.7rem;color:#fff;background:${color};padding:1px 8px;border-radius:99px">${jours}j</span>
+          ${enCours ? `<span style="font-size:.68rem;font-weight:700;background:#fef9c3;color:#b45309;padding:1px 8px;border-radius:99px">En cours</span>` : ''}
+        </div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:.2rem">${formatDate(a.debut)}${a.fin ? ' → ' + formatDate(a.fin) : ' (en cours)'}</div>
+        ${a.notes ? `<div style="font-size:.78rem;margin-top:.2rem;font-style:italic">${escHtml(a.notes)}</div>` : ''}
+        ${a.justificatifPath ? `<button class="btn btn-ghost btn-sm" style="margin-top:.35rem;padding:.2rem .5rem" onclick="openJustificatif('${a.id}')">📎 Voir le justificatif</button>` : '<div style="font-size:.72rem;color:#dc2626;margin-top:.3rem">⚠️ Aucun justificatif joint</div>'}
+      </div>
+      <div style="display:flex;gap:.25rem;flex-shrink:0">
+        <button class="btn btn-ghost btn-sm" onclick="openMesAbsModal('${a.id}')" title="Modifier / ajouter un justificatif">✎</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteMesAbs('${a.id}')" title="Supprimer">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let _maEditId = null;
+
+function openMesAbsModal(id) {
+  _maEditId = id || null;
+  const a = id ? _maCache.find(x => x.id === id) : null;
+  document.getElementById('maModalTitle').textContent = a ? 'Modifier l\'absence' : 'Déclarer une absence';
+  document.getElementById('maType').value = a ? a.type : 'maladie';
+  document.getElementById('maDebut').value = a ? a.debut : new Date().toISOString().slice(0, 10);
+  document.getElementById('maFin').value = a ? (a.fin || '') : '';
+  document.getElementById('maNotes').value = a ? (a.notes || '') : '';
+  document.getElementById('maFichier').value = '';
+  document.getElementById('maJustifInfo').innerHTML = (a && a.justificatifPath)
+    ? `📎 Justificatif déjà joint — <a href="#" onclick="openJustificatif('${a.id}');return false">voir</a>. Choisir un fichier le remplacera.`
+    : 'PDF ou image, max 5 Mo.';
+  document.getElementById('maSaveBtn').textContent = a ? '💾 Enregistrer' : '💾 Enregistrer';
+  openModal('modalMesAbs');
+}
+
+async function saveMesAbs() {
+  if (!_maFiche) return;
+  const debut = document.getElementById('maDebut').value;
+  if (!debut) { toast('Date de début requise', 'error'); return; }
+  const file = document.getElementById('maFichier').files[0];
+  if (file && file.size > 5 * 1024 * 1024) { toast('Fichier trop lourd (max 5 Mo)', 'error'); return; }
+
+  const existing = _maEditId ? _maCache.find(x => x.id === _maEditId) : null;
+  const btn = document.getElementById('maSaveBtn');
+  btn.disabled = true; const lbl = btn.textContent; btn.textContent = '⏳ Enregistrement…';
+  try {
+    let justificatifPath = existing?.justificatifPath || '';
+    if (file) justificatifPath = await sbUploadJustificatif(file, Auth.getSession().userId);
+    const saved = await sbSaveAbsence({
+      id: _maEditId || undefined,
+      employeId: _maFiche.id,
+      employeNom: `${_maFiche.prenom || ''} ${_maFiche.nom || ''}`.trim(),
+      type: document.getElementById('maType').value,
+      debut,
+      fin: document.getElementById('maFin').value || '',
+      notes: document.getElementById('maNotes').value.trim(),
+      declareeCpam: existing?.declareeCpam || false,
+      visiteDate: existing?.visiteDate || '',
+      visiteFaite: existing?.visiteFaite || false,
+      justifie: existing?.justifie || false,
+      justificatifPath
+    });
+    if (_maEditId) {
+      const idx = _maCache.findIndex(x => x.id === _maEditId);
+      if (idx >= 0) _maCache[idx] = saved;
+      toast('Absence mise à jour', 'success');
+    } else {
+      _maCache.unshift(saved);
+      toast('Absence déclarée', 'success');
+    }
+    closeModal('modalMesAbs');
+    renderMesAbs();
+  } catch (e) {
+    const msg = e?.message || e?.details || JSON.stringify(e) || 'Erreur inconnue';
+    toast('Erreur : ' + msg, 'error');
+    console.error('[saveMesAbs]', e);
+  } finally {
+    btn.disabled = false; btn.textContent = lbl;
+  }
+}
+
+async function openJustificatif(id) {
+  const a = _maCache.find(x => x.id === id);
+  if (!a || !a.justificatifPath) return;
+  const url = await sbJustificatifUrl(a.justificatifPath);
+  if (url) window.open(url, '_blank');
+  else toast('Justificatif introuvable', 'error');
+}
+
+function deleteMesAbs(id) {
+  confirmDialog('Supprimer cette absence ?', async () => {
+    const a = _maCache.find(x => x.id === id);
+    try {
+      if (a?.justificatifPath) await sbDeleteJustificatif(a.justificatifPath);
+      await sbDeleteAbsence(id);
+      _maCache = _maCache.filter(x => x.id !== id);
+      renderMesAbs();
+      toast('Absence supprimée', 'info');
+    } catch (e) {
+      toast('Erreur : ' + (e?.message || e), 'error');
+      console.error('[deleteMesAbs]', e);
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initMesAbs);
+</script>
+</body>
+</html>

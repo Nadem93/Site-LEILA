@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>ViaTrajectoire — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">ViaTrajectoire</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm btn-add-resident" onclick="history.back()">←<span class="btn-add-label"> Retour</span></button>
+      </div>
+    </header>
+
+    <main class="content" id="vtContent">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <div>
+          <div style="font-weight:700;font-size:1rem">Demandes ViaTrajectoire</div>
+          <div style="font-size:.78rem;color:var(--muted)">Échanges MDPH / ESMS — orientations et décisions</div>
+        </div>
+        <button class="btn btn-primary" onclick="openVTDemande()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouvelle demande
+        </button>
+      </div>
+
+      <div class="card" style="margin-bottom:1rem">
+        <div style="display:flex;gap:1rem;padding:.75rem 1rem">
+          <div style="flex:1;text-align:center">
+            <div id="vtStatEnCours" style="font-weight:800;font-size:1.4rem;color:#d97706">0</div>
+            <div style="font-size:.72rem;color:var(--muted)">En cours</div>
+          </div>
+          <div style="flex:1;text-align:center">
+            <div id="vtStatAcceptees" style="font-weight:800;font-size:1.4rem;color:#16a34a">0</div>
+            <div style="font-size:.72rem;color:var(--muted)">Acceptées</div>
+          </div>
+          <div style="flex:1;text-align:center">
+            <div id="vtStatRefusees" style="font-weight:800;font-size:1.4rem;color:#ef4444">0</div>
+            <div style="font-size:.72rem;color:var(--muted)">Refusées</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="vtList">
+        <div class="empty" style="padding:3rem;text-align:center">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto .75rem;color:var(--g300)"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <p>Aucune demande ViaTrajectoire</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/viatrajectoire-supabase.js"></script>
+<script src="js/viatrajectoire.js"></script>
+<script>
+  Auth.requireAuth();
+  if (!Auth.isAdmin()) {
+    document.getElementById('vtContent').innerHTML = '<div class="empty" style="padding:3rem;text-align:center"><div style="font-size:2rem;margin-bottom:.75rem">🔒</div><h3>Accès refusé</h3><p>Vous n\'avez pas la permission d\'accéder à ce module.</p><a href="accueil.html" class="btn btn-accent" style="margin-top:1rem">Retour à l\'accueil</a></div>';
+  }
+</script>
+</body>
+</html>

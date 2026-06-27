@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Générateur de données démo — Internalis</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+  .wrap{max-width:760px;margin:0 auto;padding:2rem 1rem}
+  h1{font-size:1.4rem;font-weight:800;color:#0f2b4a;margin-bottom:.25rem}
+  .sub{font-size:.82rem;color:#64748b;margin-bottom:2rem}
+  .card{background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);padding:1.5rem;margin-bottom:1rem}
+  .card-title{font-weight:700;font-size:.9rem;margin-bottom:1rem;color:#0f2b4a}
+  .agents{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem;margin-bottom:1rem}
+  .agent{border-radius:10px;padding:.65rem .85rem;font-size:.78rem;border:1.5px solid transparent}
+  .badge{display:inline-block;font-size:.7rem;padding:.15rem .5rem;border-radius:999px;font-weight:600;margin-top:.2rem}
+  label{font-size:.82rem;font-weight:600;display:block;margin-bottom:.3rem;color:#374151}
+  select,input[type=checkbox]{font-size:.82rem}
+  select.sel{border:1.5px solid #e2e8f0;border-radius:8px;padding:.4rem .7rem;background:#fff;color:#1e293b;outline:none}
+  .btn{padding:.6rem 1.4rem;border-radius:9px;font-weight:700;font-size:.88rem;cursor:pointer;border:none;transition:.15s}
+  .btn-go{background:#0f2b4a;color:#fff}
+  .btn-go:hover{background:#1e3a5f}
+  .btn-go:disabled{background:#94a3b8;cursor:not-allowed}
+  .btn-reset{background:#fee2e2;color:#dc2626;margin-left:.5rem}
+  .btn-reset:hover{background:#fecaca}
+  .log{background:#0f172a;color:#94a3b8;border-radius:10px;padding:1rem;font-family:monospace;font-size:.76rem;line-height:1.7;max-height:340px;overflow-y:auto;margin-top:1rem}
+  .log .ok{color:#4ade80}.log .info{color:#60a5fa}.log .warn{color:#fbbf24}.log .err{color:#f87171}
+  progress{width:100%;height:6px;border-radius:3px;margin-top:.75rem;accent-color:#0f2b4a}
+  .check-row{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:#475569;margin-bottom:.75rem}
+  .stat-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.5rem}
+  .stat{text-align:center;flex:1;min-width:80px}
+  .stat-n{font-size:1.5rem;font-weight:800;color:#0f2b4a}
+  .stat-l{font-size:.7rem;color:#64748b}
+  .etab-info{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:8px;padding:.6rem .85rem;font-size:.8rem;color:#0369a1;margin-bottom:1rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🧪 Générateur de données démo</h1>
+  <p class="sub">Peuple l'application avec 30 jours d'activité réaliste — résidents, planning, journal, formations, messages et plus.</p>
+
+  <div class="card">
+    <div class="card-title">Établissement cible</div>
+    <div id="etabInfo" class="etab-info">Chargement…</div>
+    <label>Sélectionner un établissement</label>
+    <select id="selEtab" class="sel"></select>
+  </div>
+
+  <div class="card">
+    <div class="card-title">👥 Agents simulés</div>
+    <div class="agents" id="agentsGrid"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Données générées</div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-n">12</div><div class="stat-l">Employés</div></div>
+      <div class="stat"><div class="stat-n">12</div><div class="stat-l">Résidents</div></div>
+      <div class="stat"><div class="stat-n">~200</div><div class="stat-l">Entrées journal</div></div>
+      <div class="stat"><div class="stat-n">~250</div><div class="stat-l">Créneaux équipe</div></div>
+      <div class="stat"><div class="stat-n">5</div><div class="stat-l">Formations</div></div>
+      <div class="stat"><div class="stat-n">30</div><div class="stat-l">Jours d'historique</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Options</div>
+    <div class="check-row">
+      <input type="checkbox" id="chkOverwrite"/>
+      <span>Écraser les données existantes (déconseillé si des vraies données sont présentes)</span>
+    </div>
+    <div class="check-row">
+      <input type="checkbox" id="chkUsers" checked/>
+      <span>Créer aussi les comptes utilisateurs (mots de passe : <code>demo1234</code>)</span>
+    </div>
+    <button class="btn btn-go" id="btnRun" onclick="runSeed()">▶ Générer les données</button>
+    <button class="btn btn-reset" id="btnReset" onclick="resetSeed()">🗑 Réinitialiser</button>
+    <progress id="prog" value="0" max="100" style="display:none"></progress>
+    <div id="logBox" class="log" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+// ─── Utilitaires ────────────────────────────────────────────────────
+function uid() { return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+function dKey(key, etabId) { return `${key}__${etabId}`; }
+function lsGet(key) { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } }
+function lsSet(key, v) { localStorage.setItem(key, JSON.stringify(v)); }
+function scGet(key, etabId) { return lsGet(dKey(key, etabId)); }
+function scSet(key, etabId, v) { lsSet(dKey(key, etabId), v); }
+
+function dateStr(daysFromNow = 0) {
+  const d = new Date(); d.setDate(d.getDate() + daysFromNow);
+  return d.toISOString().slice(0, 10);
+}
+function isoStr(daysFromNow = 0, h = 8, m = 0) {
+  const d = new Date(); d.setDate(d.getDate() + daysFromNow);
+  d.setHours(h, m, 0, 0);
+  return d.toISOString();
+}
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function pickN(arr, n) {
+  const s = [...arr]; const out = [];
+  while (out.length < n && s.length) { const i = Math.floor(Math.random() * s.length); out.push(s.splice(i, 1)[0]); }
+  return out;
+}
+
+let logEl, progEl;
+function log(msg, cls = 'info') {
+  if (!logEl) return;
+  logEl.style.display = '';
+  logEl.innerHTML += `<div class="${cls}">▸ ${msg}</div>`;
+  logEl.scrollTop = logEl.scrollHeight;
+}
+function setProgress(v) { if (progEl) { progEl.style.display = ''; progEl.value = v; } }
+
+// ─── Données de base ────────────────────────────────────────────────
+const AGENTS = [
+  // 8 Éducateurs
+  { id:'de-1',  prenom:'Marie',      nom:'Lefebvre',   fonction:'Éducateur spécialisé',              contrat:'CDI', heures:35, color:'#3b82f6', username:'mlefebvre',  role:'moderator' },
+  { id:'de-2',  prenom:'Thomas',     nom:'Bernard',    fonction:'Éducateur spécialisé',              contrat:'CDI', heures:35, color:'#3b82f6', username:'tbernard',   role:'employe' },
+  { id:'de-3',  prenom:'Lucas',      nom:'Petit',      fonction:'Éducateur spécialisé',              contrat:'CDI', heures:35, color:'#3b82f6', username:'lpetit',     role:'employe' },
+  { id:'de-4',  prenom:'Inès',       nom:'Chabrier',   fonction:'Éducateur spécialisé',              contrat:'CDI', heures:35, color:'#3b82f6', username:'ichabrier',  role:'employe' },
+  { id:'de-5',  prenom:'Karim',      nom:'Saïdi',      fonction:'Moniteur-éducateur',                contrat:'CDI', heures:35, color:'#6366f1', username:'ksaidi',     role:'employe' },
+  { id:'de-6',  prenom:'Aurélie',    nom:'Fontaine',   fonction:'Moniteur-éducateur',                contrat:'CDD', heures:28, color:'#6366f1', username:'afontaine',  role:'employe' },
+  { id:'de-7',  prenom:'Bastien',    nom:'Collignon',  fonction:'Moniteur-éducateur',                contrat:'CDI', heures:35, color:'#6366f1', username:'bcollignon', role:'employe' },
+  { id:'de-8',  prenom:'Sara',       nom:'Lemoine',    fonction:'Éducateur spécialisé',              contrat:'CDI', heures:35, color:'#3b82f6', username:'slemoine',   role:'employe' },
+  // 1 Coordinateur
+  { id:'de-9',  prenom:'Jean-Luc',   nom:'Moreau',     fonction:'Chef de service',                   contrat:'CDI', heures:35, color:'#f59e0b', username:'jlmoreau',   role:'admin' },
+  // 2 Veilleurs de nuit
+  { id:'de-10', prenom:'Pierre',     nom:'Dubois',     fonction:'Veilleur de nuit',                  contrat:'CDI', heures:35, color:'#0ea5e9', username:'pdubois',    role:'employe' },
+  { id:'de-11', prenom:'Nadia',      nom:'Benali',     fonction:'Veilleur de nuit',                  contrat:'CDI', heures:35, color:'#0ea5e9', username:'nbenali',    role:'employe' },
+  // 1 Assistante de direction
+  { id:'de-12', prenom:'Camille',    nom:'Rousseau',   fonction:'Secrétaire / Assistant administratif', contrat:'CDI', heures:35, color:'#78716c', username:'crousseau',  role:'employe' },
+];
+
+const RESIDENTS = [
+  { prenom:'Antoine', nom:'Girard',    dateNaissance:'2003-04-12', chambre:'101', referent:'Marie Lefebvre' },
+  { prenom:'Emma',    nom:'Petit',     dateNaissance:'2005-11-28', chambre:'102', referent:'Thomas Bernard' },
+  { prenom:'Rayan',   nom:'Mansouri',  dateNaissance:'2004-02-17', chambre:'103', referent:'Marie Lefebvre' },
+  { prenom:'Lucie',   nom:'Fontaine',  dateNaissance:'2004-09-05', chambre:'104', referent:'Lucas Petit' },
+  { prenom:'Kevin',   nom:'Lebrun',    dateNaissance:'2002-07-30', chambre:'105', referent:'Thomas Bernard' },
+  { prenom:'Jade',    nom:'Moreau',    dateNaissance:'2007-01-14', chambre:'106', referent:'Marie Lefebvre' },
+  { prenom:'Dylan',   nom:'Rousseau',  dateNaissance:'2001-06-22', chambre:'107', referent:'Lucas Petit' },
+  { prenom:'Sarah',   nom:'Benali',    dateNaissance:'2004-12-03', chambre:'108', referent:'Thomas Bernard' },
+  { prenom:'Mathieu', nom:'Garnier',   dateNaissance:'2003-08-19', chambre:'201', referent:'Lucas Petit' },
+  { prenom:'Pauline', nom:'Vidal',     dateNaissance:'2005-03-25', chambre:'202', referent:'Marie Lefebvre' },
+  { prenom:'Samir',   nom:'Karim',     dateNaissance:'2004-10-08', chambre:'203', referent:'Thomas Bernard' },
+  { prenom:'Laura',   nom:'Martin',    dateNaissance:'2002-05-16', chambre:'204', referent:'Lucas Petit' },
+];
+
+const JOURNAL_TEMPLATES = [
+  e => `Entretien individuel avec ${e} — évoque des difficultés relationnelles avec un autre résident. Travail sur la gestion des conflits proposé.`,
+  e => `${e} présent·e au repas du midi. Bonne participation à la table. Appétit satisfaisant.`,
+  e => `Accompagnement de ${e} à un rendez-vous médical. Consultation s'est bien déroulée.`,
+  e => `${e} a participé à l'activité collective du soir. Engagement positif observé.`,
+  e => `Rappel des règles de vie à ${e} suite à une altercation verbale dans les couloirs. Réponse constructive.`,
+  e => `${e} a sollicité un entretien sur son projet de formation. Dossier à préparer pour la semaine prochaine.`,
+  e => `Bilan de semaine avec ${e}. Objectifs PPE révisés. Prochaine échéance fixée au mois suivant.`,
+  e => `${e} absent·e au petit-déjeuner. Contact famille effectué. Pas d'inquiétude particulière.`,
+  e => `Accompagnement de ${e} pour ouverture d'un compte bancaire. Démarche administrative complétée.`,
+  e => `${e} montre de la motivation pour reprendre une activité sportive. Prise de contact avec l'association locale.`,
+  e => `Retour tardif de ${e} (22h30). Discussion sur le respect des horaires du règlement intérieur.`,
+  e => `${e} a rendu son espace de vie propre et rangé ce matin. Encouragements apportés.`,
+  e => `Présence de la famille de ${e}. Visite sereine. Lien familial maintenu.`,
+  e => `${e} se plaint de maux de tête récurrents. Transmis à l'infirmière pour suivi.`,
+  e => `Travail en groupe avec ${e} sur les démarches administratives. Compréhension progressive du système CAF.`,
+];
+
+const FORMATIONS_DATA = [
+  { titre:'PSC1 — Prévention et secours civiques', organisme:'Croix-Rouge française', domaine:"Sécurité & gestes d'urgence", dureeHeures:7, cout:120, statut:'realisee', daysOffset:-45 },
+  { titre:'Gestion de crise et déescalade verbale', organisme:'CREAHI Occitanie', domaine:'Communication & gestion des conflits', dureeHeures:14, cout:350, statut:'realisee', daysOffset:-20 },
+  { titre:'Accompagnement vers l\'autonomie des jeunes adultes', organisme:'UNIFAF', domaine:'Accompagnement éducatif & pédagogique', dureeHeures:21, cout:480, statut:'planifiee', daysOffset:15 },
+  { titre:'Protection des données et RGPD en ESMS', organisme:'CNFPT', domaine:'Numérique & outils professionnels', dureeHeures:7, cout:0, statut:'planifiee', daysOffset:30, maxParticipants:10 },
+  { titre:'Protocoles de soins et administration médicaments', organisme:'IFSI Montpellier', domaine:'Hygiène, santé & soins', dureeHeures:14, cout:290, statut:'planifiee', daysOffset:45, maxParticipants:6 },
+];
+
+const MESSAGES_DATA = [
+  { from:'de-9',  to:'de-1',  body:'Marie, peux-tu rédiger le bilan mensuel d\'Antoine avant vendredi ? Réunion de synthèse lundi matin.', daysOffset:-5 },
+  { from:'de-1',  to:'de-9',  body:'Bien reçu Jean-Luc. Je m\'en occupe demain. Il y a aussi la question du projet professionnel de Rayan à aborder.', daysOffset:-5 },
+  { from:'de-9',  to:'de-12', body:'Camille, peux-tu préparer les convocations pour les entretiens professionnels de mars ? Merci.', daysOffset:-4 },
+  { from:'de-12', to:'de-9',  body:'Bien sûr, je m\'en occupe aujourd\'hui. Vous confirmez les dates de la semaine prochaine ?', daysOffset:-4 },
+  { from:'de-2',  to:'de-3',  body:'Lucas, tu t\'occupes de l\'accompagnement de Kevin demain matin ? J\'ai une réunion réseau.', daysOffset:-3 },
+  { from:'de-3',  to:'de-2',  body:'Pas de problème Thomas, je le prends en charge. On se fait un point en fin de service ?', daysOffset:-3 },
+  { from:'de-10', to:'de-9',  body:'Jean-Luc, nuit agitée hier. Deux résidents difficiles à coucher. J\'ai tout consigné dans le cahier de nuit.', daysOffset:-2 },
+  { from:'de-9',  to:'de-10', body:'Merci Pierre. Je lis ça et on en parle à la réunion de lundi. Continue à bien noter les transmissions.', daysOffset:-2 },
+  { from:'de-5',  to:'de-1',  body:'Marie, j\'ai remarqué que Mathieu mange très peu depuis 3 jours. À surveiller de ton côté ?', daysOffset:-1 },
+  { from:'de-1',  to:'de-5',  body:'Merci Karim. Je vais faire un point avec lui cet après-midi et prévenir le référent si nécessaire.', daysOffset:-1 },
+  { from:'de-11', to:'de-9',  body:'Jean-Luc, je souhaiterais poser une demande de formation sur la gestion des comportements difficiles la nuit.', daysOffset:-1 },
+  { from:'de-9',  to:'de-11', body:'Bonne initiative Nadia. Envoie ta demande à l\'assistante de direction pour inscription au plan de formation.', daysOffset:-1 },
+];
+
+const INCIDENTS_DATA = [
+  { type:'Altercation verbale', titre:'Conflit entre résidents — couloir 1er étage', description:'Altercation verbale entre Antoine G. et Dylan R. suite à un désaccord sur l\'utilisation du salon commun. Intervention rapide de l\'éducatrice de service. Médiation effectuée. Aucune violence physique. Résolution amiable après 20 minutes de discussion.', residentIdx:0, daysOffset:-18 },
+  { type:'Fugue / Absence', titre:'Absence non signalée — Emma Petit', description:'Emma Petit n\'a pas été présente au repas du soir et n\'a pas signalé de sortie. Contact téléphonique établi à 20h15 : elle était chez une amie et avait oublié de prévenir. Retour au foyer à 21h00. Rappel du règlement effectué.', residentIdx:1, daysOffset:-9 },
+  { type:'Incident médical', titre:'Malaise vagal — Nadia Benali', description:'L\'aide-soignante Nadia Benali a présenté un malaise vagal en milieu de service. Prise en charge immédiate par Sophie Martin (infirmière). Repos observé, récupération complète après 30 minutes. Pas d\'hospitalisation nécessaire. Déclaration employeur effectuée.', residentIdx:null, daysOffset:-4 },
+];
+
+const SHIFT_TYPES = [
+  { debut:'06:30', fin:'14:30' },
+  { debut:'08:00', fin:'16:00' },
+  { debut:'13:30', fin:'21:30' },
+  { debut:'21:00', fin:'07:00' },
+];
+
+// ─── Initialisation de l'UI ─────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  logEl = document.getElementById('logBox');
+  progEl = document.getElementById('prog');
+
+  const etabs = lsGet('ftr_etablissements') || [];
+  const sel = document.getElementById('selEtab');
+  const info = document.getElementById('etabInfo');
+
+  if (!etabs.length) {
+    info.textContent = '⚠️ Aucun établissement trouvé. Ouvrez d\'abord l\'application pour créer un établissement.';
+    document.getElementById('btnRun').disabled = true;
+    sel.disabled = true;
+    return;
+  }
+
+  etabs.forEach(e => {
+    const o = document.createElement('option');
+    o.value = e.id;
+    o.textContent = `${e.nom || e.name || 'Établissement'} (id: ${e.id})`;
+    sel.appendChild(o);
+  });
+
+  sel.addEventListener('change', updateInfo);
+  updateInfo();
+
+  // Agents grid
+  const grid = document.getElementById('agentsGrid');
+  AGENTS.forEach(a => {
+    const div = document.createElement('div');
+    div.className = 'agent';
+    div.style.cssText = `background:${a.color}12;border-color:${a.color}40`;
+    div.innerHTML = `<div style="font-weight:700;font-size:.82rem">${a.prenom} ${a.nom}</div>
+      <div style="font-size:.72rem;color:#64748b;margin:.1rem 0">${a.fonction}</div>
+      <span class="badge" style="background:${a.color}20;color:${a.color}">${a.role}</span>`;
+    grid.appendChild(div);
+  });
+
+  function updateInfo() {
+    const id = sel.value;
+    const etab = etabs.find(e => String(e.id) === String(id));
+    if (etab) info.textContent = `📍 Établissement sélectionné : ${etab.nom || etab.name} (clé : __${etab.id})`;
+  }
+});
+
+// ─── Seed principal ──────────────────────────────────────────────────
+async function runSeed() {
+  logEl = document.getElementById('logBox');
+  progEl = document.getElementById('prog');
+  logEl.innerHTML = '';
+  logEl.style.display = '';
+
+  const etabId = document.getElementById('selEtab').value;
+  if (!etabId) { log('Aucun établissement sélectionné', 'err'); return; }
+
+  const overwrite = document.getElementById('chkOverwrite').checked;
+  const createUsers = document.getElementById('chkUsers').checked;
+
+  document.getElementById('btnRun').disabled = true;
+  log(`Établissement cible : id=${etabId}`, 'info');
+
+  // ── 1. Employés ────────────────────────────────────────────────────
+  setProgress(5);
+  const existingEmps = scGet('ftr_employes', etabId) || [];
+  if (existingEmps.length && !overwrite) {
+    log(`Employés : ${existingEmps.length} déjà présents — ignorés (cochez "Écraser" pour remplacer)`, 'warn');
+  } else {
+    const emps = AGENTS.map(a => ({
+      id: a.id,
+      prenom: a.prenom,
+      nom: a.nom,
+      fonction: a.fonction,
+      statut: 'actif',
+      contrat: a.contrat,
+      heuresHebdo: a.heures,
+      dateEntree: dateStr(-Math.floor(Math.random() * 720 + 90)),
+      email: `${a.username}@foyer-ftr.fr`,
+      tel: `06${Math.floor(Math.random()*100000000).toString().padStart(8,'0')}`,
+      poste: a.fonction,
+      createdAt: isoStr(-400),
+    }));
+    scSet('ftr_employes', etabId, emps);
+    log(`✓ ${emps.length} employés créés`, 'ok');
+  }
+  const employes = scGet('ftr_employes', etabId) || [];
+  const empById = Object.fromEntries(employes.map(e => [e.id, e]));
+
+  // ── 2. Comptes utilisateurs ────────────────────────────────────────
+  setProgress(10);
+  if (createUsers) {
+    const existingUsers = scGet('ftr_users', etabId) || [];
+    const adminExists = existingUsers.find(u => u.role === 'admin' || u.super);
+    const newUsers = [];
+    if (!adminExists) newUsers.push({ id:1, prenom:'Admin', nom:'', username:'admin', password:'admin123', role:'admin', super:true });
+    AGENTS.forEach((a, i) => {
+      if (!existingUsers.find(u => u.username === a.username)) {
+        newUsers.push({ id: 100 + i, prenom: a.prenom, nom: a.nom, username: a.username, password:'demo1234', role: a.role, fonction: a.fonction });
+      }
+    });
+    if (newUsers.length) {
+      const merged = [...existingUsers, ...newUsers];
+      scSet('ftr_users', etabId, merged);
+      log(`✓ ${newUsers.length} compte(s) utilisateur créés (mdp: demo1234)`, 'ok');
+    } else {
+      log('Comptes utilisateurs : déjà présents', 'warn');
+    }
+  }
+
+  // ── 3. Résidents ───────────────────────────────────────────────────
+  setProgress(18);
+  const existingRes = scGet('ftr_residents', etabId) || [];
+  let residents;
+  if (existingRes.length && !overwrite) {
+    log(`Résidents : ${existingRes.length} déjà présents — ignorés`, 'warn');
+    residents = existingRes;
+  } else {
+    residents = RESIDENTS.map((r, i) => ({
+      id: `r-${uid()}`,
+      prenom: r.prenom,
+      nom: r.nom,
+      dateNaissance: r.dateNaissance,
+      chambre: r.chambre,
+      referent: r.referent,
+      dateEntree: dateStr(-(Math.floor(Math.random() * 400 + 30))),
+      statut: 'present',
+      objectifs: [],
+      createdAt: isoStr(-400),
+    }));
+    scSet('ftr_residents', etabId, residents);
+    log(`✓ ${residents.length} résidents créés`, 'ok');
+  }
+
+  // ── 4. Journal de bord (30 jours) ──────────────────────────────────
+  setProgress(28);
+  const existingJournal = scGet('ftr_journal', etabId) || [];
+  if (existingJournal.length && !overwrite) {
+    log(`Journal : ${existingJournal.length} entrées déjà présentes — ignorées`, 'warn');
+  } else {
+    const cats = ['Autonomie','Santé et bien-être','Vie sociale et loisirs','Accompagnement','Administratif','Logement'];
+    const journal = [];
+    for (let d = -30; d <= 0; d++) {
+      const nbEntries = 4 + Math.floor(Math.random() * 6);
+      for (let k = 0; k < nbEntries; k++) {
+        const res = pick(residents);
+        const agent = pick(employes);
+        const fullName = `${res.prenom} ${res.nom}`;
+        journal.push({
+          id: uid(),
+          date: dateStr(d),
+          heure: `${8 + Math.floor(Math.random() * 13)}:${Math.random() > 0.5 ? '00' : '30'}`,
+          residentId: res.id,
+          residentNom: fullName,
+          auteur: `${agent.prenom} ${agent.nom}`,
+          auteurId: agent.id,
+          categorie: pick(cats),
+          texte: pick(JOURNAL_TEMPLATES)(fullName),
+          createdAt: isoStr(d),
+        });
+      }
+    }
+    scSet('ftr_journal', etabId, journal);
+    log(`✓ ${journal.length} entrées journal créées (30 jours)`, 'ok');
+  }
+
+  // ── 5. Présences (30 jours) ────────────────────────────────────────
+  setProgress(36);
+  const existingPres = scGet('ftr_presences', etabId) || {};
+  if (Object.keys(existingPres).length > 5 && !overwrite) {
+    log('Présences : données déjà présentes — ignorées', 'warn');
+  } else {
+    const presences = {};
+    for (let d = -30; d <= 0; d++) {
+      const ds = dateStr(d);
+      presences[ds] = {};
+      residents.forEach(r => {
+        const rand = Math.random();
+        presences[ds][r.id] = rand < 0.88 ? 'present' : rand < 0.94 ? 'sortie' : 'absent';
+      });
+    }
+    scSet('ftr_presences', etabId, presences);
+    log(`✓ Présences sur 30 jours créées`, 'ok');
+  }
+
+  // ── 6. Planning équipe (–30j → +14j) ──────────────────────────────
+  setProgress(46);
+  const existingShifts = scGet('ftr_planning_equipe', etabId) || [];
+  if (existingShifts.length > 10 && !overwrite) {
+    log(`Planning équipe : ${existingShifts.length} créneaux déjà présents — ignorés`, 'warn');
+  } else {
+    const shifts = [];
+    // Assign each day agent a consistent shift pattern
+    const dayAgents = ['de-1','de-2','de-3','de-4','de-5','de-6','de-7','de-8']; // éducateurs jour
+    const nightAgents = ['de-10','de-11']; // 2 veilleurs de nuit
+    const weekendExtra = ['de-4','de-8'];
+
+    for (let d = -30; d <= 14; d++) {
+      const ds = dateStr(d);
+      const dayOfWeek = new Date(ds).getDay();
+      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+      // Shift matin + après-midi pour agents de jour
+      dayAgents.forEach((empId, i) => {
+        if (isWeekend && i > 2) return; // moins de monde le weekend
+        const shift = i < 2 ? SHIFT_TYPES[0] : i < 4 ? SHIFT_TYPES[1] : SHIFT_TYPES[2];
+        const emp = empById[empId];
+        if (!emp) return;
+        shifts.push({
+          id: 'pe-' + uid(),
+          employeId: empId,
+          employeNom: `${emp.prenom} ${emp.nom}`,
+          date: ds,
+          debut: shift.debut,
+          fin: shift.fin,
+        });
+      });
+
+      // Nuit
+      nightAgents.forEach(empId => {
+        const emp = empById[empId];
+        if (!emp) return;
+        shifts.push({
+          id: 'pe-' + uid(),
+          employeId: empId,
+          employeNom: `${emp.prenom} ${emp.nom}`,
+          date: ds,
+          debut: SHIFT_TYPES[3].debut,
+          fin: SHIFT_TYPES[3].fin,
+        });
+      });
+
+      // Weekend : ajoute des agents supplémentaires
+      if (isWeekend) {
+        weekendExtra.forEach(empId => {
+          const emp = empById[empId];
+          if (!emp) return;
+          shifts.push({
+            id: 'pe-' + uid(),
+            employeId: empId,
+            employeNom: `${emp.prenom} ${emp.nom}`,
+            date: ds,
+            debut: '09:00',
+            fin: '17:00',
+          });
+        });
+      }
+
+      // Jean-Luc chef de service : jours ouvrés
+      // Coordinateur (de-9) : jours ouvrés uniquement
+      if (!isWeekend) {
+        const emp = empById['de-9'];
+        if (emp) shifts.push({ id:'pe-'+uid(), employeId:'de-9', employeNom:`${emp.prenom} ${emp.nom}`, date:ds, debut:'08:30', fin:'16:30' });
+      }
+      // Assistante de direction (de-12) : jours ouvrés uniquement
+      if (!isWeekend) {
+        const emp = empById['de-12'];
+        if (emp) shifts.push({ id:'pe-'+uid(), employeId:'de-12', employeNom:`${emp.prenom} ${emp.nom}`, date:ds, debut:'09:00', fin:'17:00' });
+      }
+    }
+    scSet('ftr_planning_equipe', etabId, shifts);
+    log(`✓ ${shifts.length} créneaux planning équipe créés`, 'ok');
+  }
+
+  // ── 7. Formations ──────────────────────────────────────────────────
+  setProgress(56);
+  const existingForms = scGet('ftr_formations', etabId) || [];
+  if (existingForms.length && !overwrite) {
+    log(`Formations : ${existingForms.length} déjà présentes — ignorées`, 'warn');
+  } else {
+    const empIds = employes.map(e => e.id);
+    const formations = FORMATIONS_DATA.map(f => {
+      const participants = pickN(empIds, 3 + Math.floor(Math.random() * 4));
+      const ds = dateStr(f.daysOffset);
+      return {
+        id: uid(),
+        titre: f.titre,
+        organisme: f.organisme,
+        domaine: f.domaine,
+        dateDebut: ds,
+        dateFin: dateStr(f.daysOffset + (f.dureeHeures > 7 ? 1 : 0)),
+        dureeHeures: f.dureeHeures,
+        cout: f.cout,
+        maxParticipants: f.maxParticipants || null,
+        statut: f.statut,
+        participants,
+        notes: '',
+        createdAt: isoStr(-60),
+        updatedAt: isoStr(-60),
+      };
+    });
+    scSet('ftr_formations', etabId, formations);
+    log(`✓ ${formations.length} formations créées`, 'ok');
+  }
+
+  // ── 8. Congés ──────────────────────────────────────────────────────
+  setProgress(62);
+  const existingConges = lsGet('ftr_conges') || [];
+  if (existingConges.length && !overwrite) {
+    log('Congés : données déjà présentes — ignorées', 'warn');
+  } else {
+    const conges = [
+      { id:uid(), employeId:'de-2',  employeNom:'Thomas Bernard',   type:'Congés payés',  debut:dateStr(10), fin:dateStr(17), motif:'Vacances été',                  statut:'approuve',   createdAt:isoStr(-10) },
+      { id:uid(), employeId:'de-11', employeNom:'Nadia Benali',     type:'Arrêt maladie', debut:dateStr(-12),fin:dateStr(-8), motif:'Grippe',                         statut:'approuve',   createdAt:isoStr(-14) },
+      { id:uid(), employeId:'de-12', employeNom:'Camille Rousseau', type:'Congés payés',  debut:dateStr(22), fin:dateStr(28), motif:'Congés annuels',                 statut:'en_attente', createdAt:isoStr(-2)  },
+      { id:uid(), employeId:'de-1',  employeNom:'Marie Lefebvre',   type:'Récupération',  debut:dateStr(5),  fin:dateStr(5),  motif:'Récup heures supplémentaires',   statut:'en_attente', createdAt:isoStr(-1)  },
+      { id:uid(), employeId:'de-6',  employeNom:'Aurélie Fontaine', type:'Congés payés',  debut:dateStr(30), fin:dateStr(37), motif:'Congés annuels',                 statut:'en_attente', createdAt:isoStr(-3)  },
+      { id:uid(), employeId:'de-10', employeNom:'Pierre Dubois',    type:'Récupération',  debut:dateStr(3),  fin:dateStr(3),  motif:'Nuits supplémentaires récupérées', statut:'approuve', createdAt:isoStr(-5)  },
+    ];
+    lsSet('ftr_conges', conges);
+    log(`✓ ${conges.length} demandes de congés créées`, 'ok');
+  }
+
+  // ── 9. Arrêts maladie employés ─────────────────────────────────────
+  setProgress(68);
+  const existingArrets = scGet('ftr_emp_arrets', etabId) || {};
+  if (Object.keys(existingArrets).length && !overwrite) {
+    log('Arrêts maladie : données déjà présentes — ignorées', 'warn');
+  } else {
+    const arrets = {
+      'de-11': [
+        { id:uid(), type:'Maladie ordinaire', debut:dateStr(-12), fin:dateStr(-8), dureeJours:4, notes:'Syndrome grippal. Médecin traitant consulté.', createdAt:isoStr(-14) }
+      ],
+      'de-4': [
+        { id:uid(), type:'Accident de travail', debut:dateStr(-60), fin:dateStr(-55), dureeJours:5, notes:'Entorse cheville lors d\'une intervention. Déclaré à la CPAM.', createdAt:isoStr(-62) }
+      ],
+      'de-6': [
+        { id:uid(), type:'Maladie ordinaire', debut:dateStr(-90), fin:dateStr(-85), dureeJours:5, notes:'Surmenage. Repos prescrit par le médecin du travail.', createdAt:isoStr(-92) }
+      ],
+    };
+    scSet('ftr_emp_arrets', etabId, arrets);
+    log('✓ 2 arrêts maladie créés', 'ok');
+  }
+
+  // ── 10. Diplômes & habilitations ───────────────────────────────────
+  setProgress(73);
+  const existingDip = scGet('ftr_emp_diplomes', etabId) || {};
+  if (Object.keys(existingDip).length && !overwrite) {
+    log('Diplômes : données déjà présentes — ignorées', 'warn');
+  } else {
+    const diplomes = {
+      'de-1': [
+        { id:uid(), titre:'DEES — Diplôme d\'État d\'Éducateur Spécialisé', organisme:'IRTS Montpellier', dateObtention:'2018-06-30', expiration:null, notes:'', createdAt:isoStr(-200) },
+        { id:uid(), titre:'PSC1', organisme:'Croix-Rouge', dateObtention:dateStr(-45), expiration:dateStr(320), notes:'Recyclage effectué', createdAt:isoStr(-45) },
+      ],
+      'de-2': [
+        { id:uid(), titre:'DEES — Diplôme d\'État d\'Éducateur Spécialisé', organisme:'IRTS Lyon', dateObtention:'2019-07-01', expiration:null, notes:'', createdAt:isoStr(-200) },
+        { id:uid(), titre:'PSC1', organisme:'Croix-Rouge', dateObtention:dateStr(-45), expiration:dateStr(320), notes:'', createdAt:isoStr(-45) },
+      ],
+      'de-3': [
+        { id:uid(), titre:'DEES — Diplôme d\'État d\'Éducateur Spécialisé', organisme:'IRTS Bordeaux', dateObtention:'2021-06-30', expiration:null, notes:'', createdAt:isoStr(-200) },
+      ],
+      'de-5': [
+        { id:uid(), titre:'DEME — Diplôme d\'État de Moniteur-Éducateur', organisme:'IRTS Toulouse', dateObtention:'2020-07-15', expiration:null, notes:'', createdAt:isoStr(-200) },
+      ],
+      'de-7': [
+        { id:uid(), titre:'DEME — Diplôme d\'État de Moniteur-Éducateur', organisme:'IRTS Nantes', dateObtention:'2022-07-01', expiration:null, notes:'', createdAt:isoStr(-200) },
+      ],
+      'de-8': [
+        { id:uid(), titre:'DEES — Diplôme d\'État d\'Éducateur Spécialisé', organisme:'IRTS Paris', dateObtention:'2017-06-30', expiration:null, notes:'', createdAt:isoStr(-200) },
+        { id:uid(), titre:'PSC1', organisme:'Croix-Rouge', dateObtention:dateStr(-45), expiration:dateStr(320), notes:'', createdAt:isoStr(-45) },
+      ],
+      'de-9': [
+        { id:uid(), titre:'CAFERUIS', organisme:'IRTS Languedoc-Roussillon', dateObtention:'2012-07-01', expiration:null, notes:'Certificat d\'aptitude aux fonctions d\'encadrement', createdAt:isoStr(-200) },
+        { id:uid(), titre:'DEES — Diplôme d\'État d\'Éducateur Spécialisé', organisme:'IRTS Montpellier', dateObtention:'2005-06-30', expiration:null, notes:'', createdAt:isoStr(-200) },
+      ],
+      'de-10': [
+        { id:uid(), titre:'CQP Surveillant de nuit qualifié', organisme:'UNIFAF', dateObtention:'2016-09-01', expiration:null, notes:'', createdAt:isoStr(-200) },
+        { id:uid(), titre:'PSC1', organisme:'Croix-Rouge', dateObtention:dateStr(-80), expiration:dateStr(285), notes:'', createdAt:isoStr(-80) },
+      ],
+      'de-11': [
+        { id:uid(), titre:'CQP Surveillant de nuit qualifié', organisme:'UNIFAF', dateObtention:'2019-09-01', expiration:null, notes:'', createdAt:isoStr(-200) },
+      ],
+      'de-12': [
+        { id:uid(), titre:'BTS Support à l\'Action Managériale', organisme:'Lycée Montaigne', dateObtention:'2014-07-01', expiration:null, notes:'', createdAt:isoStr(-200) },
+      ],
+    };
+    scSet('ftr_emp_diplomes', etabId, diplomes);
+    log('✓ Diplômes & habilitations créés pour 4 employés', 'ok');
+  }
+
+  // ── 11. Incidents ──────────────────────────────────────────────────
+  setProgress(78);
+  const existingInc = scGet('ftr_incidents', etabId) || [];
+  if (existingInc.length && !overwrite) {
+    log(`Incidents : ${existingInc.length} déjà présents — ignorés`, 'warn');
+  } else {
+    const incidents = INCIDENTS_DATA.map(inc => {
+      const res = inc.residentIdx !== null ? residents[inc.residentIdx] : null;
+      const auteur = pick(employes);
+      return {
+        id: uid(),
+        date: dateStr(inc.daysOffset),
+        heure: `${9 + Math.floor(Math.random()*10)}:${Math.random()>.5?'00':'30'}`,
+        type: inc.type,
+        titre: inc.titre,
+        description: inc.description,
+        residentId: res?.id || null,
+        residentNom: res ? `${res.prenom} ${res.nom}` : null,
+        auteur: `${auteur.prenom} ${auteur.nom}`,
+        auteurId: auteur.id,
+        statut: 'traite',
+        createdAt: isoStr(inc.daysOffset),
+      };
+    });
+    scSet('ftr_incidents', etabId, incidents);
+    log(`✓ ${incidents.length} incidents enregistrés`, 'ok');
+  }
+
+  // ── 12. Messages internes ──────────────────────────────────────────
+  setProgress(84);
+  const existingMsgs = scGet('ftr_messages', etabId) || [];
+  if (existingMsgs.length > 5 && !overwrite) {
+    log(`Messages : ${existingMsgs.length} déjà présents — ignorés`, 'warn');
+  } else {
+    const convs = {};
+    const msgs = [];
+    MESSAGES_DATA.forEach(m => {
+      const convId = [m.from, m.to].sort().join('_');
+      if (!convs[convId]) convs[convId] = { id: convId, userIds: [m.from, m.to], createdAt: isoStr(m.daysOffset - 1) };
+      msgs.push({
+        id: uid(),
+        convId,
+        from: m.from,
+        body: m.body,
+        date: isoStr(m.daysOffset, 9 + Math.floor(Math.random()*8)),
+        readBy: [m.from, m.to],
+      });
+    });
+    scSet('ftr_messages', etabId, msgs);
+    scSet('ftr_conversations', etabId, convs);
+    log(`✓ ${msgs.length} messages créés dans ${Object.keys(convs).length} conversations`, 'ok');
+  }
+
+  // ── 13. Cahiers de nuit (7 dernières nuits) ────────────────────────
+  setProgress(90);
+  const existingNuits = scGet('ftr_nuits', etabId) || {};
+  if (Object.keys(existingNuits).length > 3 && !overwrite) {
+    log('Cahiers de nuit : données déjà présentes — ignorées', 'warn');
+  } else {
+    const nuits = { ...existingNuits };
+    const nuitAgent = empById['de-4'];
+    const rondesNotes = ['RAS — résidents calmes','Ronde sans incident','Léger bruit au couloir — aucune suite nécessaire'];
+    for (let d = -7; d <= -1; d++) {
+      const ds = dateStr(d);
+      nuits[ds] = {
+        id: uid(),
+        date: ds,
+        ouvert: true,
+        agent: nuitAgent ? `${nuitAgent.prenom} ${nuitAgent.nom}` : '',
+        agentId: 'de-4',
+        rondes: [
+          { id:uid(), heure:'22:30', ras:true, note: pick(rondesNotes) },
+          { id:uid(), heure:'01:00', ras:true, note: pick(rondesNotes) },
+          { id:uid(), heure:'04:00', ras:true, note: pick(rondesNotes) },
+          { id:uid(), heure:'06:30', ras:true, note:'Réveil progressif, distribution des médicaments du matin.' },
+        ],
+        astreintes: [],
+        evenements: Math.random() > 0.7 ? [{
+          id: uid(),
+          heure: '03:' + (Math.random() > 0.5 ? '15' : '45'),
+          resident: pick(residents).prenom + ' ' + pick(residents).nom,
+          type: 'Difficulté sommeil',
+          note: 'Résident réveillé, insomnie. Présence rassurante effectuée. Retour au calme en 15 minutes.'
+        }] : [],
+        transmission: 'Nuit calme dans l\'ensemble. Aucun événement particulier à signaler. Résidents reposés.',
+        createdAt: isoStr(d, 22),
+      };
+    }
+    scSet('ftr_nuits', etabId, nuits);
+    log('✓ 7 cahiers de nuit créés', 'ok');
+  }
+
+  // ── 14. Planification résidents (rendez-vous) ──────────────────────
+  setProgress(95);
+  const existingPlan = scGet('ftr_planning', etabId) || [];
+  if (existingPlan.length > 5 && !overwrite) {
+    log(`Planning résidents : ${existingPlan.length} entrées déjà présentes — ignorées`, 'warn');
+  } else {
+    const rdvTypes = ['Rendez-vous médical','Entretien éducatif','Démarche administrative','Formation professionnelle','Activité extérieure','Visite famille'];
+    const planEntries = [];
+    for (let d = -14; d <= 14; d++) {
+      const nbRdv = 1 + Math.floor(Math.random() * 4);
+      for (let k = 0; k < nbRdv; k++) {
+        const res = pick(residents);
+        const agent = pick(employes);
+        planEntries.push({
+          id: uid(),
+          date: dateStr(d),
+          heure: `${9 + Math.floor(Math.random()*8)}:00`,
+          residentId: res.id,
+          residentNom: `${res.prenom} ${res.nom}`,
+          titre: pick(rdvTypes),
+          type: 'rdv',
+          auteur: `${agent.prenom} ${agent.nom}`,
+          auteurId: agent.id,
+          createdAt: isoStr(d - 3),
+        });
+      }
+    }
+    scSet('ftr_planning', etabId, planEntries);
+    log(`✓ ${planEntries.length} rendez-vous résidents créés (±14 jours)`, 'ok');
+  }
+
+  setProgress(100);
+  log('', 'info');
+  log('═══════════════════════════════════════════', 'info');
+  log('✅ Génération terminée — rechargez l\'application', 'ok');
+  log(`   Comptes créés — admin: admin/admin123 | staff: login/demo1234`, 'info');
+  log('═══════════════════════════════════════════', 'info');
+  document.getElementById('btnRun').disabled = false;
+}
+
+// ─── Reset ───────────────────────────────────────────────────────────
+function resetSeed() {
+  if (!confirm('Supprimer TOUTES les données de démo ? (les vraies données seront aussi perdues)')) return;
+  logEl = document.getElementById('logBox');
+  progEl = document.getElementById('prog');
+  logEl.innerHTML = '';
+  logEl.style.display = '';
+
+  const etabId = document.getElementById('selEtab').value;
+  const keys = ['ftr_employes','ftr_users','ftr_residents','ftr_journal','ftr_presences',
+    'ftr_planning_equipe','ftr_formations','ftr_incidents','ftr_emp_arrets','ftr_emp_diplomes',
+    'ftr_messages','ftr_conversations','ftr_nuits','ftr_planning'];
+  keys.forEach(k => { localStorage.removeItem(dKey(k, etabId)); log(`Supprimé : ${dKey(k, etabId)}`, 'warn'); });
+  localStorage.removeItem('ftr_conges');
+  log('Supprimé : ftr_conges', 'warn');
+  log('✓ Réinitialisation complète', 'ok');
+  setProgress(0);
+}
+</script>
+</body>
+</html>

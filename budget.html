@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Budget & dépenses — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout"><div class="main">
+  <header class="header">
+    <div class="header-info"><div class="header-title">Budget & dépenses</div></div>
+    <div class="header-right"><button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button></div>
+  </header>
+  <main class="content">
+    <div style="max-width:1000px;margin:0 auto">
+    <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:1rem;gap:1rem;flex-wrap:wrap">
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm admin-only" onclick="openEnveloppeModal()">📁 Nouvelle enveloppe</button>
+        <button class="btn btn-primary" onclick="openNouvelleDemandeBudget()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Demande de budget
+        </button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;gap:1rem;padding:.75rem 1rem;flex-wrap:wrap">
+        <div style="flex:1;text-align:center;min-width:90px"><div id="bgStatEnAttente" style="font-weight:800;font-size:1.4rem;color:#d97706">0</div><div style="font-size:.72rem;color:var(--muted)">En attente</div></div>
+        <div style="flex:1;text-align:center;min-width:90px"><div id="bgStatAcceptes" style="font-weight:800;font-size:1.4rem;color:#0891b2">0</div><div style="font-size:.72rem;color:var(--muted)">Justificatif attendu</div></div>
+        <div style="flex:1;text-align:center;min-width:90px"><div id="bgStatJustifiees" style="font-weight:800;font-size:1.4rem;color:#16a34a">0</div><div style="font-size:.72rem;color:var(--muted)">Justifiées</div></div>
+        <div style="flex:1;text-align:center;min-width:90px"><div id="bgStatRefuses" style="font-weight:800;font-size:1.4rem;color:#ef4444">0</div><div style="font-size:.72rem;color:var(--muted)">Refusées</div></div>
+        <div style="flex:1;text-align:center;min-width:90px"><div id="bgStatTotal" style="font-weight:800;font-size:1.4rem;color:#0f2b4a">0,00 €</div><div style="font-size:.72rem;color:var(--muted)">Total engagé</div></div>
+      </div>
+    </div>
+
+    <div id="bgAlertsRow" style="display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap">
+      <div class="card" id="bgPendingCard" style="flex:1;min-width:280px;display:none;border:1px solid #d9770640">
+        <div style="padding:.6rem .85rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.82rem;color:#d97706">⏳ Demandes en attente de validation</div>
+        <div id="bgPendingList" style="padding:.4rem .6rem;max-height:340px;overflow-y:auto"></div>
+      </div>
+
+      <div class="card" id="bgJustifCard" style="flex:1;min-width:280px;display:none;border:1px solid #93c5fd">
+        <div style="padding:.6rem .85rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.82rem;color:#1d4ed8">📎 Vos demandes acceptées — justificatif à fournir</div>
+        <div id="bgJustifList" style="padding:.4rem .6rem;max-height:340px;overflow-y:auto"></div>
+      </div>
+    </div>
+
+    <div id="bgEnveloppesCard" style="margin-bottom:1rem">
+      <div style="font-weight:700;font-size:.9rem;margin-bottom:.75rem">📁 Enveloppes budgétaires</div>
+      <div id="bgEnveloppesList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:.85rem"></div>
+    </div>
+
+    <div style="display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
+      <select id="bgFiltreStatut" class="form-input" style="width:160px" onchange="renderBudget()">
+        <option value="">Tous les statuts</option>
+        <option value="en_attente">En attente</option>
+        <option value="accepte">Justificatif attendu</option>
+        <option value="justifie">Justifiées</option>
+        <option value="refuse">Refusées</option>
+      </select>
+      <select id="bgFiltreEnveloppe" class="form-input" style="width:200px" onchange="renderBudget()"><option value="">Toutes les enveloppes</option></select>
+      <select id="bgFiltreEmploye" class="form-input admin-only" style="width:200px;display:none" onchange="renderBudget()"><option value="">Tous les employés</option></select>
+    </div>
+
+    <div id="bgList"><div class="empty" style="padding:3rem;text-align:center"><p>Aucune demande de budget</p></div></div>
+    </div>
+  </main>
+</div></div>
+<div id="toast-container" class="toast-container"></div>
+
+<div class="modal-overlay" id="modalBudgetDemande">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <span class="modal-title" style="display:flex;align-items:center;gap:.6rem">
+        <span style="width:38px;height:38px;border-radius:10px;background:#eef2ff;color:#4338ca;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">📋</span>
+        Nouvelle demande de budget
+      </span>
+      <button class="modal-close" onclick="closeModal('modalBudgetDemande')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:.85rem">
+      <div class="form-group"><label class="required">Enveloppe</label><select id="bgFormEnveloppe" class="form-input"><option value="">Sélectionner une enveloppe</option></select></div>
+      <div class="form-row">
+        <div class="form-group"><label class="required">Montant (€)</label>
+          <div style="position:relative">
+            <input type="number" id="bgFormMontant" class="form-input" min="0" step="0.01" placeholder="0,00" oninput="updateBgPrixParPersonne()" style="padding-right:2.2rem"/>
+            <span style="position:absolute;right:.8rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem;pointer-events:none">€</span>
+          </div>
+        </div>
+        <div class="form-group"><label class="required">Date de la dépense</label><input type="date" id="bgFormDate" class="form-input"/></div>
+      </div>
+      <div id="bgPrixParPersonne" style="display:none;align-items:center;gap:.6rem;background:#eef2ff;border-radius:10px;padding:.6rem .8rem">
+        <span style="width:30px;height:30px;border-radius:50%;background:#fff;color:#4338ca;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0">💰</span>
+        <span style="font-size:.84rem;color:var(--text)">Prix par personne : <strong></strong></span>
+      </div>
+      <div class="form-group">
+        <label class="required">Motif</label>
+        <textarea id="bgFormMotif" class="form-input" rows="2" maxlength="200" placeholder="Ex : Achat de matériel pour l'atelier cuisine…" oninput="document.getElementById('bgMotifCount').textContent=this.value.length"></textarea>
+        <div style="text-align:right;font-size:.68rem;color:var(--muted)"><span id="bgMotifCount">0</span>/200</div>
+      </div>
+      <div class="form-group">
+        <label>Joindre un projet (programme, devis…)</label>
+        <input type="file" id="bgFormProjetInput" multiple accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.doc,.docx" onchange="handleBudgetProjetSelect(event)"/>
+        <div id="bgFormProjetFiles" style="margin-top:.5rem"></div>
+      </div>
+      <div class="form-group">
+        <label>Résidents concernés (optionnel)</label>
+        <div id="bgFormResidents" style="display:flex;flex-wrap:wrap;gap:.4rem;max-height:140px;overflow-y:auto;padding:.2rem"></div>
+        <span class="form-hint">Cliquez sur un ou plusieurs résidents concernés par cette dépense.</span>
+      </div>
+      <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;cursor:pointer;padding:.5rem .7rem;background:#fff7ed;border:1px solid #fed7aa;border-radius:8px">
+        <input type="checkbox" id="bgFormPartage50" style="width:16px;height:16px;flex-shrink:0" onchange="updateBgPrixParPersonne()"/>
+        🏠 Activité éducative / séjour — partage 50% foyer / 50% résident(s)
+      </label>
+      <div id="bgPartageDetail" style="display:none;font-size:.8rem;background:var(--g50);border-radius:8px;padding:.6rem .8rem"></div>
+      <p style="font-size:.74rem;color:var(--muted)">📎 Le justificatif (ticket/facture) se fournit une fois la demande acceptée, depuis la carte « justificatif à fournir ».</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modalBudgetDemande')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveBudgetDemande()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Envoyer la demande
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalBudgetJustif">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <span class="modal-title" id="bgJustifTitle">Justificatif</span>
+      <button class="modal-close" onclick="closeModal('modalBudgetJustif')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="bgJustifBody" style="text-align:center"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modalBudgetJustif')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>Auth.requireAuth(); if (!requireModule('access_budget')) { document.querySelector('.content').innerHTML = ''; }</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/budget-supabase.js"></script>
+<script src="js/budget.js"></script>
+</body></html>

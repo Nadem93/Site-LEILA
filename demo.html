@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Démo — Génération d'usage — FTR</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#dbeafe 0%,#eff6ff 100%);background-attachment:fixed;color:#334155;min-height:100vh;padding:2rem;display:flex;flex-direction:column;align-items:center}
+body::before,body::after{content:'';position:fixed;z-index:-1;border-radius:50%;pointer-events:none;filter:blur(70px)}
+body::before{width:55vw;height:55vw;top:-18vw;right:-12vw;background:radial-gradient(circle at 35% 35%,rgba(6,182,212,.11),rgba(99,102,241,.07) 55%,transparent 75%);animation:aur-a 46s ease-in-out infinite alternate}
+body::after{width:48vw;height:48vw;bottom:-20vw;left:-10vw;background:radial-gradient(circle at 60% 60%,rgba(168,85,247,.08),rgba(6,182,212,.05) 55%,transparent 75%);animation:aur-b 58s ease-in-out infinite alternate}
+@keyframes aur-a{from{transform:translate(0,0)}to{transform:translate(-8vw,6vh) scale(1.12)}}
+@keyframes aur-b{from{transform:translate(0,0)}to{transform:translate(7vw,-5vh) scale(1.1)}}
+.card{background:rgba(255,255,255,.78);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border-radius:20px;padding:2.5rem;max-width:920px;width:100%;box-shadow:0 8px 32px rgba(15,43,74,.1);border:1px solid rgba(255,255,255,.85);margin-bottom:1.5rem;position:relative;overflow:hidden;animation:rise .5s cubic-bezier(.22,1,.36,1) backwards}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#06b6d4 20%,#6366f1 50%,#a855f7 80%,transparent);background-size:220% 100%;animation:scan 16s linear infinite}
+@keyframes scan{from{background-position:0% 0}to{background-position:220% 0}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+h1{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:#0f2b4a;margin-bottom:.25rem}
+.sub{color:#64748b;font-size:.85rem;margin-bottom:1.5rem}
+.btn{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border:none;padding:.85rem 2rem;border-radius:12px;font-size:.9rem;font-weight:600;cursor:pointer;width:100%;justify-content:center;transition:box-shadow .2s,transform .1s;box-shadow:0 4px 16px rgba(124,58,237,.3);position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;top:0;bottom:0;left:-80%;width:50%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);transition:left .45s ease}
+.btn:hover{box-shadow:0 5px 18px rgba(124,58,237,.3)}
+.btn:hover::after{left:130%}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.status{text-align:left;margin-top:1.5rem;font-size:.82rem;color:#475569;background:rgba(248,250,252,.85);border-radius:12px;padding:1.25rem;max-height:280px;overflow-y:auto;line-height:1.8;border:1px solid #e2e8f0}
+.status .ok{color:#16a34a;font-weight:600}
+.sel-label{font-size:.78rem;font-weight:600;color:#64748b;margin-bottom:.5rem;display:block}
+.etab-selector{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem}
+.etab-chip{display:flex;align-items:center;gap:.5rem;padding:.4rem .7rem .4rem .5rem;background:rgba(248,250,252,.9);border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;font-size:.78rem;font-weight:500}
+.etab-chip:hover{border-color:#67e8f9;box-shadow:0 0 12px rgba(6,182,212,.15)}
+.etab-chip input{display:none}
+.etab-chip input:checked+.etab-dot{box-shadow:0 0 0 2.5px #6366f1}
+.etab-chip:has(input:checked){border-color:#6366f1;background:#eef2ff}
+.etab-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;transition:box-shadow .1s}
+.config-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:1.25rem}
+.config-item{background:rgba(248,250,252,.9);border-radius:10px;padding:.5rem .65rem;border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:3px;transition:border-color .15s,box-shadow .15s}
+.config-item:focus-within{border-color:#67e8f9;box-shadow:0 0 12px rgba(6,182,212,.15)}
+.config-item label{font-size:.65rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.03em}
+.config-item input[type=number]{border:1px solid #cbd5e1;border-radius:6px;padding:.2rem .4rem;font-size:.82rem;font-weight:600;color:#0f2b4a;width:100%;background:#fff;outline:none;font-family:inherit}
+.config-item input[type=number]:focus{border-color:#06b6d4;box-shadow:0 0 0 2px rgba(6,182,212,.18)}
+.config-item .hint{font-size:.6rem;color:#94a3b8}
+.footer{font-size:.75rem;color:#94a3b8;margin-top:1rem;text-align:center}
+@media (prefers-reduced-motion: reduce){body::before,body::after,.card::before{animation:none!important}.card{animation:none!important}}
+
+.chart-wrap{width:100%;overflow-x:auto}
+.chart-wrap svg{display:block}
+.chart-legend{display:flex;gap:1.25rem;justify-content:center;margin-top:.6rem;font-size:.74rem;color:#64748b}
+.chart-legend span{display:inline-flex;align-items:center;gap:.4rem;font-weight:600}
+.chart-legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.usage-stats{display:flex;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.usage-stat{flex:1;min-width:120px;text-align:center;background:rgba(248,250,252,.9);border:1px solid #e2e8f0;border-radius:12px;padding:.75rem}
+.usage-stat .v{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.3rem;color:#0f2b4a}
+.usage-stat .l{font-size:.68rem;color:#64748b;margin-top:2px}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div style="display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.25rem">
+    <div style="width:48px;height:48px;background:linear-gradient(135deg,#06b6d4,#6366f1 55%,#a855f7);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.1rem;flex-shrink:0;font-family:'Space Grotesk',sans-serif;box-shadow:0 4px 14px rgba(99,102,241,.35)">FTR</div>
+    <div style="flex:1">
+      <h1>Générateur d'usage</h1>
+      <div class="sub">Génère des résidents et employés de démo si l'établissement est vide, puis une activité réaliste : 6 mois dans le passé (connexions, journal, présences, planning réalisé, budget) et 6 mois dans le futur (planning prévisionnel)</div>
+    </div>
+  </div>
+
+  <div class="config-grid">
+    <div class="config-item"><label>Intensité</label><input type="number" id="cfgIntensite" value="3" min="1" max="10"><span class="hint">Évènements / jour ouvré</span></div>
+    <div class="config-item"><label>Résidents</label><input type="number" id="cfgResidents" value="25" min="1" max="200"><span class="hint">Créés si aucun résident</span></div>
+    <div class="config-item"><label>Employés</label><input type="number" id="cfgEmployes" value="12" min="1" max="100"><span class="hint">Créés si aucun employé</span></div>
+  </div>
+
+  <label class="sel-label">Établissements concernés</label>
+  <div class="etab-selector" id="etabSelector"></div>
+
+  <button class="btn" id="genBtn" onclick="generateUsage()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M4 12a8 8 0 018-8V0L18 6l-6 6V4a8 8 0 000 16 8 8 0 01-8-8z"/><path d="M12 20l6-6v4a8 8 0 01-8 8z"/></svg>
+    Générer l'usage (-6 mois / +6 mois)
+  </button>
+
+  <div class="status" id="status">Cliquez sur le bouton pour générer l'activité. Les résidents et employés de démo sont créés automatiquement si l'établissement est vide.</div>
+  <div class="footer">Identifiants : <strong>admin / admin123</strong></div>
+</div>
+
+<div class="card" id="chartCard" style="display:none;animation-delay:.12s">
+  <div style="display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.25rem">
+    <div style="width:48px;height:48px;background:linear-gradient(135deg,#0ea5e9,#6366f1 55%,#a855f7);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;flex-shrink:0;box-shadow:0 4px 14px rgba(99,102,241,.35)">📈</div>
+    <div style="flex:1">
+      <h1>Usage sur 1 an</h1>
+      <div class="sub">Volume d'activité par semaine, du plus ancien au plus récent puis vers le prévisionnel</div>
+    </div>
+  </div>
+  <div class="usage-stats" id="usageStats"></div>
+  <div class="chart-wrap" id="usageChart"></div>
+  <div class="chart-legend">
+    <span><i style="background:#6366f1"></i>Activité passée (réelle)</span>
+    <span><i style="background:#06b6d4"></i>Activité future (prévisionnelle)</span>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+
+function log(msg) { const s = $('status'); s.innerHTML += msg + '<br>'; s.scrollTop = s.scrollHeight; }
+function $(v) { return document.getElementById(v); }
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function pick(arr) { return arr[rand(0, arr.length - 1)]; }
+function getCfg(k) { return parseInt($('cfg' + k).value) || 1; }
+
+function getSelectedEtabs() {
+  const checks = document.querySelectorAll('#etabSelector input:checked');
+  const all = getEtabs();
+  if (!checks.length) return [];
+  const ids = new Set(Array.from(checks).map(c => String(c.value)));
+  return all.filter(e => ids.has(String(e.id)));
+}
+
+function populateEtabSelector() {
+  const el = document.getElementById('etabSelector');
+  const etabs = getEtabs();
+  el.innerHTML = etabs.map(e =>
+    `<label class="etab-chip"><input type="checkbox" value="${e.id}" checked onchange="updateGenBtn()"/><span class="etab-dot" style="background:${e.color||'#3b82f6'}"></span>${escHtml(e.nom||'Sans nom')}</label>`
+  ).join('');
+  updateGenBtn();
+}
+
+function updateGenBtn() {
+  const n = document.querySelectorAll('#etabSelector input:checked').length;
+  document.getElementById('genBtn').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M4 12a8 8 0 018-8V0L18 6l-6 6V4a8 8 0 000 16 8 8 0 01-8-8z"/><path d="M12 20l6-6v4a8 8 0 01-8 8z"/></svg> Générer l\'usage (-6 mois / +6 mois)' + (n ? ' (' + n + ' établissement' + (n > 1 ? 's' : '') + ')' : '');
+}
+
+// ── CONTENU RÉUTILISABLE ──
+const JOURNAL_SNIPPETS = [
+  "Échange avec le résident sur ses démarches en cours. Bonne participation, climat apaisé.",
+  "Point de suivi hebdomadaire. Quelques progrès observés depuis le dernier entretien.",
+  "Rendez-vous extérieur accompagné, déroulement sans difficulté particulière.",
+  "Observation en collectif : comportement adapté, bonne intégration au groupe.",
+  "Suivi administratif en cours, dossier complété pour la prochaine étape.",
+  "Atelier du jour : participation active et bon investissement du résident.",
+  "Difficulté ponctuelle gérée en équipe, retour au calme rapide.",
+  "Appel avec la famille, échange constructif sur la situation actuelle.",
+  "Consultation médicale de routine, aucun élément à signaler.",
+  "Temps individuel consacré aux objectifs du projet personnalisé."
+];
+const PLANNING_EVENTS = [
+  { titre:'Réunion d’équipe', type:'reunion', color:'#8b5cf6', time:'09:00', dur:'60' },
+  { titre:'Atelier collectif', type:'activite', color:'#3b82f6', time:'14:00', dur:'90' },
+  { titre:'RDV extérieur', type:'rdv', color:'#ef4444', time:'10:00', dur:'60' },
+  { titre:'Sortie éducative', type:'sortie', color:'#10b981', time:'13:00', dur:'180' },
+  { titre:'Consultation médicale', type:'rdv', color:'#ef4444', time:'11:00', dur:'45' },
+  { titre:'Suivi éducatif', type:'rdv', color:'#e11d48', time:'15:00', dur:'60' },
+  { titre:'Entretien psychologue', type:'rdv', color:'#9333ea', time:'15:30', dur:'60' }
+];
+const BUD_DEP_CAT = ['Alimentation','Hygiène','Vêtements','Loisirs','Transport','Téléphone','Santé'];
+
+// ── DONNÉES DE BASE (résidents / employés) — créées uniquement si l'établissement est vide ──
+const PRENOMS_M = ['Amine','Thomas','Lucas','Yanis','Hugo','Moussa','Mehdi','Ryan','Enzo','Adam','Mathis','Nathan','Sofiane','Lilian','Kylian','Samy','Axel','Noam','Rayane','Ibrahim','Ilyes','Malik','Yacine','Bilal','Nassim','Samir','Kevin','Jordan','Antoine','Alexandre','Romain','Florian','Maxime','Jules','Gabriel','Louis','Arthur','Paul','Nicolas','Théo'];
+const PRENOMS_F = ['Sofia','Fatima','Clara','Emma','Leila','Sarah','Océane','Inès','Chloé','Nora','Lina','Manon','Zara','Elena','Camille','Selma','Romane','Jade','Assia','Juliette','Louna','Léa','Mélissa','Amina','Nour','Aïcha','Yasmine','Imane','Sandra','Laura','Marine','Céline','Audrey','Julie','Sophie','Caroline','Justine','Marion','Mathilde','Émilie'];
+const NOMS = ['Benali','Petit','Leroy','Zahra','Moreau','Bernard','Diallo','Garcia','Rousseau','Haddad','Martin','Cohen','Diara','Fabre','Bouaziz','Martinez','Ndiaye','Dubois','Bouchard','Ferrari','Rossi','Traoré','Girard','Da Silva','Fournier','Simon','Mercier','Renard','Fontaine','Lambert','Dupont','Gauthier','Lefevre','Roux','Morel','Garnier','Perrin','Bonnet','Caron','Marchand'];
+const COULEURS = ['#3b82f6','#10b981','#8b5cf6','#f59e0b','#ef4444','#06b6d4','#e11d48','#d946ef','#f97316','#14b8a6','#0ea5e9','#84cc16','#dc2626','#a855f7','#ec4899','#7c3aed','#2563eb','#ca8a04','#65a30d','#db2777'];
+const FONCTIONS_DEMO = ['Éducateur spécialisé','Moniteur-éducateur','Psychologue','Infirmier','Aide-soignant','Maître / Maîtresse de maison','Veilleur de nuit','Chef de service'];
+const CATEGORIES_DEMO = [
+  { id: 1, name: 'Accompagnement', color: '#3b82f6' },
+  { id: 2, name: 'Médical', color: '#ef4444' },
+  { id: 3, name: 'Éducatif', color: '#10b981' },
+  { id: 4, name: 'Administratif', color: '#f59e0b' },
+  { id: 5, name: 'Familial', color: '#8b5cf6' },
+  { id: 6, name: 'Loisirs', color: '#06b6d4' }
+];
+
+function seedResidentsSiNecessaire(count) {
+  const existing = DB.get(DB.keys.residents) || [];
+  if (existing.length) return existing;
+  const list = [];
+  for (let i = 0; i < count; i++) {
+    const genre = Math.random() < 0.5 ? 'M' : 'F';
+    const prenom = pick(genre === 'M' ? PRENOMS_M : PRENOMS_F);
+    const nom = pick(NOMS);
+    const age = rand(14, 21);
+    const y = new Date().getFullYear() - age;
+    const dob = `${y}-${String(rand(1,12)).padStart(2,'0')}-${String(rand(1,28)).padStart(2,'0')}`;
+    const entree = new Date(Date.now() - rand(30, 500) * 86400000).toISOString().slice(0,10);
+    list.push({
+      id: 'demo-res-' + genId(), prenom, nom, dob, genre, entree,
+      statut: '', chambre: String(100 + (i % 30)), color: pick(COULEURS),
+      referent: '', photo: `https://i.pravatar.cc/150?img=${(i % 70) + 1}`,
+      notes: '', objectifs: [], updatedAt: new Date().toISOString()
+    });
+  }
+  DB.set(DB.keys.residents, list);
+  if (!DB.get(DB.keys.categories) || !(DB.get(DB.keys.categories) || []).length) DB.set(DB.keys.categories, CATEGORIES_DEMO);
+  return list;
+}
+
+function seedEmployesSiNecessaire(count) {
+  const existingUsers = DB.get(DB.keys.users) || [];
+  if (existingUsers.length > 1) return existingUsers; // déjà du personnel en plus de l'admin
+  const users = [...existingUsers];
+  const employes = [];
+  for (let i = 0; i < count; i++) {
+    const genre = Math.random() < 0.5 ? 'M' : 'F';
+    const prenom = pick(genre === 'M' ? PRENOMS_M : PRENOMS_F);
+    const nom = pick(NOMS);
+    const fonction = pick(FONCTIONS_DEMO);
+    const id = 100 + i;
+    const username = (prenom + '.' + nom).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z.]/g,'');
+    users.push({ id, prenom, nom, username, password: 'demo123', role: 'employe', fonction });
+    employes.push({
+      id: String(id), prenom, nom, poste: fonction,
+      telephone: '06' + rand(10000000, 99999999),
+      email: username + '@example.fr', statut: 'actif',
+      dateEmbauche: new Date(Date.now() - rand(60, 1500) * 86400000).toISOString().slice(0,10),
+      color: pick(COULEURS)
+    });
+  }
+  DB.set(DB.keys.users, users);
+  DB.set(DB.keys.employes, employes);
+  return users;
+}
+
+// ── GÉNÉRATION POUR L'ÉTABLISSEMENT COURANT ──
+function generateUsageForCurrentEtab(intensite, nbResidents, nbEmployes) {
+  initDefaults();
+  const now = new Date();
+
+  const residentsAvant = (DB.get(DB.keys.residents) || []).length;
+  const usersAvant = (DB.get(DB.keys.users) || []).length;
+  seedResidentsSiNecessaire(nbResidents);
+  seedEmployesSiNecessaire(nbEmployes);
+  const residentsCrees = !residentsAvant ? (DB.get(DB.keys.residents) || []).length : 0;
+  const employesCrees = usersAvant <= 1 ? (DB.get(DB.keys.users) || []).length - usersAvant : 0;
+
+  const residents = (DB.get(DB.keys.residents) || []);
+  const activeResidents = residents.filter(r => r.statut !== 'sorti');
+  const users = DB.get(DB.keys.users) || [];
+
+  const journal = DB.get(DB.keys.journal) || [];
+  const planning = DB.get(DB.keys.planning) || [];
+  const loginLog = DB.get(DB.keys.loginHistory) || [];
+  const presences = DB.get(DB.keys.presences) || {};
+  let journalAdded = 0, planningAdded = 0, loginsAdded = 0, presencesAdded = 0, budgetAdded = 0;
+
+  const dayBuckets = [];
+
+  for (let off = -180; off <= 180; off++) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + off);
+    const dateStr = d.toISOString().slice(0,10);
+    const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+    const isPast = off <= 0;
+    const baseN = isWeekend ? Math.max(1, Math.round(intensite * 0.3)) : intensite;
+    let count = 0;
+
+    if (isPast) {
+      // Connexions
+      const nbLogins = rand(0, baseN);
+      for (let i = 0; i < nbLogins; i++) {
+        const u = users.length ? pick(users) : { username: 'demo', prenom: 'Démo', nom: '', role: 'employe' };
+        loginLog.push({ id: genId(), action: 'login', username: u.username || 'demo', prenom: u.prenom || '', nom: u.nom || '', role: u.role || '', date: new Date(d.getTime() + rand(7,19)*3600000).toISOString() });
+        count++; loginsAdded++;
+      }
+      // Journal
+      if (activeResidents.length) {
+        const nbJournal = rand(0, Math.max(1, Math.round(baseN * 0.6)));
+        for (let i = 0; i < nbJournal; i++) {
+          const r = pick(activeResidents);
+          const author = users.length ? pick(users) : { prenom: 'Équipe', nom: '', id: 'demo' };
+          const dt = new Date(d.getTime() + rand(8,19)*3600000).toISOString();
+          journal.push({ id: 'usj-' + genId(), type: 'observation', residentId: r.id, resident: (r.prenom||'')+' '+(r.nom||''), residentColor: r.color || '#3b82f6', categorie: 1, date: dt, contenu: pick(JOURNAL_SNIPPETS), visibilite: 'equipe', author: (author.prenom||'')+' '+(author.nom||''), authorId: author.id || 'demo', replies: [], readBy: [], createdAt: dt, updatedAt: dt });
+          count++; journalAdded++;
+        }
+      }
+      // Présences
+      if (activeResidents.length) {
+        if (!presences[dateStr]) presences[dateStr] = {};
+        activeResidents.forEach(r => { presences[dateStr][r.id] = Math.random() < .92 ? 'present' : 'absent'; });
+        presencesAdded += activeResidents.length;
+        count += 1;
+      }
+      // Budget (résidents)
+      if (activeResidents.length && Math.random() < .25) {
+        const r = pick(activeResidents);
+        r.budget = r.budget || { operations: [] };
+        r.budget.operations.push({ id: 'usb-' + genId(), type: 'depense', montant: rand(8, 90), date: dateStr, categorie: pick(BUD_DEP_CAT), libelle: '', notes: '' });
+        budgetAdded++; count++;
+      }
+    }
+    // Planning : réalisé (passé) ou prévisionnel (futur), des deux côtés
+    if (Math.random() < (isPast ? 0.35 : 0.45)) {
+      const ev = pick(PLANNING_EVENTS);
+      const r = activeResidents.length ? pick(activeResidents) : null;
+      planning.push({ id: 'usp-' + genId(), titre: r ? ev.titre + ' — ' + r.prenom + ' ' + r.nom : ev.titre, type: ev.type, color: ev.color, date: dateStr, time: ev.time, duree: ev.dur, residentId: r ? r.id : '', residentName: r ? (r.prenom+' '+r.nom) : '', desc: '', dateEnd: dateStr, timeEnd: '', createdAt: now.toISOString(), updatedAt: now.toISOString() });
+      planningAdded++; count++;
+    }
+
+    dayBuckets.push({ offset: off, date: d, isPast, count });
+  }
+
+  DB.set(DB.keys.journal, journal);
+  DB.set(DB.keys.planning, planning);
+  DB.set(DB.keys.loginHistory, loginLog.slice(0, 3000));
+  DB.set(DB.keys.presences, presences);
+  DB.set(DB.keys.residents, residents);
+
+  return { dayBuckets, journalAdded, planningAdded, loginsAdded, presencesAdded, budgetAdded, residentsCrees, employesCrees };
+}
+
+// ── BOUCLE MULTI-ÉTABLISSEMENT ──
+function generateUsage() {
+  const etabs = getSelectedEtabs();
+  if (!etabs.length) { log('⚠️ Sélectionnez au moins un établissement.'); return; }
+  const intensite = getCfg('Intensite');
+  const nbResidents = getCfg('Residents');
+  const nbEmployes = getCfg('Employes');
+  $('genBtn').disabled = true;
+  $('status').innerHTML = '';
+  const originalEtab = sessionStorage.getItem('ftr_current_etab');
+  let lastResult = null;
+
+  etabs.forEach(etab => {
+    sessionStorage.setItem('ftr_current_etab', etab.id);
+    log('— ' + etab.nom + ' —');
+    const res = generateUsageForCurrentEtab(intensite, nbResidents, nbEmployes);
+    if (res) {
+      if (res.residentsCrees) log(`<span class="ok">✓</span> ${res.residentsCrees} résidents de démo créés`);
+      if (res.employesCrees) log(`<span class="ok">✓</span> ${res.employesCrees} employés de démo créés`);
+      log(`<span class="ok">✓</span> ${res.loginsAdded} connexions · ${res.journalAdded} entrées de journal · ${res.planningAdded} évènements planning · ${res.presencesAdded} présences · ${res.budgetAdded} dépenses`);
+      lastResult = res;
+    }
+  });
+
+  sessionStorage.setItem('ftr_current_etab', originalEtab || '');
+  $('genBtn').disabled = false;
+  log('<br><strong class="ok">Génération terminée.</strong>');
+
+  if (lastResult) renderUsageChart(lastResult.dayBuckets);
+}
+
+// ── VISUEL 1 AN (par semaine) ──
+function renderUsageChart(dayBuckets) {
+  const weeks = [];
+  for (let i = 0; i < dayBuckets.length; i += 7) {
+    const slice = dayBuckets.slice(i, i + 7);
+    const total = slice.reduce((s, d) => s + d.count, 0);
+    const isPast = slice[0].isPast;
+    weeks.push({ total, isPast, date: slice[0].date });
+  }
+
+  const totalPast = dayBuckets.filter(d => d.isPast).reduce((s,d) => s + d.count, 0);
+  const totalFutur = dayBuckets.filter(d => !d.isPast).reduce((s,d) => s + d.count, 0);
+  const moyJour = Math.round((totalPast / 180) * 10) / 10;
+
+  $('usageStats').innerHTML = `
+    <div class="usage-stat"><div class="v">${totalPast}</div><div class="l">Évènements générés (6 mois passés)</div></div>
+    <div class="usage-stat"><div class="v">${totalFutur}</div><div class="l">Évènements prévisionnels (6 mois futurs)</div></div>
+    <div class="usage-stat"><div class="v">${moyJour}</div><div class="l">Moyenne / jour (passé)</div></div>`;
+
+  const W = Math.max(700, weeks.length * 13), H = 220, padL = 36, padB = 24, padT = 10;
+  const max = Math.max(1, ...weeks.map(w => w.total));
+  const bw = (W - padL - 10) / weeks.length;
+  const todayX = padL + weeks.findIndex(w => !w.isPast) * bw;
+
+  let bars = '';
+  weeks.forEach((w, i) => {
+    const h = (H - padT - padB) * (w.total / max);
+    const x = padL + i * bw;
+    const y = H - padB - h;
+    bars += `<rect x="${x + bw*0.12}" y="${y}" width="${bw*0.76}" height="${Math.max(h,1)}" fill="${w.isPast ? '#6366f1' : '#06b6d4'}" rx="2" opacity="${w.isPast?1:.85}"><title>${w.date.toLocaleDateString('fr-FR')} — ${w.total} évènements</title></rect>`;
+  });
+
+  const svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+    <line x1="${padL}" y1="${H-padB}" x2="${W}" y2="${H-padB}" stroke="#e2e8f0" stroke-width="1"/>
+    ${todayX > padL ? `<line x1="${todayX}" y1="${padT}" x2="${todayX}" y2="${H-padB}" stroke="#0f2b4a" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${todayX+4}" y="${padT+10}" font-size="10" fill="#0f2b4a" font-weight="700">Aujourd'hui</text>` : ''}
+    ${bars}
+  </svg>`;
+
+  $('usageChart').innerHTML = svg;
+  $('chartCard').style.display = '';
+  $('chartCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.addEventListener('DOMContentLoaded', populateEtabSelector);
+</script>
+</body>
+</html>

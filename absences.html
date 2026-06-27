@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Absences & AT — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    /* Toujours 4 cartes par ligne sur cette page */
+    #abStats{ grid-template-columns:repeat(4,1fr) !important; }
+
+    /* ─────────────────────────────────────────────
+       Cartes « dossier » uniques à la page Absences
+       ───────────────────────────────────────────── */
+    .abx-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.1rem; }
+    @media(max-width:900px){ .abx-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:560px){ .abx-grid{ grid-template-columns:1fr; } }
+
+    .abx-card{
+      position:relative; background:#fff; border:1px solid var(--border);
+      border-radius:18px; padding:1.15rem 1.2rem 1rem; overflow:hidden;
+      box-shadow:0 4px 24px rgba(15,43,74,.07),0 1px 3px rgba(15,43,74,.05);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    /* halo coloré discret en haut à droite */
+    .abx-card::before{
+      content:""; position:absolute; top:-45px; right:-45px; width:150px; height:150px;
+      background:radial-gradient(circle, var(--type), transparent 70%); opacity:.10; pointer-events:none;
+    }
+    /* fin bandeau supérieur dégradé */
+    .abx-card::after{
+      content:""; position:absolute; top:0; left:0; right:0; height:4px;
+      background:linear-gradient(90deg, var(--type), color-mix(in srgb, var(--type) 30%, #fff));
+    }
+    .abx-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 16px 42px rgba(15,43,74,.14);
+      border-color:color-mix(in srgb, var(--type) 38%, var(--border));
+    }
+    .abx-watermark{ position:absolute; bottom:-18px; right:-4px; font-size:5rem; opacity:.05; line-height:1; pointer-events:none; }
+
+    .abx-head{ display:flex; align-items:center; gap:.7rem; margin-bottom:.95rem; position:relative; }
+    .abx-badge{
+      width:46px; height:46px; border-radius:14px; flex-shrink:0; font-size:1.4rem;
+      display:flex; align-items:center; justify-content:center;
+      background:color-mix(in srgb, var(--type) 14%, #fff);
+      box-shadow:0 0 0 4px color-mix(in srgb, var(--type) 9%, transparent);
+    }
+    .abx-head-text{ flex:1; min-width:0; }
+    .abx-name{ font-weight:700; font-size:.98rem; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .abx-type{ font-size:.72rem; font-weight:700; color:var(--type); text-transform:uppercase; letter-spacing:.04em; margin-top:2px; }
+    .abx-state{ font-size:.64rem; font-weight:800; padding:.26rem .6rem; border-radius:99px; flex-shrink:0; text-transform:uppercase; letter-spacing:.03em; }
+    .abx-state-encours{ background:#fef9c3; color:#b45309; display:inline-flex; align-items:center; gap:.35rem; }
+    .abx-state-encours::before{ content:""; width:7px; height:7px; border-radius:50%; background:#f59e0b; animation:abxpulse 1.8s infinite; }
+    .abx-state-fini{ background:var(--g100); color:var(--g600); }
+    @keyframes abxpulse{ 0%{box-shadow:0 0 0 0 rgba(245,158,11,.5)} 70%{box-shadow:0 0 0 6px rgba(245,158,11,0)} 100%{box-shadow:0 0 0 0 rgba(245,158,11,0)} }
+
+    .abx-duration{
+      display:flex; align-items:center; gap:1rem; padding:.75rem .9rem; border-radius:14px; margin-bottom:.85rem;
+      background:color-mix(in srgb, var(--type) 5%, #fff);
+      border:1px solid color-mix(in srgb, var(--type) 16%, var(--border));
+    }
+    .abx-days{ display:flex; flex-direction:column; align-items:center; line-height:1; flex-shrink:0; min-width:50px; }
+    .abx-days-num{ font-size:1.75rem; font-weight:800; color:var(--type); letter-spacing:-.03em; }
+    .abx-days-lbl{ font-size:.64rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-top:3px; }
+    .abx-tl{ flex:1; min-width:0; }
+    .abx-tl-track{ display:flex; align-items:center; gap:.4rem; }
+    .abx-tl-dot{ width:9px; height:9px; border-radius:50%; background:var(--type); flex-shrink:0; }
+    .abx-tl-line{ flex:1; height:4px; border-radius:99px; background:linear-gradient(90deg, var(--type), color-mix(in srgb, var(--type) 30%, var(--border))); }
+    .abx-tl-line.encours{ background:linear-gradient(90deg, var(--type) 0%, var(--type) 55%, transparent 100%); }
+    .abx-tl-dot.end{ background:color-mix(in srgb, var(--type) 45%, #fff); box-shadow:0 0 0 2px var(--type) inset; }
+    .abx-tl-dot.end.encours{ background:#fff; box-shadow:0 0 0 2px var(--type) inset; opacity:.6; }
+    .abx-tl-dates{ display:flex; justify-content:space-between; margin-top:.45rem; font-size:.7rem; font-weight:600; color:var(--muted); }
+
+    .abx-pills{ display:flex; flex-wrap:wrap; gap:.35rem; margin-bottom:.7rem; }
+    .abx-pill{ font-size:.67rem; font-weight:700; padding:.22rem .55rem; border-radius:99px; background:var(--g100); color:var(--g600); }
+    .abx-pill-ok{ background:#dcfce7; color:#16a34a; }
+    .abx-pill-warn{ background:#fef2f2; color:#dc2626; }
+    .abx-pill-danger{ background:#fee2e2; color:#b91c1c; }
+
+    .abx-info{ display:flex; align-items:center; gap:.4rem; font-size:.74rem; font-weight:600; padding:.45rem .65rem; border-radius:10px; margin-bottom:.55rem; }
+    .abx-info-visite{ background:color-mix(in srgb,#8b5cf6 9%,#fff); color:#7c3aed; }
+    .abx-info-visite.done{ background:#dcfce7; color:#16a34a; }
+    .abx-info-piece{ background:#eff6ff; color:#2563eb; cursor:pointer; transition:background .15s; }
+    .abx-info-piece:hover{ background:#dbeafe; }
+    .abx-info-piece .u{ text-decoration:underline; margin-left:.15rem; }
+    .abx-notes{ font-size:.76rem; color:var(--g600); line-height:1.5; padding:.5rem .7rem; border-left:3px solid var(--type); background:var(--g100); border-radius:0 8px 8px 0; margin-bottom:.6rem; }
+
+    .abx-foot{ display:flex; align-items:center; gap:.4rem; padding-top:.7rem; border-top:1px solid var(--border); }
+    .abx-foot .abx-spacer{ flex:1; }
+    .abx-btn{ font-size:.73rem; font-weight:600; padding:.34rem .62rem; border-radius:8px; border:1px solid var(--border); background:#fff; color:var(--g700); cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; gap:.3rem; }
+    .abx-btn:hover{ background:var(--g100); }
+    .abx-btn-just{ color:#16a34a; border-color:#bbf7d0; }
+    .abx-btn-just:hover{ background:#dcfce7; }
+    .abx-btn-just.on{ background:#16a34a; border-color:#16a34a; color:#fff; }
+    .abx-btn-just.on:hover{ background:#15803d; }
+    .abx-icbtn{ width:31px; height:31px; padding:0; justify-content:center; font-size:.8rem; }
+    .abx-icbtn.del{ color:var(--red); border-color:#fecaca; }
+    .abx-icbtn.del:hover{ background:#fef2f2; }
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Absences & accidents du travail</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <button id="btnAddAbsence" class="btn btn-accent btn-sm" onclick="openAbsenceModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Déclarer une absence
+        </button>
+        <a href="pilotage.html" class="btn btn-ghost btn-sm">Portail</a>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:1200px">
+      <div id="abStats" class="grid grid-4" style="margin-bottom:1.5rem"></div>
+      <div id="abAlerts" style="margin-bottom:1.25rem"></div>
+
+      <div class="toolbar" style="margin-bottom:1.25rem">
+        <select id="abFilterEmploye" style="width:auto"><option value="">Tous les employés</option></select>
+        <select id="abFilterType" style="width:auto">
+          <option value="">Tous les types</option>
+          <option value="maladie">Arrêt maladie</option>
+          <option value="at">Accident du travail</option>
+          <option value="maladie_pro">Maladie professionnelle</option>
+          <option value="maternite">Congé maternité/paternité</option>
+          <option value="longue_maladie">Longue maladie</option>
+          <option value="autre">Autre absence</option>
+        </select>
+      </div>
+
+      <div id="abList"></div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL ABSENCE -->
+<div class="modal-overlay" id="modalAbsence">
+  <div class="modal" style="max-width:520px;--mc:#d97706">
+    <div class="mdx-hero">
+      <button class="mdx-close" onclick="closeModal('modalAbsence')" aria-label="Fermer">✕</button>
+      <div class="mdx-badge">🩺</div>
+      <div class="mdx-hero-txt">
+        <div class="mdx-title" id="abModalTitle">Déclarer une absence</div>
+        <div class="mdx-sub">Arrêt maladie · AT · autre</div>
+      </div>
+    </div>
+    <div class="modal-body mdx-body">
+      <div class="mdx-section">
+        <div class="mdx-sec-head"><span>🩺</span> L'absence</div>
+        <div class="form-row">
+          <div class="form-group"><label class="required">Employé</label><select id="abEmploye"></select></div>
+          <div class="form-group"><label class="required">Type</label>
+            <select id="abType">
+              <option value="maladie">🤒 Arrêt maladie</option>
+              <option value="at">⚠️ Accident du travail</option>
+              <option value="maladie_pro">🏭 Maladie professionnelle</option>
+              <option value="maternite">👶 Congé maternité/paternité</option>
+              <option value="longue_maladie">🩺 Longue maladie</option>
+              <option value="autre">📋 Autre absence</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="required">Date début</label><input type="date" id="abDebut"/></div>
+          <div class="form-group"><label>Date fin (si connue)</label><input type="date" id="abFin"/></div>
+        </div>
+        <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;cursor:pointer">
+          <input type="checkbox" id="abProlongation" style="width:16px;height:16px"/> Prolongation d'un arrêt précédent
+        </label>
+        <div id="abDeclareeWrap" style="display:none">
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;cursor:pointer;padding:.5rem .65rem;background:#fef2f2;border:1px solid #fecaca;border-radius:8px">
+            <input type="checkbox" id="abDeclareeCpam" style="width:16px;height:16px"/> Accident déclaré à la CPAM <span style="color:#dc2626;font-size:.72rem">(obligation sous 48 h)</span>
+          </label>
+        </div>
+        <div class="form-group" id="abVisiteWrap" style="display:none">
+          <label>Visite médicale de reprise</label>
+          <div style="display:flex;align-items:center;gap:.6rem">
+            <input type="date" id="abVisiteDate" style="flex:1"/>
+            <label style="display:flex;align-items:center;gap:.35rem;font-size:.78rem;white-space:nowrap"><input type="checkbox" id="abVisiteFaite" style="width:16px;height:16px"/> Effectuée</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mdx-section">
+        <div class="mdx-sec-head"><span>📎</span> Notes &amp; justificatif</div>
+        <div class="form-group"><label>Notes / circonstances</label><textarea id="abNotes" rows="3" placeholder="Détails, contexte de l'accident…"></textarea></div>
+        <div class="form-group">
+          <label>Justificatif (arrêt de travail…)</label>
+          <input type="file" id="abFichier" accept="image/*,application/pdf"/>
+          <div id="abJustifInfo" style="font-size:.74rem;color:var(--muted);margin-top:.3rem"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="color:#dc2626;margin-right:auto" id="abDeleteBtn" onclick="deleteAbsence()">Supprimer</button>
+      <button class="btn btn-ghost" onclick="closeModal('modalAbsence')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveAbsence()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/absences-supabase.js"></script>
+<script src="js/absences.js"></script>
+</body>
+</html>

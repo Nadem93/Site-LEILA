@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Test connexion Supabase</title>
+  <style>
+    body{font-family:sans-serif;max-width:600px;margin:3rem auto;padding:1rem;color:#1e293b}
+    #result{margin-top:1.5rem;padding:1rem;border-radius:10px;font-size:.9rem;white-space:pre-wrap}
+    .ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
+    .err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+    .pending{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
+  </style>
+</head>
+<body>
+  <h1>🔌 Test de connexion Supabase</h1>
+  <p>Cette page vérifie juste que le site arrive à parler à ton projet Supabase. Elle ne lit/écrit aucune donnée métier.</p>
+  <div id="result" class="pending">Test en cours…</div>
+
+  <h2 style="margin-top:2rem;font-size:1.05rem">2. Test d'écriture / lecture (résident fictif)</h2>
+  <p style="font-size:.85rem;color:#64748b">Insère un résident de test, puis le relit depuis la base — pour valider l'aller-retour complet.</p>
+  <button id="btnTestCrud" disabled style="padding:.6rem 1.2rem;border-radius:8px;border:none;background:#6366f1;color:#fff;font-weight:600;cursor:pointer">Lancer le test</button>
+  <div id="resultCrud" class="pending" style="margin-top:1rem">En attente du test de connexion ci-dessus…</div>
+
+  <h2 style="margin-top:2rem;font-size:1.05rem">3. Test de connexion (compte utilisateur)</h2>
+  <p style="font-size:.85rem;color:#64748b">Connecte-toi avec le compte créé dans Supabase (Authentication → Users) pour vérifier que la connexion fonctionne depuis le site.</p>
+  <div style="display:flex;flex-direction:column;gap:.5rem;max-width:320px">
+    <input type="email" id="loginEmail" placeholder="email@exemple.fr" style="padding:.55rem .7rem;border:1px solid #cbd5e1;border-radius:8px;font-size:.85rem"/>
+    <input type="password" id="loginPassword" placeholder="Mot de passe" style="padding:.55rem .7rem;border:1px solid #cbd5e1;border-radius:8px;font-size:.85rem"/>
+    <button id="btnLogin" style="padding:.6rem 1.2rem;border-radius:8px;border:none;background:#16a34a;color:#fff;font-weight:600;cursor:pointer">Se connecter</button>
+    <button id="btnLogout" style="padding:.6rem 1.2rem;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#475569;font-weight:600;cursor:pointer">Se déconnecter</button>
+  </div>
+  <div id="resultLogin" class="pending" style="margin-top:1rem">En attente…</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script>
+    (async () => {
+      const el = document.getElementById('result');
+      try {
+        // Requête volontairement anodine : on demande juste la session courante
+        // (doit retourner "pas de session" sans erreur réseau/clé).
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) throw error;
+        el.className = 'ok';
+        el.textContent = '✅ Connexion réussie au projet Supabase.\nURL : ' + SUPABASE_URL + '\n(Aucune session active — normal, on n\'a pas encore configuré l\'authentification.)';
+        const btn = document.getElementById('btnTestCrud');
+        btn.disabled = false;
+        document.getElementById('resultCrud').textContent = 'Prêt — clique sur le bouton.';
+      } catch (e) {
+        el.className = 'err';
+        el.textContent = '❌ Erreur de connexion :\n' + (e.message || e);
+      }
+    })();
+
+    document.getElementById('btnTestCrud').addEventListener('click', async () => {
+      const out = document.getElementById('resultCrud');
+      out.className = 'pending';
+      out.textContent = 'Insertion en cours…';
+      try {
+        const testNom = 'TEST-' + Date.now();
+        const { data: inserted, error: insertErr } = await supabaseClient
+          .from('residents')
+          .insert({ prenom: 'Résident', nom: testNom, statut: 'test', etablissement_id: 'foyer-trois-rivieres' })
+          .select()
+          .single();
+        if (insertErr) throw insertErr;
+
+        out.textContent = '✓ Écriture OK (id: ' + inserted.id + ')\nLecture en cours…';
+
+        const { data: fetched, error: fetchErr } = await supabaseClient
+          .from('residents')
+          .select('*')
+          .eq('id', inserted.id)
+          .single();
+        if (fetchErr) throw fetchErr;
+
+        out.className = 'ok';
+        out.textContent = '✅ Aller-retour complet réussi !\n\nÉcrit puis relu :\n' + JSON.stringify(fetched, null, 2) + '\n\n(Cette ligne de test est dans ta table — tu peux la supprimer depuis le Table Editor de Supabase.)';
+      } catch (e) {
+        out.className = 'err';
+        out.textContent = '❌ Erreur :\n' + (e.message || JSON.stringify(e));
+      }
+    });
+
+    document.getElementById('btnLogin').addEventListener('click', async () => {
+      const out = document.getElementById('resultLogin');
+      out.className = 'pending';
+      out.textContent = 'Connexion en cours…';
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        out.className = 'ok';
+        out.textContent = '✅ Connecté !\nUtilisateur : ' + data.user.email + '\nID : ' + data.user.id;
+      } catch (e) {
+        out.className = 'err';
+        out.textContent = '❌ Erreur de connexion :\n' + (e.message || JSON.stringify(e));
+      }
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      const out = document.getElementById('resultLogin');
+      await supabaseClient.auth.signOut();
+      out.className = 'pending';
+      out.textContent = 'Déconnecté.';
+    });
+  </script>
+</body>
+</html>

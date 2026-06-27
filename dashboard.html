@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><link rel="manifest" href="manifest.json"/><link rel="apple-touch-icon" href="icon-192.png"/><meta name="theme-color" content="#0f2b4a"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Tableau de bord — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    .mini-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.85rem;margin-bottom:1.5rem}
+    .mini-card{display:flex;flex-direction:column;justify-content:center;text-decoration:none;color:inherit;background:#f1f5f9;border:1px solid rgba(15,43,74,.08);border-radius:14px;padding:1rem 1.15rem;box-shadow:0 1px 3px rgba(15,43,74,.06);transition:box-shadow .2s,transform .2s;min-width:0;min-height:96px}
+    a.mini-card:hover{box-shadow:0 6px 16px rgba(15,43,74,.1);transform:translateY(-2px)}
+    .mini-card .mc-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);display:flex;align-items:center;gap:.4rem}
+    .mini-card .mc-label svg{width:16px;height:16px;flex-shrink:0}
+    .mini-card .mc-val{font-size:1.7rem;font-weight:800;color:var(--primary);line-height:1.1;margin-top:.35rem}
+    .mini-card .mc-sub{font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.15rem}
+    .mini-card .mc-alert{margin-top:.45rem;padding:.25rem .5rem;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:7px;font-size:.7rem;font-weight:600;text-align:center}
+    @media(max-width:680px){.mini-cards{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="header">
+      <div class="header-info">
+        <div class="header-title">Tableau de bord</div>
+        <div class="header-date" id="headerDate"></div>
+      </div>
+      <div class="header-right">
+        <a href="residents.html?new=true" class="btn btn-accent btn-sm admin-only btn-add-resident"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span class="btn-add-label">Ajouter un résident</span></a>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- MON ESPACE (salarié connecté) -->
+      <div id="monEspaceCard" style="display:none;margin-bottom:1.5rem">
+        <div class="card" style="background:linear-gradient(135deg,#4f46e510,#7c3aed08),#fff">
+          <div class="card-header"><span class="card-title">👤 Mon espace</span><a href="mes-absences.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Mes absences →</a></div>
+          <div class="card-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem">
+            <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase">Congés pris (<span id="meYear"></span>)</div><div style="font-size:1.7rem;font-weight:800" id="meCongesPris">—</div><div style="font-size:.74rem;color:var(--muted)" id="meCongesAttente"></div></div>
+            <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase">Heures de récup</div><div style="font-size:1.7rem;font-weight:800" id="meRecup">—</div><div style="font-size:.74rem;color:var(--muted)">écart cumulé planning</div></div>
+            <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase">Formations suivies</div><div style="font-size:1.7rem;font-weight:800" id="meFormations">—</div><div style="font-size:.74rem;color:var(--muted)">réalisées</div></div>
+            <div><div style="font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase">Entretiens</div><div style="font-size:1.7rem;font-weight:800" id="meEntretiens">—</div><div style="font-size:.74rem;color:var(--muted)">réalisés</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINI CARTES -->
+      <div class="mini-cards" id="miniCards">
+        <a href="planning.html" class="mini-card" id="miniEventCard" title="Voir le planning">
+          <div class="mc-label" style="color:#ef4444"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Événements à venir</div>
+          <div class="mc-val" id="miniEventVal">0</div>
+          <div class="mc-sub" id="miniEventSub">Aujourd'hui</div>
+        </a>
+        <div class="mini-card" id="miniPresenceCard">
+          <div class="mc-label" style="color:#16a34a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Présents aujourd'hui</div>
+          <div class="mc-val" id="miniPresentsVal">0</div>
+          <div class="mc-sub" id="miniPresentsSub">Présences enregistrées</div>
+          <div class="mc-alert" id="miniPresenceAlert" style="display:none;cursor:pointer" onclick="window.location='presences.html'">⚠ Présences non saisies</div>
+        </div>
+        <a href="residents.html" class="mini-card" id="miniAnnivCard" title="Anniversaires du mois">
+          <div class="mc-label" style="color:#ec4899"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Anniversaires du mois</div>
+          <div class="mc-val" id="miniAnnivVal" style="font-size:1.25rem">—</div>
+          <div class="mc-sub" id="miniAnnivSub">Ce mois-ci</div>
+        </a>
+        <a href="vehicules.html" class="mini-card" id="miniVehCard" title="Réservations véhicules du jour">
+          <div class="mc-label" style="color:#6366f1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.5a1 1 0 0 0-.8.4L2 11v5h2m10 1.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h3m-3 0H9"/></svg>Véhicules du jour</div>
+          <div class="mc-val" id="miniVehVal">0</div>
+          <div class="mc-sub" id="miniVehSub">Réservés aujourd'hui</div>
+        </a>
+        <a href="echeances.html" class="mini-card" id="miniEcheanceCard" title="Échéancier administratif">
+          <div class="mc-label" style="color:#0369a1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M5 3 2 6"/><path d="m22 6-3-3"/></svg>Échéances urgentes</div>
+          <div class="mc-val" id="miniEcheanceVal">0</div>
+          <div class="mc-sub" id="miniEcheanceSub">Sous 30 jours</div>
+          <div class="mc-alert" id="miniEcheanceAlert" style="display:none">⚠ Échéances en retard</div>
+        </a>
+        <a href="satisfaction.html" class="mini-card" id="miniSatCard" title="Satisfaction résidents">
+          <div class="mc-label" style="color:#6366f1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Satisfaction</div>
+          <div class="mc-val" id="miniSatVal" style="font-size:1.5rem">—</div>
+          <div class="mc-sub" id="miniSatSub">Score résidents</div>
+        </a>
+        <a href="repas.html" class="mini-card" id="miniRepasCard" title="Repas du jour">
+          <div class="mc-label" style="color:#ea580c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>Repas du jour</div>
+          <div class="mc-val" id="miniRepasVal">0</div>
+          <div class="mc-sub" id="miniRepasSub">couverts midi / soir</div>
+        </a>
+      </div>
+
+      <!-- CARTES SUPPLÉMENTAIRES -->
+      <div class="grid grid-3" style="gap:1.5rem">
+
+        <!-- RÉSIDENTS SANS AVENANT -->
+        <div class="card" id="dashCardSansAvenant">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#8b5cf6"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span class="card-title">Sans avenant actif</span>
+            <a href="ppe.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Créer</a>
+          </div>
+          <div class="card-body" style="padding:0;max-height:240px;overflow-y:auto" id="dashboardSansAvenant">
+            <div class="empty" style="padding:1.5rem"><p>Aucun</p></div>
+          </div>
+        </div>
+
+        <!-- ALERTES ÉCHÉANCES -->
+        <div class="card" id="dashCardAlertes">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#f59e0b"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span class="card-title">Alertes échéances</span>
+          </div>
+          <div class="card-body" style="padding:0;max-height:240px;overflow-y:auto" id="dashboardAlertes">
+            <div class="empty" style="padding:1.5rem"><p>Tout est à jour</p></div>
+          </div>
+        </div>
+
+        <!-- RÉPERTOIRE RÉCENT -->
+        <div class="card" id="dashCardRepertoire">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#06b6d4"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="card-title">Répertoire récent</span>
+            <a href="repertoire.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a>
+          </div>
+          <div class="card-body" style="padding:0;max-height:240px;overflow-y:auto" id="dashboardRepertoire">
+            <div class="empty" style="padding:1.5rem"><p>Aucun contact</p></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- JOURNAL + AVENANTS -->
+      <div class="grid grid-2" style="gap:1.5rem;margin-top:1.5rem">
+
+        <!-- DERNIÈRES ENTRÉES JOURNAL -->
+        <div class="card" id="dashCardJournal">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:var(--accent)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span class="card-title">Journal de bord</span>
+            <a href="journal.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div id="recentJournal">
+              <div class="empty" style="padding:2rem"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><p>Aucune entrée aujourd'hui</p><a href="journal.html" class="btn btn-outline btn-sm">Ajouter une entrée</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AVENANTS RÉCENTS -->
+        <div class="card" id="dashCardAvenants">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#16a34a"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span class="card-title">Avenants récents</span>
+            <a href="ppe.html" class="btn btn-ghost btn-sm" style="margin-left:auto">Voir tout</a>
+          </div>
+          <div class="card-body" style="padding:0" id="dashboardAvenants">
+            <div class="empty" style="padding:2rem"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div><p>Aucun avenant</p><a href="ppe.html" class="btn btn-outline btn-sm">Créer un avenant</a></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUIVI RÉSIDENTS (données des fiches) -->
+      <div class="section-label" style="margin:1.75rem 0 .25rem;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)" id="dashSuiviLabel">Suivi des résidents</div>
+      <div class="grid grid-2" style="gap:1.5rem;margin-top:.75rem" id="dashSuiviSection">
+
+        <!-- RDV MÉDICAUX À VENIR -->
+        <div class="card" id="dashCardRdv">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#16a34a"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+            <span class="card-title">RDV médicaux à venir</span>
+            <span class="badge badge-gray" id="dashRdvCount" style="margin-left:auto;display:none">0</span>
+          </div>
+          <div class="card-body" style="padding:0;max-height:260px;overflow-y:auto" id="dashRdvMedicaux">
+            <div class="empty" style="padding:1.5rem"><p>Aucun RDV à venir</p></div>
+          </div>
+        </div>
+
+        <!-- RÉSIDENTS ACTUELLEMENT SORTIS -->
+        <div class="card" id="dashCardSorties">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#0d9488"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+            <span class="card-title">Résidents actuellement sortis</span>
+            <span class="badge badge-gray" id="dashSortiesCount" style="margin-left:auto;display:none">0</span>
+          </div>
+          <div class="card-body" style="padding:0;max-height:260px;overflow-y:auto" id="dashSorties">
+            <div class="empty" style="padding:1.5rem"><p>Aucun résident sorti</p></div>
+          </div>
+        </div>
+
+        <!-- SOLDES BUDGET NÉGATIFS -->
+        <div class="card" id="dashCardSoldes">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#dc2626"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span class="card-title">Soldes budget négatifs</span>
+            <span class="badge badge-gray" id="dashSoldesCount" style="margin-left:auto;display:none">0</span>
+          </div>
+          <div class="card-body" style="padding:0;max-height:260px;overflow-y:auto" id="dashSoldes">
+            <div class="empty" style="padding:1.5rem"><p>Aucun solde négatif</p></div>
+          </div>
+        </div>
+
+        <!-- RAPPELS VACCINS -->
+        <div class="card" id="dashCardVaccins">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#9333ea"><path d="M18 2l4 4M17 7l-9 9-4 1 1-4 9-9zM13.5 6.5l4 4"/></svg>
+            <span class="card-title">Rappels de vaccins à faire</span>
+            <span class="badge badge-gray" id="dashVaccinsCount" style="margin-left:auto;display:none">0</span>
+          </div>
+          <div class="card-body" style="padding:0;max-height:260px;overflow-y:auto" id="dashVaccins">
+            <div class="empty" style="padding:1.5rem"><p>Aucun rappel en retard</p></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STATISTIQUES VISUELLES -->
+      <div class="grid grid-2" style="gap:1.5rem;margin-top:1.5rem" id="dashStatsSection">
+
+        <!-- Présences 7 jours -->
+        <div class="card" id="dashCardPresenceChart">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:var(--green)"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="card-title">Présences — 7 derniers jours</span>
+          </div>
+          <div class="card-body">
+            <div id="chartPresences" style="display:flex;align-items:flex-end;gap:.5rem;height:150px;margin-bottom:.6rem"></div>
+            <div id="chartPresencesLegend" style="font-size:.7rem;color:var(--muted);text-align:center"></div>
+          </div>
+        </div>
+
+        <!-- Incidents par statut -->
+        <div class="card" id="dashCardIncidentChart">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#dc2626"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span class="card-title">Incidents — répartition</span>
+          </div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:.6rem">
+            <div id="chartIncidents"></div>
+            <div id="chartIncidentsCats" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.25rem"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RACCOURCIS -->
+      <div class="card" style="margin-top:1.5rem">
+        <div class="card-header"><span class="card-title">Accès rapides</span></div>
+        <div class="card-body">
+          <div class="grid grid-4" style="gap:1rem">
+            <a href="residents.html" class="btn btn-outline admin-only" style="flex-direction:column;height:80px;gap:.5rem;border-radius:var(--r)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;color:var(--blue)"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+              Nouveau résident
+            </a>
+            <a href="journal.html" class="btn btn-outline" style="flex-direction:column;height:80px;gap:.5rem;border-radius:var(--r)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;color:var(--accent)"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Nouvelle entrée
+            </a>
+            <a href="presences.html" class="btn btn-outline" style="flex-direction:column;height:80px;gap:.5rem;border-radius:var(--r)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;color:var(--green)"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              Saisir présences
+            </a>
+            <a href="planning.html" class="btn btn-outline" style="flex-direction:column;height:80px;gap:.5rem;border-radius:var(--r)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;color:var(--purple)"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Ajouter événement
+            </a>
+            <a href="vehicules.html" class="btn btn-outline" style="flex-direction:column;height:80px;gap:.5rem;border-radius:var(--r);text-decoration:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;color:#6366f1"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.5a1 1 0 0 0-.8.4L2 11v5h2m10 1.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h3m-3 0H9m6-6V7a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1v3M6 17.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0"/></svg>
+              Réserver véhicule
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<!-- WIZARD PREMIÈRE CONNEXION -->
+<div class="wizard-overlay" id="wizardOverlay" style="display:none">
+  <div class="wizard-card">
+    <div class="wizard-head">
+      <div class="logo-icon" style="background:var(--accent);margin:0 auto 1rem;width:52px;height:52px;font-size:1rem">FTR</div>
+      <h2 style="font-size:1.4rem;font-weight:800;color:var(--text)">Bienvenue sur votre plateforme</h2>
+      <p style="font-size:.875rem;color:var(--muted);margin-top:.4rem">Configurez votre espace en quelques étapes</p>
+      <div class="wizard-steps" id="wizardSteps">
+        <div class="wstep active" style="width:32px" id="ws0"></div>
+        <div class="wstep" style="width:16px" id="ws1"></div>
+        <div class="wstep" style="width:16px" id="ws2"></div>
+      </div>
+    </div>
+
+    <!-- Step 0: Structure -->
+    <div class="wizard-body" id="wStep0">
+      <h3 style="font-weight:700;margin-bottom:1.25rem">Votre structure</h3>
+      <div class="form-group"><label class="required">Nom de l'établissement</label><input type="text" id="wEtab" placeholder="Ex : Foyer d'Hébergement Les Trois Rivières"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Ville</label><input type="text" id="wVille" placeholder="Ville"/></div>
+        <div class="form-group"><label>N° FINESS</label><input type="text" id="wFiness" placeholder="750123456"/></div>
+      </div>
+
+    </div>
+
+    <!-- Step 1: Personnalisation -->
+    <div class="wizard-body" id="wStep1" style="display:none">
+      <h3 style="font-weight:700;margin-bottom:1.25rem">Identité visuelle</h3>
+      <div class="form-group">
+        <label>Couleur principale (sidebar)</label>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <input type="color" id="wPrimary" value="#0f2b4a" style="width:52px;height:40px;cursor:pointer;border-radius:var(--r-sm)"/>
+          <div style="flex:1;height:40px;border-radius:var(--r);transition:background .2s" id="wPrimaryPreview" style="background:#0f2b4a"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Couleur d'accentuation (boutons)</label>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <input type="color" id="wAccent" value="#e85d04" style="width:52px;height:40px;cursor:pointer;border-radius:var(--r-sm)"/>
+          <div style="flex:1;height:40px;border-radius:var(--r);transition:background .2s" id="wAccentPreview" style="background:#e85d04"></div>
+        </div>
+      </div>
+      <p style="font-size:.8rem;color:var(--muted);margin-top:.5rem">Ces couleurs peuvent être modifiées à tout moment dans Administration → Personnalisation.</p>
+    </div>
+
+    <!-- Step 2: Compte sécurisé -->
+    <div class="wizard-body" id="wStep2" style="display:none">
+      <h3 style="font-weight:700;margin-bottom:.4rem">Sécurisez votre accès</h3>
+      <p style="font-size:.875rem;color:var(--muted);margin-bottom:1.25rem">Modifiez les identifiants par défaut avant de commencer.</p>
+      <div class="form-row">
+        <div class="form-group"><label>Prénom</label><input type="text" id="wPrenom" placeholder="Votre prénom"/></div>
+        <div class="form-group"><label>Nom</label><input type="text" id="wNom" placeholder="Votre nom"/></div>
+      </div>
+      <div class="form-group"><label class="required">Nouvel identifiant</label><input type="text" id="wUsername" value="admin" autocomplete="off"/></div>
+      <div class="form-group"><label class="required">Nouveau mot de passe</label><input type="password" id="wPassword" placeholder="Choisissez un mot de passe sécurisé" autocomplete="new-password"/></div>
+      <div class="form-group"><label class="required">Confirmer le mot de passe</label><input type="password" id="wPasswordConfirm" placeholder="Répétez le mot de passe" autocomplete="new-password"/></div>
+      <div class="alert alert-info" style="font-size:.8rem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Identifiants actuels par défaut : <strong>admin</strong> / <strong>admin123</strong>
+      </div>
+    </div>
+
+    <div class="wizard-footer">
+      <button class="btn btn-ghost" id="wBtnBack" style="display:none;margin-right:auto" onclick="wizardBack()">← Retour</button>
+      <button class="btn btn-primary" id="wBtnNext" onclick="wizardNext()">Suivant →</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script>Auth.requireAuth();</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/conges-supabase.js"></script>
+<script src="js/planning-equipe-supabase.js"></script>
+<script src="js/formations-supabase.js"></script>
+<script src="js/entretiens-supabase.js"></script>
+<script>
+  // Carte « Mon espace » : congés + heures de récup du salarié connecté
+  (async function loadMonEspace() {
+    const s = Auth.getSession();
+    if (!s) return;
+    try {
+      const employes = await sbGetEmployes();
+      const fiche = employes.find(e => String(e.profileId) === String(s.userId));
+      if (!fiche) return; // pas de fiche liée → carte masquée
+      const [conges, shifts, formations, entretiens] = await Promise.all([
+        sbGetConges().catch(() => []),
+        sbGetPeShifts().catch(() => []),
+        sbGetFormations().catch(() => []),
+        sbGetEntretiens().catch(() => [])
+      ]);
+      const year = new Date().getFullYear();
+      const mesConges = conges.filter(c => String(c.employeId) === String(fiche.id));
+      const joursPris = mesConges
+        .filter(c => c.statut === 'accepte' && new Date(c.debut).getFullYear() === year)
+        .reduce((sum, c) => sum + (Math.ceil((new Date(c.fin) - new Date(c.debut)) / 86400000) + 1), 0);
+      const enAttente = mesConges.filter(c => c.statut === 'en_attente').length;
+      const recupMins = peRecupMinutesForEmploye(shifts, fiche.id, fiche.heuresContrat);
+
+      document.getElementById('meYear').textContent = year;
+      document.getElementById('meCongesPris').textContent = joursPris + ' j';
+      document.getElementById('meCongesAttente').textContent = enAttente ? (enAttente + ' demande' + (enAttente > 1 ? 's' : '') + ' en attente') : 'Aucune demande en attente';
+      const recupEl = document.getElementById('meRecup');
+      recupEl.textContent = peFormatRecup(recupMins);
+      recupEl.style.color = recupMins >= 0 ? '#16a34a' : '#dc2626';
+
+      // RÈGLE : on n'affiche que les formations / entretiens passés en « réalisé »
+      const formationsRealisees = formations.filter(f => f.statut === 'realisee' && (f.participants || []).map(String).includes(String(fiche.id))).length;
+      const entretiensRealises = entretiens.filter(e => e.statut === 'realise' && String(e.employeId) === String(fiche.id)).length;
+      document.getElementById('meFormations').textContent = formationsRealisees;
+      document.getElementById('meEntretiens').textContent = entretiensRealises;
+
+      document.getElementById('monEspaceCard').style.display = '';
+    } catch (e) { console.error('[monEspace]', e); }
+  })();
+</script>
+<script>
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  // ── WIZARD ──
+  let wizardStep = 0;
+  function wizardGoTo(step) {
+    wizardStep = step;
+    [0,1,2].forEach(i => {
+      document.getElementById('wStep'+i).style.display = i===step ? '' : 'none';
+      const dot = document.getElementById('ws'+i);
+      dot.classList.toggle('active', i===step);
+      dot.classList.toggle('done', i<step);
+      dot.style.width = i===step ? '32px' : i<step ? '16px' : '16px';
+    });
+    document.getElementById('wBtnBack').style.display = step > 0 ? '' : 'none';
+    document.getElementById('wBtnNext').textContent = step === 2 ? '✓ Terminer la configuration' : 'Suivant →';
+  }
+
+  function wizardBack() { if (wizardStep > 0) wizardGoTo(wizardStep - 1); }
+
+  async function wizardNext() {
+    if (wizardStep === 0) {
+      const etab = document.getElementById('wEtab').value.trim();
+      if (!etab) { toast('Le nom de l\'établissement est requis', 'error'); return; }
+      wizardGoTo(1);
+    } else if (wizardStep === 1) {
+      const primary = document.getElementById('wPrimary').value;
+      const accent  = document.getElementById('wAccent').value;
+      const b = DB.get(DB.keys.branding) || {};
+      DB.set(DB.keys.branding, { ...b, primaryColor: primary, accentColor: accent });
+      applyBranding();
+      wizardGoTo(2);
+    } else if (wizardStep === 2) {
+      const username = document.getElementById('wUsername').value.trim();
+      const password = document.getElementById('wPassword').value;
+      const confirm  = document.getElementById('wPasswordConfirm').value;
+      if (!username) { toast('L\'identifiant est requis', 'error'); return; }
+      if (!password || password.length < 6) { toast('Mot de passe : 6 caractères minimum', 'error'); return; }
+      if (password !== confirm) { toast('Les mots de passe ne correspondent pas', 'error'); return; }
+
+      // Save structure
+      const settings = {
+        etablissement: document.getElementById('wEtab').value.trim(),
+        ville: document.getElementById('wVille').value.trim(),
+        finess: document.getElementById('wFiness').value.trim(),
+        tel:'', email:'', adresse:''
+      };
+      DB.set(DB.keys.settings, settings);
+
+      // Save admin credentials
+      const prenom = document.getElementById('wPrenom').value.trim();
+      const nom    = document.getElementById('wNom').value.trim();
+      const session = Auth.getSession();
+      let users = DB.get(DB.keys.users) || [];
+      const _pwdHash = await hashPassword(password);
+      users = users.map(u => u.id === session.userId ? { ...u, prenom, nom, username, password: _pwdHash } : u);
+      DB.set(DB.keys.users, users);
+      DB.set(DB.keys.session, { ...session, prenom, nom, username });
+      DB.set(DB.keys.user, { prenom, nom, role: 'Administrateur' });
+
+      // Mark onboarded
+      DB.set(DB.keys.onboarded, true);
+      document.getElementById('wizardOverlay').style.display = 'none';
+      renderUserInfo();
+      renderDashboard();
+      toast('Configuration enregistrée — bienvenue !');
+    }
+  }
+
+  // Live color preview
+  const _wp = document.getElementById('wPrimary');
+  const _wa = document.getElementById('wAccent');
+  if (_wp) _wp.addEventListener('input', () => { document.getElementById('wPrimaryPreview').style.background = _wp.value; });
+  if (_wa) _wa.addEventListener('input', () => { document.getElementById('wAccentPreview').style.background = _wa.value; });
+  // Trigger wizard if admin & not onboarded
+  if (Auth.isAdmin() && !DB.get(DB.keys.onboarded)) {
+    document.getElementById('wizardOverlay').style.display = '';
+    wizardGoTo(0);
+  }
+
+  function renderDashboard() {
+    const s = getStats();
+    const planning = DB.get(DB.keys.planning) || [];
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0,10);
+    const allResidents = sbResidents().filter(r => r.statut !== 'sorti');
+
+    // ── MINI CARTES ──
+    const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    // Événements à venir (à partir de maintenant, hors véhicules)
+    const upcomingEv = planning.filter(e => e.type !== 'vehicule')
+      .map(e => ({ e, start: new Date(e.date + 'T' + (e.time || '00:00')).getTime() }))
+      .filter(x => x.start >= now.getTime())
+      .sort((a, b) => a.start - b.start);
+    setText('miniEventVal', upcomingEv.length);
+    const nextEv = upcomingEv[0] && upcomingEv[0].e;
+    setText('miniEventSub', nextEv ? (formatDate(nextEv.date) + (nextEv.time ? ' ' + nextEv.time.slice(0,5) : '') + ' · ' + (nextEv.residentName || nextEv.titre || '')) : 'Aucun à venir');
+    // Présents aujourd'hui + alerte saisie
+    setText('miniPresentsVal', s.presentsToday);
+    const todayPres = (DB.get(DB.keys.presences) || {})[todayStr] || {};
+    const markedCount = allResidents.filter(r => todayPres[r.id]).length;
+    const incomplete = allResidents.length > 0 && markedCount < allResidents.length;
+    const pAlert = document.getElementById('miniPresenceAlert');
+    if (pAlert) pAlert.style.display = incomplete ? '' : 'none';
+    setText('miniPresentsSub', incomplete ? (markedCount + '/' + allResidents.length + ' pointés') : 'Présences enregistrées');
+    // Anniversaires du mois
+    const thisMonth = now.getMonth();
+    const annivRes = allResidents.filter(r => r.dob && new Date(r.dob).getMonth() === thisMonth);
+    if (annivRes.length === 1) {
+      const f = annivRes[0];
+      setText('miniAnnivVal', f.prenom || '');
+      setText('miniAnnivSub', new Date(f.dob).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }));
+    } else if (annivRes.length > 1) {
+      setText('miniAnnivVal', annivRes.length);
+      setText('miniAnnivSub', annivRes.map(r => r.prenom).filter(Boolean).join(', '));
+    } else {
+      setText('miniAnnivVal', 'Aucun');
+      setText('miniAnnivSub', 'Ce mois-ci');
+    }
+    // Véhicules réservés dans la journée
+    const vehToday = planning.filter(e => e.type === 'vehicule' && (e.date || '') <= todayStr && (e.dateEnd || e.date || '') >= todayStr)
+      .sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+    setText('miniVehVal', vehToday.length);
+    setText('miniVehSub', vehToday.length ? [...new Set(vehToday.map(v => v.vehicule).filter(Boolean))].join(', ') : 'Aucun aujourd\'hui');
+
+    // Échéances administratives urgentes (retard + sous 30 j)
+    const echList = (DB.keys.echeances ? (DB.get(DB.keys.echeances) || []) : []).filter(e => !e.done);
+    const echLate = echList.filter(e => (e.date || '') < todayStr).length;
+    const echSoon = echList.filter(e => {
+      if ((e.date || '') < todayStr) return false;
+      return Math.ceil((new Date(e.date) - new Date(todayStr)) / 86400000) <= 30;
+    }).length;
+    setText('miniEcheanceVal', echLate + echSoon);
+    setText('miniEcheanceSub', echLate ? `${echLate} en retard · ${echSoon} sous 30 j` : 'Sous 30 jours');
+    const echAlert = document.getElementById('miniEcheanceAlert');
+    if (echAlert) echAlert.style.display = echLate ? '' : 'none';
+
+    // Repas du jour (inscrits par défaut sauf décochés)
+    const repasAll = (DB.keys.repas ? (DB.get(DB.keys.repas) || {}) : {});
+    const repasDay = repasAll[todayStr] || {};
+    const actifs = allResidents.filter(r => r.statut !== 'sorti');
+    const cnt = m => actifs.filter(r => { const v = (repasDay[m] || {})[r.id]; return v === undefined ? true : !!v; }).length;
+    setText('miniRepasVal', `${cnt('midi')} / ${cnt('soir')}`);
+
+    // Score satisfaction
+    const satAllDash = DB.get(DB.keys.satisfaction) || [];
+    const satValEl = document.getElementById('miniSatVal');
+    const satSubEl = document.getElementById('miniSatSub');
+    if (satValEl) {
+      if (satAllDash.length) {
+        let st = 0, sc = 0;
+        satAllDash.forEach(s => { Object.values(s.reponses||{}).forEach(v => { if (v != null) { st += Number(v); sc++; } }); });
+        const satAvg = sc ? st/sc : null;
+        const satPct = satAvg !== null ? Math.round(satAvg*25) : null;
+        const satCol = satAvg === null ? '#94a3b8' : satAvg >= 3.5 ? '#0d9488' : satAvg >= 2.5 ? '#16a34a' : satAvg >= 1.5 ? '#d97706' : '#dc2626';
+        satValEl.textContent = satPct !== null ? satPct+'%' : '—';
+        satValEl.style.color = satCol;
+        if (satSubEl) satSubEl.textContent = satAllDash.length+' questionnaire'+(satAllDash.length!==1?'s':'');
+      } else {
+        satValEl.textContent = '—';
+        if (satSubEl) satSubEl.textContent = 'Aucun questionnaire';
+      }
+    }
+
+    // Résidents sans avenant actif
+    const ppeList = DB.get(DB.keys.ppe) || [];
+    const residentsWithPpe = new Set(ppeList.filter(p => p.statut === 'actif').map(p => p.residentId));
+    const sansAvenant = allResidents.filter(r => !residentsWithPpe.has(r.id));
+    const saEl = document.getElementById('dashboardSansAvenant');
+    if (sansAvenant.length) {
+      saEl.innerHTML = sansAvenant.slice(0, 10).map(r => `
+        <div style="display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;border-bottom:1px solid var(--border);font-size:.8rem">
+          ${r.photo?`<img src="${sanitizeUrl(r.photo)}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0" alt=""/>`:`<div class="avatar sm" style="background:${r.color||'var(--blue)'};flex-shrink:0;width:26px;height:26px;font-size:.6rem">${(r.prenom||'?')[0].toUpperCase()}</div>`}
+          <span style="font-weight:600;flex:1">${escHtml(r.prenom||'')} ${escHtml(r.nom||'')}</span>
+          <a href="ppe.html?residentId=${r.id}" class="btn btn-ghost btn-sm" style="font-size:.7rem">+ Avenant</a>
+        </div>`).join('');
+    } else {
+      saEl.innerHTML = '<div class="empty" style="padding:1.5rem"><p>Tous les résidents ont un avenant actif</p></div>';
+    }
+
+    // Alertes échéances
+    const nowDate2 = new Date();
+    const alertes = [];
+    const _aSess = Auth.getSession();
+    const _aCanPpe = _aSess?.role === 'admin' || hasPermission(_aSess?.userId, 'access_ppe');
+    const _aCanInc = _aSess?.role === 'admin' || canViewAllIncidents(_aSess?.userId);
+    // Avenants avec révision dans < 30j (réservé aux droits PPE)
+    if (_aCanPpe) ppeList.filter(p => p.statut === 'actif' && p.dateRevision).forEach(p => {
+      const d = new Date(p.dateRevision + 'T00:00:00');
+      const diff = Math.round((d - nowDate2) / 86400000);
+      if (diff >= 0 && diff <= 30) alertes.push({ type: 'avenant', label: `Révision avenant : ${p.residentName||'?'}`, date: p.dateRevision, jours: diff });
+    });
+    // Incidents non validés depuis > 7j (réservé aux droits incidents)
+    if (_aCanInc) (DB.get(DB.keys.incidents)||[]).filter(i => i.statut === 'declare' || i.statut === 'cours').forEach(i => {
+      if (i.date) {
+        const d = new Date(i.date + (i.heure ? 'T'+i.heure : 'T00:00:00'));
+        const diff = Math.round((nowDate2 - d) / 86400000);
+        if (diff >= 7) alertes.push({ type: 'incident', label: `Incident non traité : ${i.residentName||'?'}`, date: i.date, jours: -diff, gravite: i.gravite });
+      }
+    });
+    alertes.sort((a,b) => a.type === 'avenant' ? a.jours - b.jours : b.jours - a.jours);
+    const alEl = document.getElementById('dashboardAlertes');
+    if (alertes.length) {
+      alEl.innerHTML = alertes.slice(0, 8).map(a => {
+        const isUrgent = a.type === 'avenant' ? a.jours <= 7 : a.jours <= -7;
+        return `<div style="display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;border-bottom:1px solid var(--border);font-size:.8rem;${isUrgent?'background:#fef2f2':''}">
+          <span style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${a.type==='avenant'?'#f59e0b':'#dc2626'}"></span>
+          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(a.label)}</span>
+          <span style="font-size:.7rem;color:var(--muted);white-space:nowrap">${a.type==='avenant' ? `J-${a.jours}` : `J+${Math.abs(a.jours)}`}</span>
+        </div>`;
+      }).join('');
+    } else {
+      alEl.innerHTML = '<div class="empty" style="padding:1.5rem"><p>Tout est à jour</p></div>';
+    }
+
+    // Répertoire récent
+    const contacts = (DB.get(DB.keys.repertoire)||[]).filter(c => c.updatedAt).sort((a,b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 5);
+    const repEl = document.getElementById('dashboardRepertoire');
+    if (contacts.length) {
+      repEl.innerHTML = contacts.map(c => {
+        const initiale = (c.organisme||'?')[0].toUpperCase();
+        return `<div style="display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;border-bottom:1px solid var(--border);font-size:.8rem">
+          <div class="avatar sm" style="background:#06b6d4;flex-shrink:0;width:26px;height:26px;font-size:.6rem">${initiale}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(c.organisme)}</div>
+            <div style="font-size:.7rem;color:var(--muted)">${escHtml(c.nom||'')}</div>
+          </div>
+          <span style="font-size:.65rem;color:var(--muted);white-space:nowrap">${c.updatedAt ? formatDate(c.updatedAt) : ''}</span>
+        </div>`;
+      }).join('');
+    } else {
+      repEl.innerHTML = '<div class="empty" style="padding:1.5rem"><p>Aucun contact récent</p></div>';
+    }
+
+    // Avenants récents (dashboard cards)
+    const avenants = (DB.get(DB.keys.ppe)||[]).filter(p => p.statut !== 'termine').slice(-4).reverse();
+    const da = document.getElementById('dashboardAvenants');
+    if (avenants.length) {
+      da.innerHTML = avenants.map(p => {
+        const totalObj = Object.values(p.sections||{}).reduce((a, s) => a + (s.objectifs?.length||0), 0);
+        return `<div class="avenant-row" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1.25rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s ease" onclick="window.location='ppe.html?residentId=${p.residentId}'">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:.875rem">${escHtml(p.residentName||'?')}</div>
+            <div style="font-size:.75rem;color:var(--muted)">${totalObj} objectifs · ${escHtml(p.dateRedaction||'—')}</div>
+          </div>
+          <span class="badge-ppe ${p.statut}">${STATUT_PPE_LABEL[p.statut]||p.statut}</span>
+        </div>`;
+      }).join('');
+    }
+
+    const nc = document.getElementById('navResCount');
+    if (nc && s.totalResidents > 0) { nc.style.display=''; nc.textContent = s.totalResidents; }
+
+    const _js = Auth.getSession();
+    const journal = (DB.get(DB.keys.journal)||[]).filter(e => e.visibilite !== 'confidentiel' || _js?.role === 'admin' || String(e.authorId) === String(_js?.userId)).slice(-5).reverse();
+    const jEl = document.getElementById('recentJournal');
+    const cats = DB.get(DB.keys.categories)||[];
+    if (journal.length) {
+      jEl.innerHTML = journal.map(e=>{
+        const cat = cats.find(c=>c.id==e.categorie);
+        return `<div style="display:flex;align-items:flex-start;gap:.75rem;padding:.85rem 1.25rem;border-bottom:1px solid var(--border)">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:3px">
+              <span style="font-weight:600;font-size:.875rem">${escHtml(e.resident||'—')}</span>
+              ${cat?`<span class="badge" style="background:${escHtml(cat.color)}22;color:${escHtml(cat.color)}">${escHtml(cat.name)}</span>`:''}
+              <span style="font-size:.7rem;background:${getAuthorColor(e)}18;color:${getAuthorColor(e)};padding:1px 7px;border-radius:10px;margin-left:auto">${escHtml(getJournalAuthor(e))}</span>
+            </div>
+            <div style="font-size:.8rem;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(e.contenu||'')}</div>
+            <div style="font-size:.72rem;color:var(--g400);margin-top:3px">${formatDateTime(e.date)}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    // ── Graphique présences 7 jours ──
+    const presencesData = DB.get(DB.keys.presences) || {};
+    const allRes = sbResidents().filter(r => r.statut !== 'sorti');
+    const total = allRes.length || 1;
+    const days7 = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const key = d.toISOString().slice(0,10);
+      const presDay = presencesData[key] || {};
+      const count = allRes.filter(r => presDay[r.id] === 'present').length;
+      days7.push({ key, label: d.toLocaleDateString('fr-FR',{weekday:'short'}), count, pct: Math.round(count/total*100) });
+    }
+    const maxPct = Math.max(...days7.map(d => d.pct), 1);
+    const chartEl = document.getElementById('chartPresences');
+    if (chartEl) {
+      chartEl.innerHTML = days7.map(d => {
+        const h = Math.max(4, Math.round(d.pct / maxPct * 130));
+        const isToday = d.key === now.toISOString().slice(0,10);
+        const color = d.pct >= 80 ? '#10b981' : d.pct >= 50 ? '#f59e0b' : '#ef4444';
+        return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px">
+          <div style="font-size:.6rem;color:var(--muted);font-weight:600">${d.pct}%</div>
+          <div style="width:100%;height:${h}px;background:${color};border-radius:3px 3px 0 0;opacity:${isToday?1:.75};transition:height .3s" title="${d.label} : ${d.count}/${total}"></div>
+          <div style="font-size:.62rem;color:${isToday?'var(--accent)':'var(--muted)'};font-weight:${isToday?700:400}">${d.label}</div>
+        </div>`;
+      }).join('');
+      const avgPct = Math.round(days7.reduce((s,d)=>s+d.pct,0)/7);
+      const legEl = document.getElementById('chartPresencesLegend');
+      if (legEl) legEl.textContent = `Moyenne sur 7 jours : ${avgPct}% · ${total} résidents actifs`;
+    }
+
+    // ── Graphique incidents par statut ──
+    const incAll = DB.get(DB.keys.incidents) || [];
+    const incStats = {
+      declare: { label:'Déclaré', color:'#3b82f6', count: incAll.filter(i=>i.statut==='declare').length },
+      cours:   { label:'En cours', color:'#f59e0b', count: incAll.filter(i=>i.statut==='cours').length },
+      valide:  { label:'Validé',   color:'#10b981', count: incAll.filter(i=>i.statut==='valide').length },
+      classe:  { label:'Classé',   color:'#94a3b8', count: incAll.filter(i=>i.statut==='classe').length },
+    };
+    const incTotal = incAll.length || 1;
+    const incChartEl = document.getElementById('chartIncidents');
+    if (incChartEl) {
+      incChartEl.innerHTML = Object.values(incStats).map(s => {
+        const pct = Math.round(s.count / incTotal * 100);
+        return `<div style="margin-bottom:.4rem">
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:2px">
+            <span style="color:var(--g700);font-weight:500">${s.label}</span>
+            <span style="color:var(--muted)">${s.count} (${pct}%)</span>
+          </div>
+          <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${s.color};border-radius:4px;transition:width .4s"></div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    const incCatEl = document.getElementById('chartIncidentsCats');
+    if (incCatEl) {
+      const byType = {};
+      incAll.forEach(i => { byType[i.type] = (byType[i.type]||0)+1; });
+      const typeColors = { chute:'#f59e0b', agression:'#ef4444', fugue:'#8b5cf6', violence:'#dc2626', medical:'#06b6d4', materiel:'#6366f1', accident:'#f97316', autre:'#94a3b8' };
+      const typeLabels = { chute:'Chute', agression:'Agression', fugue:'Fugue', violence:'Violence', medical:'Médical', materiel:'Matériel', accident:'Accident', autre:'Autre' };
+      incCatEl.innerHTML = Object.entries(byType).sort((a,b)=>b[1]-a[1]).map(([type, count]) =>
+        `<span style="display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .5rem;border-radius:100px;font-size:.7rem;font-weight:600;background:${typeColors[type]||'#94a3b8'}18;color:${typeColors[type]||'#94a3b8'}">${typeLabels[type]||type} <strong>${count}</strong></span>`
+      ).join('');
+    }
+
+    renderResidentTracking();
+
+    // ── Filtrer les cartes selon les permissions ──
+    const _session = Auth.getSession();
+    const _userId = _session?.userId;
+    const canSee = (perm) => _session?.role === 'admin' || hasPermission(_userId, perm);
+    const hideIf = (id, perm) => { const el = document.getElementById(id); if (el && !canSee(perm)) el.style.display = 'none'; };
+    // Section suivi résidents
+    if (!canSee('view_residents')) {
+      const _sl = document.getElementById('dashSuiviLabel'); if (_sl) _sl.style.display = 'none';
+      const _ss = document.getElementById('dashSuiviSection'); if (_ss) _ss.style.display = 'none';
+    }
+    hideIf('miniPresenceCard', 'access_presences');
+    hideIf('miniVehCard', 'access_vehicules');
+    hideIf('miniAnnivCard', 'view_residents');
+    hideIf('miniEcheanceCard', 'view_residents');
+    hideIf('miniRepasCard', 'view_residents');
+    hideIf('dashCardJournal', 'access_journal');
+    hideIf('dashCardAvenants', 'access_ppe');
+    hideIf('dashCardSansAvenant', 'access_ppe');
+    const _alCard = document.getElementById('dashCardAlertes');
+    if (_alCard && !canSee('access_ppe') && !canSee('view_incidents')) _alCard.style.display = 'none';
+    hideIf('dashCardRepertoire', 'access_repertoire');
+    hideIf('dashCardPresenceChart', 'access_presences');
+    hideIf('dashCardIncidentChart', 'view_incidents');
+    hideIf('dashCardRdv', 'access_sante');
+    hideIf('dashCardVaccins', 'access_sante');
+    const _statsEl = document.getElementById('dashStatsSection');
+    if (_statsEl && !canSee('access_presences') && !canSee('view_incidents')) _statsEl.style.display = 'none';
+  }
+
+  // ── SUIVI DES RÉSIDENTS (agrège les données des fiches) ──
+  function renderResidentTracking() {
+    const residents = sbResidents();
+    const todayStr = new Date().toISOString().slice(0,10);
+    const nowMs = Date.now();
+    const resName = r => `${r.prenom||''} ${r.nom||''}`.trim() || '—';
+    const avatar = r => r.photo
+      ? `<img src="${sanitizeUrl(r.photo)}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0" alt=""/>`
+      : `<div class="avatar sm" style="background:${r.color||'var(--blue)'};flex-shrink:0;width:26px;height:26px;font-size:.6rem">${(r.prenom||'?')[0].toUpperCase()}</div>`;
+    const rowOpen = r => `<a href="resident.html?id=${r.id}" style="display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;border-bottom:1px solid var(--border);font-size:.8rem;text-decoration:none;color:inherit">`;
+
+    // 1) RDV médicaux à venir (14 jours)
+    const rdvs = [];
+    residents.forEach(r => (r.sante?.rdv || []).forEach(v => {
+      if (!v.fait && v.date >= todayStr) rdvs.push({ r, v });
+    }));
+    rdvs.sort((a,b) => (a.v.date+'T'+(a.v.heure||'')).localeCompare(b.v.date+'T'+(b.v.heure||'')));
+    const rdvEl = document.getElementById('dashRdvMedicaux');
+    setCount('dashRdvCount', rdvs.length);
+    if (rdvs.length) {
+      rdvEl.innerHTML = rdvs.slice(0,10).map(({r,v}) => `${rowOpen(r)}
+        ${avatar(r)}
+        <div style="flex:1;min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(resName(r))}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(v.type||'Rendez-vous')}${v.lieu?' · '+escHtml(v.lieu):''}</div></div>
+        <span style="font-size:.72rem;color:var(--muted);white-space:nowrap;text-align:right">${formatDate(v.date)}${v.heure?'<br>'+v.heure:''}</span>
+      </a>`).join('');
+    } else { rdvEl.innerHTML = '<div class="empty" style="padding:1.5rem"><p>Aucun RDV à venir</p></div>'; }
+
+    // 2) Résidents actuellement sortis (non rentrés)
+    const sorties = [];
+    residents.forEach(r => (r.sorties || []).forEach(s => {
+      if (!s.retourEffectif) {
+        const prevu = s.retourPrevuDate ? new Date(s.retourPrevuDate+'T'+(s.retourPrevuHeure||'23:59')).getTime() : null;
+        const dep = s.date ? new Date(s.date+'T'+(s.heure||'00:00')).getTime() : 0;
+        const enCours = dep <= nowMs;
+        const retard = prevu && prevu < nowMs;
+        sorties.push({ r, s, enCours, retard, sortKey: prevu || dep });
+      }
+    }));
+    sorties.sort((a,b) => a.sortKey - b.sortKey);
+    const soEl = document.getElementById('dashSorties');
+    setCount('dashSortiesCount', sorties.length);
+    if (sorties.length) {
+      soEl.innerHTML = sorties.slice(0,10).map(({r,s,retard}) => `${rowOpen(r)}
+        ${avatar(r)}
+        <div style="flex:1;min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(resName(r))}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(s.destination||'Sortie')}${s.retourPrevuDate?' · retour '+formatDate(s.retourPrevuDate)+(s.retourPrevuHeure?' '+s.retourPrevuHeure:''):''}</div></div>
+        <span class="badge ${retard?'badge-red':'badge-amber'}" style="white-space:nowrap">${retard?'En retard':'Sorti(e)'}</span>
+      </a>`).join('');
+    } else { soEl.innerHTML = '<div class="empty" style="padding:1.5rem"><p>Aucun résident sorti</p></div>'; }
+
+    // 3) Soldes budget négatifs
+    const soldes = [];
+    residents.forEach(r => {
+      const ops = (r.budget && r.budget.operations) || [];
+      if (!ops.length) return;
+      const solde = ops.reduce((a,o) => a + (o.type==='recette' ? Number(o.montant||0) : -Number(o.montant||0)), 0);
+      if (solde < 0) soldes.push({ r, solde });
+    });
+    soldes.sort((a,b) => a.solde - b.solde);
+    const sdEl = document.getElementById('dashSoldes');
+    setCount('dashSoldesCount', soldes.length);
+    if (soldes.length) {
+      sdEl.innerHTML = soldes.slice(0,10).map(({r,solde}) => `${rowOpen(r)}
+        ${avatar(r)}
+        <div style="flex:1;min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(resName(r))}</div></div>
+        <span style="font-weight:700;color:#dc2626;white-space:nowrap">${solde.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})} €</span>
+      </a>`).join('');
+    } else { sdEl.innerHTML = '<div class="empty" style="padding:1.5rem"><p>Aucun solde négatif</p></div>'; }
+
+    // 4) Rappels de vaccins en retard
+    const vaccins = [];
+    residents.forEach(r => (r.sante?.vaccins || []).forEach(vc => {
+      if (vc.rappel && vc.rappel < todayStr) vaccins.push({ r, vc });
+    }));
+    vaccins.sort((a,b) => (a.vc.rappel||'').localeCompare(b.vc.rappel||''));
+    const vcEl = document.getElementById('dashVaccins');
+    setCount('dashVaccinsCount', vaccins.length);
+    if (vaccins.length) {
+      vcEl.innerHTML = vaccins.slice(0,10).map(({r,vc}) => `${rowOpen(r)}
+        ${avatar(r)}
+        <div style="flex:1;min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(resName(r))}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(vc.nom||'Vaccin')}</div></div>
+        <span style="font-size:.72rem;color:#dc2626;font-weight:600;white-space:nowrap">${formatDate(vc.rappel)}</span>
+      </a>`).join('');
+    } else { vcEl.innerHTML = '<div class="empty" style="padding:1.5rem"><p>Aucun rappel en retard</p></div>'; }
+  }
+
+  function setCount(id, n) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (n > 0) { el.style.display = ''; el.textContent = n; el.className = 'badge ' + (n > 0 ? 'badge-amber' : 'badge-gray'); }
+    else el.style.display = 'none';
+  }
+
+  // Charge les résidents depuis Supabase avant le 1er rendu, puis affiche le tableau de bord.
+  (async () => {
+    try { await sbLoadResidentsCache(); } catch (e) { console.error(e); }
+    renderDashboard();
+  })();
+</script>
+</body>
+</html>

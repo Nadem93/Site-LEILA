@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Interventions — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Interventions</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm btn-add-resident" onclick="history.back()">←<span class="btn-add-label"> Retour</span></button>
+      </div>
+    </header>
+
+    <main class="content" id="pageContent"></main>
+  </div>
+</div>
+
+<!-- Modal photo travaux -->
+<div class="modal-overlay" id="modalPhoto" onclick="closeModal('modalPhoto')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title">📸 Photo des travaux</span>
+      <button class="modal-close" onclick="closeModal('modalPhoto')">&times;</button>
+    </div>
+    <div class="modal-body" style="gap:.75rem">
+      <div id="photoPreviewWrap" style="display:none;margin-bottom:.5rem">
+        <img id="photoPreviewImg" style="width:100%;border-radius:var(--r-sm);object-fit:cover;max-height:280px" alt="Aperçu"/>
+      </div>
+      <div class="photo-upload-zone" onclick="document.getElementById('photoFileInput').click()" style="padding:1.5rem;text-align:center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:32px;height:32px;margin:0 auto .5rem;color:var(--muted)"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <div style="font-size:.82rem;color:var(--muted)">Cliquez pour ajouter une photo</div>
+        <div style="font-size:.72rem;color:var(--g400);margin-top:.25rem">JPG, PNG — max 3 Mo</div>
+      </div>
+      <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)"/>
+      <div class="form-group">
+        <label>Commentaire (optionnel)</label>
+        <textarea id="photoComment" rows="2" class="form-control" placeholder="Décrivez les travaux réalisés…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalPhoto')">Annuler</button>
+      <button class="btn btn-primary" onclick="validerIntervention()">Valider</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script>
+  Auth.requireAuth();
+
+  // Vérification accès : admin ou technicien de maintenance
+  const _s = Auth.getSession();
+  function canAccessPage() {
+    if (!_s) return false;
+    if (_s.role === 'admin' || _s.role === 'superadmin') return true;
+    if (hasPermission(_s.userId, 'access_interventions')) return true;
+    const users = DB.get(DB.keys.users) || [];
+    const user = users.find(u => String(u.id) === String(_s.userId));
+    return user?.fonction?.toLowerCase().includes('technicien') || user?.fonction?.toLowerCase().includes('maintenance');
+  }
+
+  if (!canAccessPage()) {
+    document.getElementById('pageContent').innerHTML = `
+      <div class="empty" style="padding:3rem;text-align:center">
+        <div style="font-size:2rem;margin-bottom:.75rem">🔒</div>
+        <h3>Accès restreint</h3>
+        <p>Cette page est réservée aux administrateurs et techniciens de maintenance.</p>
+        <a href="accueil.html" class="btn btn-accent" style="margin-top:1rem">Retour à l'accueil</a>
+      </div>`;
+  } else {
+    renderPage();
+  }
+
+  let pendingPhotoBase64 = null;
+  let pendingInterventionId = null;
+  const isTech = _s?.role !== 'admin';
+
+  function renderPage() {
+    const list = (DB.get(DB.keys.interventions) || []).slice().reverse();
+    const ouvertes = list.filter(i => i.statut === 'ouverte');
+    const traitees = list.filter(i => i.statut === 'traitee');
+
+    const urgColors = { basse:'#94a3b8', normale:'#3b82f6', haute:'#f59e0b', critique:'#ef4444' };
+    const urgIcons = { basse:'⬇', normale:'→', haute:'⚠', critique:'🚨' };
+
+    function cardHTML(i) {
+      const d = new Date(i.date);
+      const dateStr = d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+      const timeStr = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+      const c = urgColors[i.urgence] || '#94a3b8';
+      const done = i.statut === 'traitee';
+      return `
+        <div class="card" style="margin-bottom:1rem${done ? ';opacity:.75' : ''}">
+          <div class="card-body" style="display:flex;flex-direction:column;gap:.75rem">
+            <div style="display:flex;align-items:flex-start;gap:.75rem">
+              <div style="width:40px;height:40px;border-radius:var(--r-sm);background:${c}18;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">${urgIcons[i.urgence]||'→'}</div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.2rem">
+                  <span style="font-weight:700;font-size:.9rem">${escHtml(i.lieu||'—')}</span>
+                  <span class="badge" style="background:${c}18;color:${c}">${i.urgence||'—'}</span>
+                  ${done ? '<span class="badge badge-green">✔ Fait</span>' : '<span class="badge badge-amber">En attente</span>'}
+                </div>
+                <div style="font-size:.82rem;color:var(--text);line-height:1.6">${escHtml(i.desc||'')}</div>
+                <div style="font-size:.7rem;color:var(--muted);margin-top:.25rem">📅 ${dateStr} à ${timeStr}${i.demandePar ? ' · Par ' + escHtml(i.demandePar) : ''}</div>
+              </div>
+            </div>
+            ${i.photoTravaux ? `
+              <div>
+                <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.4rem">Photo des travaux</div>
+                <img src="${i.photoTravaux}" style="width:100%;max-height:220px;object-fit:cover;border-radius:var(--r-sm);border:1px solid var(--border)" alt="Photo travaux"/>
+                ${i.commentaireTravaux ? `<div style="font-size:.78rem;color:var(--muted);margin-top:.35rem;font-style:italic">"${escHtml(i.commentaireTravaux)}"</div>` : ''}
+                ${i.traitePar ? `<div style="font-size:.7rem;color:var(--muted);margin-top:.2rem">✔ Clôturé par ${escHtml(i.traitePar)}</div>` : ''}
+              </div>` : ''}
+            ${!done ? `
+              <div style="display:flex;gap:.5rem;justify-content:flex-end;align-items:center">
+                <button class="btn btn-accent btn-sm" onclick="openPhotoModal(${i.id})">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Joindre une photo
+                </button>
+                ${_s?.role === 'admin' ? `<button class="btn btn-ghost btn-sm" onclick="marquerFaitSansPhoto(${i.id})" style="box-shadow:0 0 0 2px #10b981;color:#10b981;font-weight:700">✅ Fait</button>` : ''}
+              </div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    document.getElementById('pageContent').innerHTML = `
+      <div style="max-width:760px;margin:0 auto">
+        <!-- Stats rapides -->
+        <div class="grid grid-4" style="margin-bottom:1.5rem">
+          <div class="stat-card" style="background:linear-gradient(135deg,#e85d0425,#fb923c15)"><div class="stat-card-top"><span class="stat-label">En attente</span><div class="stat-icon orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div></div><div class="stat-num">${ouvertes.length}</div></div>
+          <div class="stat-card" style="background:linear-gradient(135deg,#10b98125,#34d39915)"><div class="stat-card-top"><span class="stat-label">Traitées</span><div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/></svg></div></div><div class="stat-num">${traitees.length}</div></div>
+          <div class="stat-card" style="background:linear-gradient(135deg,#ef444425,#fca5a515)"><div class="stat-card-top"><span class="stat-label">Critiques</span><div class="stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div></div><div class="stat-num">${ouvertes.filter(i=>i.urgence==='critique').length}</div></div>
+          <div class="stat-card" style="background:linear-gradient(135deg,#3b82f625,#93c5fd15)"><div class="stat-card-top"><span class="stat-label">Total</span><div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div></div><div class="stat-num">${list.length}</div></div>
+        </div>
+
+        <!-- En attente -->
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem">
+          <div class="section-label" style="margin:0">🔧 En attente (${ouvertes.length})</div>
+        </div>
+        ${ouvertes.length ? ouvertes.map(cardHTML).join('') : '<div class="card"><div class="card-body" style="text-align:center;color:var(--muted);padding:2rem">Aucune intervention en attente ✓</div></div>'}
+
+        <!-- Historique -->
+        <div class="section-label" style="margin:1.5rem 0 1rem">✅ Historique (${traitees.length})</div>
+        ${traitees.length ? traitees.map(cardHTML).join('') : '<div class="card"><div class="card-body" style="text-align:center;color:var(--muted);padding:1.5rem">Aucun historique</div></div>'}
+      </div>`;
+  }
+
+  function openPhotoModal(id) {
+    pendingInterventionId = id;
+    pendingPhotoBase64 = null;
+    document.getElementById('photoPreviewWrap').style.display = 'none';
+    document.getElementById('photoComment').value = '';
+    document.getElementById('photoFileInput').value = '';
+    openModal('modalPhoto');
+  }
+
+  function handlePhotoSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 3 * 1024 * 1024) { toast('Photo trop lourde (max 3 Mo)', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      pendingPhotoBase64 = ev.target.result;
+      document.getElementById('photoPreviewImg').src = pendingPhotoBase64;
+      document.getElementById('photoPreviewWrap').style.display = '';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function validerIntervention() {
+    if (!pendingInterventionId) return;
+    const comment = document.getElementById('photoComment').value.trim();
+    const userName = [_s.prenom, _s.nom].filter(Boolean).join(' ') || _s.username;
+    const list = DB.get(DB.keys.interventions) || [];
+    const idx = list.findIndex(i => i.id === pendingInterventionId);
+    if (idx === -1) return;
+    list[idx].statut = 'traitee';
+    list[idx].traitePar = userName;
+    list[idx].dateTraitement = new Date().toISOString();
+    if (pendingPhotoBase64) list[idx].photoTravaux = pendingPhotoBase64;
+    if (comment) list[idx].commentaireTravaux = comment;
+    DB.set(DB.keys.interventions, list);
+    closeModal('modalPhoto');
+    toast('Intervention clôturée ✓', 'success');
+    pendingInterventionId = null;
+    pendingPhotoBase64 = null;
+    renderPage();
+  }
+
+  function marquerFaitSansPhoto(id) {
+    const userName = [_s.prenom, _s.nom].filter(Boolean).join(' ') || _s.username;
+    const list = DB.get(DB.keys.interventions) || [];
+    const idx = list.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    list[idx].statut = 'traitee';
+    list[idx].traitePar = userName;
+    list[idx].dateTraitement = new Date().toISOString();
+    DB.set(DB.keys.interventions, list);
+    toast('Intervention marquée comme faite ✓', 'success');
+    renderPage();
+  }
+</script>
+</body>
+</html>

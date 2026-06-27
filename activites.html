@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><link rel="manifest" href="manifest.json"/><meta name="theme-color" content="#0f2b4a"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Activités éducatives — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Activités éducatives</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <button id="btnAddActivite" class="btn btn-accent btn-sm btn-add-resident" onclick="openActiviteModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="btn-add-label">Nouvelle activité</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:1100px">
+      <div id="aStats" class="grid grid-4" style="margin-bottom:1.5rem"></div>
+      <div class="toolbar" style="margin-bottom:1.25rem">
+        <select id="aFilterCat" style="width:auto"></select>
+        <select id="aFilterJour" style="width:auto"></select>
+      </div>
+      <div id="aGrid"></div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL ACTIVITÉ (catalogue) -->
+<div class="modal-overlay" id="modalActivite">
+  <div class="modal lg">
+    <div class="modal-header">
+      <span class="modal-title" id="amTitle">Nouvelle activité</span>
+      <button class="modal-close" onclick="closeModal('modalActivite')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="required">Nom de l'activité</label><input type="text" id="amNom" placeholder="Ex : Atelier cuisine, Foot, Sortie médiathèque…"/></div>
+        <div class="form-group"><label>Catégorie</label><select id="amCategorie"></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Jour</label><select id="amJour"></select></div>
+        <div class="form-group"><label>Heure de début</label><input type="time" id="amHeureDebut"/></div>
+        <div class="form-group"><label>Heure de fin</label><input type="time" id="amHeureFin"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Lieu</label><input type="text" id="amLieu" placeholder="Salle d'activités, gymnase, extérieur…"/></div>
+        <div class="form-group"><label>Animateur / intervenant</label><input type="text" id="amAnimateur" placeholder="Éducateur référent, intervenant extérieur…"/></div>
+      </div>
+      <div class="form-group"><label>Places maximum (0 = illimité)</label><input type="number" id="amPlacesMax" min="0" placeholder="0"/></div>
+      <div class="form-group"><label>Description / objectifs</label><textarea id="amDescription" rows="3" placeholder="Objectifs éducatifs, déroulement, matériel nécessaire…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modalActivite')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveActivite()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PARTICIPANTS -->
+<div class="modal-overlay" id="modalParticipants">
+  <div class="modal lg">
+    <div class="modal-header">
+      <span class="modal-title" id="pmTitle">Participants</span>
+      <button class="modal-close" onclick="closeModal('modalParticipants')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div id="pmStats"></div>
+      <div id="pmList" style="margin-bottom:.5rem"></div>
+      <div class="section-label" style="margin-top:.5rem">Inscrire un résident</div>
+      <div class="form-row">
+        <div class="form-group" style="flex:1"><select id="pmAddResident"></select></div>
+        <div class="form-group" style="flex:0"><button class="btn btn-accent btn-sm" onclick="inscrireResident()">+ Inscrire</button></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted)">Les bilans / évaluations de chaque résident se renseignent depuis sa fiche (carte « Activités éducatives »).</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalBilanAnnuel">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="baTitle">📝 Bilan annuel</span>
+      <button class="modal-close" onclick="closeModal('modalBilanAnnuel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Année concernée</label>
+        <select id="baAnnee" onchange="renderBilanAnnuelForm()"></select>
+      </div>
+      <div class="form-group">
+        <label>Bilan de l'activité pour cette année</label>
+        <textarea id="baTexte" rows="8" placeholder="Déroulement de l'année, points forts, participation des résidents, difficultés rencontrées, perspectives pour l'année suivante…"></textarea>
+      </div>
+      <div id="baMeta" style="font-size:.72rem;color:var(--muted)"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modalBilanAnnuel')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveBilanAnnuel()">💾 Enregistrer le bilan</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/activites-supabase.js"></script>
+<script src="js/activites.js"></script>
+</body>
+</html>

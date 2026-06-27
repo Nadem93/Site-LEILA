@@ -1,0 +1,26 @@
+{
+  "name": "INTERNALIS — Gestion Internat",
+  "short_name": "Internalis",
+  "description": "Application de gestion d'internat pour foyers ESMS",
+  "start_url": "./accueil.html",
+  "display": "standalone",
+  "background_color": "#f3ebf6",
+  "theme_color": "#0f2b4a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "medical"],
+  "lang": "fr"
+}

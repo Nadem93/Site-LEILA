@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Astreintes — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+.ast-layout{display:flex;flex-direction:column;gap:1.25rem}
+.ast-nav{display:flex;align-items:center;gap:.6rem;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.55rem .9rem;margin-bottom:1rem}
+.ast-nav button{background:none;border:1px solid var(--border);border-radius:7px;width:28px;height:28px;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;color:var(--text)}
+.ast-nav button:hover{background:var(--g50)}
+#astWeekLabel{flex:1;text-align:center;font-size:.85rem;font-weight:700;color:var(--text)}
+.ast-today-box{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem}
+.ast-today-title{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.65rem}
+@media(max-width:700px){#astGrid{overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="app-layout"><div class="main">
+  <header class="header">
+    <div class="header-info">
+      <div class="header-title">📞 Astreintes</div>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+      <button class="btn btn-accent btn-sm" onclick="openAstModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouvelle astreinte
+      </button>
+    </div>
+  </header>
+
+  <main class="content" style="max-width:1400px">
+    <div class="ast-layout">
+
+      <!-- Garde du jour -->
+      <div class="ast-today-box">
+        <div class="ast-today-title">🔔 Astreintes aujourd'hui</div>
+        <div id="astTodayGuard" style="display:flex;flex-wrap:wrap;gap:.5rem"></div>
+      </div>
+
+      <div>
+        <!-- Navigation semaine -->
+        <div class="ast-nav">
+          <button id="astPrev">‹</button>
+          <span id="astWeekLabel">—</span>
+          <button id="astToday" style="font-size:.65rem;width:auto;padding:0 8px;font-weight:700;color:var(--accent)">Auj.</button>
+          <button id="astNext">›</button>
+        </div>
+
+        <!-- Grille hebdomadaire -->
+        <div id="astGrid" style="overflow-x:auto"></div>
+      </div>
+
+    </div>
+  </main>
+</div></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalAst">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h3 id="astModalTitle">Nouvelle astreinte</h3>
+      <button class="modal-close" onclick="closeModal('modalAst')">&times;</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:.85rem">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div class="form-group">
+          <label>Type d'astreinte *</label>
+          <select id="astModalType">
+            <option value="medecin">👨‍⚕️ Médecin de garde</option>
+            <option value="infirmier">🩺 Infirmier(e) d'astreinte</option>
+            <option value="cadre">👤 Cadre de permanence</option>
+            <option value="technique">🔧 Astreinte technique</option>
+            <option value="direction">🏛️ Direction</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date *</label>
+          <input type="date" id="astModalDate"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Personnel de la liste</label>
+        <select id="astModalEmploye">
+          <option value="">— Saisir manuellement —</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Nom et prénom *</label>
+        <input type="text" id="astModalNom" placeholder="Prénom Nom"/>
+      </div>
+
+      <div class="form-group">
+        <label>Numéro de téléphone</label>
+        <input type="tel" id="astModalTel" placeholder="06 00 00 00 00"/>
+      </div>
+
+      <div class="form-group">
+        <label>Note / consigne</label>
+        <textarea id="astModalNote" rows="2" placeholder="Informations complémentaires…" style="resize:vertical"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="color:#dc2626;margin-right:auto" onclick="deleteAst()">Supprimer</button>
+      <button class="btn btn-ghost" onclick="closeModal('modalAst')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveAstreinte()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script>
+  Auth.requireAuth();
+  if (!Auth.isAdmin()) {
+    document.body.innerHTML = '<div style="padding:3rem;text-align:center"><h3>Accès réservé</h3><p>Ce module est réservé aux administrateurs.</p><a href="rh.html" class="btn btn-accent">← RH</a></div>';
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/astreintes-supabase.js"></script>
+<script src="js/astreintes.js"></script>
+</body>
+</html>

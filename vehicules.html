@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Véhicules — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Véhicules</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <a href="dashboard.html" class="btn btn-ghost btn-sm">← Tableau de bord</a>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="grid grid-2" style="gap:1.5rem">
+        <!-- RÉSERVER -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">Nouvelle réservation</span></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:1rem">
+            <div class="form-row">
+              <div class="form-group"><label class="required">Date &amp; heure de départ</label><input type="datetime-local" id="vDateAller"/></div>
+              <div class="form-group"><label class="required">Durée</label>
+                <select id="vDuree">
+                  <option value="30">30 min</option>
+                  <option value="60" selected>1 h</option>
+                  <option value="90">1 h 30</option>
+                  <option value="120">2 h</option>
+                  <option value="180">3 h</option>
+                  <option value="240">4 h</option>
+                  <option value="360">6 h</option>
+                  <option value="480">8 h</option>
+                  <option value="journee">Journée</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="required">Véhicule</label>
+              <input type="text" id="vVehicule" list="vehiculesList" placeholder="Sélectionner ou saisir un véhicule"/>
+              <datalist id="vehiculesList"></datalist>
+            </div>
+            <div class="form-group"><label class="required">Destination</label><input type="text" id="vDestination" placeholder="Lieu de destination"/></div>
+            <div class="form-group"><label>Motif</label><input type="text" id="vMotif" placeholder="Objet du déplacement (optionnel)"/></div>
+            <div id="vReservataire" style="font-size:.8rem;color:var(--muted);padding:.5rem .75rem;background:var(--g50);border-radius:var(--r)"></div>
+            <button class="btn btn-primary" onclick="reserverVehicule()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><polyline points="20 6 9 17 4 12"/></svg>
+              Confirmer la réservation
+            </button>
+          </div>
+        </div>
+
+        <!-- LISTE DES RÉSERVATIONS -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">Réservations à venir</span></div>
+          <div class="card-body" style="padding:0">
+            <div id="vReservationsList">
+              <div class="empty" style="padding:2rem"><p>Aucune réservation à venir.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RÉSERVATIONS PASSÉES -->
+      <div class="card admin-only" style="margin-top:1.5rem" id="pastReservationsCard">
+        <div class="card-header"><span class="card-title">Historique</span></div>
+        <div class="card-body" style="padding:0">
+          <div id="vPastReservationsList">
+            <div class="empty" style="padding:2rem"><p>Aucune réservation passée.</p></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script>Auth.requireAuth();</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/planning-supabase.js"></script>
+<script src="js/vehicules.js"></script>
+</body>
+</html>

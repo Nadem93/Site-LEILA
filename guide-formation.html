@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Guide de formation — INTERNALIS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --primary:#0f2b4a;--accent:#0891b2;--green:#059669;--orange:#d97706;--purple:#7c3aed;
+      --red:#e11d48;--teal:#0d9488;--blue:#3b82f6;--amber:#b45309;
+      --bg:#f8fafc;--card:#fff;--border:#e2e8f0;--text:#1e293b;--muted:#64748b;--light:#f1f5f9;
+      --r:12px;--shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+    }
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+
+    /* LAYOUT */
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:260px;flex-shrink:0;background:var(--primary);color:#fff;position:sticky;top:0;height:100vh;overflow-y:auto;padding:1.5rem 0}
+    .main{flex:1;padding:2.5rem 2rem;max-width:1100px}
+
+    /* SIDEBAR */
+    .sidebar-logo{padding:0 1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:1rem}
+    .sidebar-logo h1{font-size:1.1rem;font-weight:800;letter-spacing:-.3px}
+    .sidebar-logo p{font-size:.72rem;color:rgba(255,255,255,.55);margin-top:.15rem}
+    .nav-section{padding:.25rem 0}
+    .nav-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.4);padding:.6rem 1.25rem .2rem}
+    .nav-link{display:flex;align-items:center;gap:.55rem;padding:.45rem 1.25rem;color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem;font-weight:500;border-radius:0;transition:all .12s;cursor:pointer;border:none;background:none;width:100%;text-align:left}
+    .nav-link:hover,.nav-link.active{background:rgba(255,255,255,.1);color:#fff}
+    .nav-icon{font-size:.95rem;width:18px;text-align:center;flex-shrink:0}
+
+    /* HEADER */
+    .page-header{margin-bottom:2.5rem}
+    .page-header h1{font-size:1.8rem;font-weight:800;color:var(--primary);letter-spacing:-.5px}
+    .page-header p{color:var(--muted);margin-top:.35rem;font-size:.9rem}
+    .version-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--light);border:1px solid var(--border);border-radius:100px;padding:.2rem .75rem;font-size:.72rem;color:var(--muted);font-weight:600;margin-top:.75rem}
+
+    /* SECTION */
+    .section{margin-bottom:3rem}
+    .section-title{font-size:1.15rem;font-weight:700;color:var(--primary);margin-bottom:1.25rem;padding-bottom:.5rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:.5rem}
+
+    /* MODULE CARD */
+    .modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+    .mod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.25rem;box-shadow:var(--shadow);border-top:3px solid var(--c,var(--accent))}
+    .mod-card-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.65rem}
+    .mod-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:color-mix(in srgb,var(--c,var(--accent)) 12%,#fff)}
+    .mod-title{font-weight:700;font-size:.88rem;color:var(--text)}
+    .mod-page{font-size:.7rem;color:var(--muted);font-family:monospace;background:var(--light);padding:.1rem .35rem;border-radius:4px}
+    .mod-desc{font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:.75rem}
+    .mod-features{list-style:none;padding:0}
+    .mod-features li{font-size:.78rem;color:var(--text);padding:.2rem 0;display:flex;align-items:flex-start;gap:.4rem}
+    .mod-features li::before{content:"›";color:var(--c,var(--accent));font-weight:700;flex-shrink:0;margin-top:.05rem}
+    .mod-syncs{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.75rem;padding-top:.65rem;border-top:1px solid var(--border)}
+    .sync-tag{font-size:.68rem;font-weight:600;padding:.15rem .45rem;border-radius:100px;background:color-mix(in srgb,var(--c,var(--accent)) 12%,#fff);color:color-mix(in srgb,var(--c,var(--accent)) 80%,#000)}
+
+    /* SYNCHRO MAP */
+    .sync-map{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;box-shadow:var(--shadow)}
+    .sync-map h3{font-size:.9rem;font-weight:700;margin-bottom:1rem;color:var(--primary)}
+    .sync-table{width:100%;border-collapse:collapse}
+    .sync-table th{text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:.5rem .75rem;background:var(--light);border-bottom:1px solid var(--border)}
+    .sync-table td{padding:.55rem .75rem;font-size:.8rem;border-bottom:1px solid var(--border);vertical-align:top}
+    .sync-table tr:last-child td{border-bottom:none}
+    .source-tag{display:inline-block;font-weight:700;font-size:.72rem;padding:.15rem .5rem;border-radius:4px;color:#fff;margin-bottom:.1rem}
+
+    /* ROLES TABLE */
+    .roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem}
+    .role-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem;box-shadow:var(--shadow)}
+    .role-name{font-weight:700;font-size:.88rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+    .role-badge{font-size:.65rem;padding:.15rem .45rem;border-radius:100px;font-weight:700;color:#fff}
+    .role-card ul{list-style:none}
+    .role-card li{font-size:.77rem;color:var(--muted);padding:.15rem 0;display:flex;align-items:flex-start;gap:.35rem}
+    .role-card li::before{content:"✓";color:var(--green);font-weight:700;flex-shrink:0}
+
+    /* TIPS */
+    .tip-box{background:linear-gradient(135deg,#eff6ff,#e0f2fe);border:1px solid #bae6fd;border-radius:var(--r);padding:1rem 1.25rem;margin-top:1rem}
+    .tip-box h4{font-size:.82rem;font-weight:700;color:#0369a1;margin-bottom:.4rem;display:flex;align-items:center;gap:.35rem}
+    .tip-box p,.tip-box li{font-size:.8rem;color:#0c4a6e;line-height:1.55}
+    .tip-box ul{list-style:none;padding:0}
+    .tip-box li{padding:.15rem 0;display:flex;gap:.4rem}
+    .tip-box li::before{content:"→";font-weight:700;flex-shrink:0}
+
+    .warn-box{background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1px solid #fcd34d;border-radius:var(--r);padding:1rem 1.25rem;margin-top:1rem}
+    .warn-box h4{font-size:.82rem;font-weight:700;color:#92400e;margin-bottom:.4rem}
+    .warn-box p{font-size:.8rem;color:#78350f}
+
+    /* FLOW DIAGRAM */
+    .flow{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}
+    .flow-node{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:.35rem .7rem;font-size:.78rem;font-weight:600;color:var(--text);white-space:nowrap}
+    .flow-node.highlight{background:color-mix(in srgb,var(--accent) 12%,#fff);border-color:var(--accent);color:var(--accent)}
+    .flow-arrow{color:var(--muted);font-size:.85rem;font-weight:700}
+
+    /* STICKY NAV SECTION */
+    section{scroll-margin-top:1.5rem}
+
+    /* PRINT */
+    @media print{
+      .sidebar{display:none}
+      .main{padding:1rem}
+      body{font-size:12px}
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      .sidebar{display:none}
+      .main{padding:1.25rem}
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>📚 Guide de formation</h1>
+    <p>INTERNALIS — Gestion d'internat</p>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Introduction</div>
+    <a class="nav-link" onclick="goto('intro')"><span class="nav-icon">🏠</span> Vue d'ensemble</a>
+    <a class="nav-link" onclick="goto('roles')"><span class="nav-icon">👤</span> Rôles & droits</a>
+    <a class="nav-link" onclick="goto('synchros')"><span class="nav-icon">🔗</span> Synchronisations</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Résidents</div>
+    <a class="nav-link" onclick="goto('m-residents')"><span class="nav-icon">🏘️</span> Liste des résidents</a>
+    <a class="nav-link" onclick="goto('m-fiche')"><span class="nav-icon">📋</span> Fiche résident</a>
+    <a class="nav-link" onclick="goto('m-admissions')"><span class="nav-icon">🚪</span> Admissions</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Vie quotidienne</div>
+    <a class="nav-link" onclick="goto('m-presences')"><span class="nav-icon">✅</span> Présences</a>
+    <a class="nav-link" onclick="goto('m-repas')"><span class="nav-icon">🍽️</span> Repas & régimes</a>
+    <a class="nav-link" onclick="goto('m-medicaments')"><span class="nav-icon">💊</span> Médicaments</a>
+    <a class="nav-link" onclick="goto('m-activites')"><span class="nav-icon">🎯</span> Activités</a>
+    <a class="nav-link" onclick="goto('m-planning')"><span class="nav-icon">📅</span> Agenda</a>
+    <a class="nav-link" onclick="goto('m-journal')"><span class="nav-icon">📖</span> Journal de bord</a>
+    <a class="nav-link" onclick="goto('m-transmissions')"><span class="nav-icon">💬</span> Transmissions</a>
+    <a class="nav-link" onclick="goto('m-nuit')"><span class="nav-icon">🌙</span> Cahier de nuit</a>
+    <a class="nav-link" onclick="goto('m-viequot')"><span class="nav-icon">🏡</span> Vie quotidienne</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Dossiers & suivi</div>
+    <a class="nav-link" onclick="goto('m-dossiers')"><span class="nav-icon">📁</span> Dossiers & suivi</a>
+    <a class="nav-link" onclick="goto('m-documents')"><span class="nav-icon">📄</span> Documents</a>
+    <a class="nav-link" onclick="goto('m-evaluations')"><span class="nav-icon">📊</span> Évaluations</a>
+    <a class="nav-link" onclick="goto('m-plansoins')"><span class="nav-icon">🩺</span> Plan de soins</a>
+    <a class="nav-link" onclick="goto('m-eig')"><span class="nav-icon">⚠️</span> Registre EIG</a>
+    <a class="nav-link" onclick="goto('m-viatrajectoire')"><span class="nav-icon">🔁</span> ViaTrajectoire</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Vie sociale</div>
+    <a class="nav-link" onclick="goto('m-cvs')"><span class="nav-icon">🤝</span> Vie Sociale (CVS)</a>
+    <a class="nav-link" onclick="goto('m-visites')"><span class="nav-icon">👨‍👩‍👧</span> Visites & famille</a>
+    <a class="nav-link" onclick="goto('m-satisfaction')"><span class="nav-icon">⭐</span> Satisfaction</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">RH & Pilotage</div>
+    <a class="nav-link" onclick="goto('m-planningequipe')"><span class="nav-icon">📆</span> Planning équipe</a>
+    <a class="nav-link" onclick="goto('m-conges')"><span class="nav-icon">🏖️</span> Congés</a>
+    <a class="nav-link" onclick="goto('m-entretiens')"><span class="nav-icon">🗣️</span> Entretiens</a>
+    <a class="nav-link" onclick="goto('m-formations')"><span class="nav-icon">🎓</span> Formations</a>
+    <a class="nav-link" onclick="goto('m-budget')"><span class="nav-icon">💰</span> Budget</a>
+    <a class="nav-link" onclick="goto('m-incidents')"><span class="nav-icon">🚨</span> Incidents</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Infrastructure</div>
+    <a class="nav-link" onclick="goto('m-chambres')"><span class="nav-icon">🛏️</span> Chambres</a>
+    <a class="nav-link" onclick="goto('m-vehicules')"><span class="nav-icon">🚗</span> Véhicules</a>
+    <a class="nav-link" onclick="goto('m-inventaire')"><span class="nav-icon">📦</span> Inventaire</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Admin & outils</div>
+    <a class="nav-link" onclick="goto('m-dashboard')"><span class="nav-icon">📈</span> Tableau de bord</a>
+    <a class="nav-link" onclick="goto('m-alertes')"><span class="nav-icon">🔔</span> Alertes</a>
+    <a class="nav-link" onclick="goto('m-messages')"><span class="nav-icon">✉️</span> Messages</a>
+    <a class="nav-link" onclick="goto('m-admin')"><span class="nav-icon">⚙️</span> Administration</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- INTRO -->
+  <section id="intro">
+    <div class="page-header">
+      <h1>📚 Guide de formation INTERNALIS</h1>
+      <p>Vue d'ensemble complète des modules, fonctionnalités et synchronisations du logiciel de gestion d'internat.</p>
+      <div class="version-badge">🗓️ Mis à jour le 20/06/2026 &nbsp;·&nbsp; Version courante</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🗂️ Organisation générale</div>
+      <p style="color:var(--muted);margin-bottom:1rem;font-size:.85rem">INTERNALIS est organisé autour d'une <strong>source centrale</strong> : la fiche résident. Tous les modules s'y connectent pour lire ou écrire des données.</p>
+      <div class="flow">
+        <div class="flow-node highlight">📋 Fiche résident</div>
+        <div class="flow-arrow">↔</div>
+        <div class="flow-node">✅ Présences</div>
+        <div class="flow-arrow">↔</div>
+        <div class="flow-node">🍽️ Repas</div>
+        <div class="flow-arrow">↔</div>
+        <div class="flow-node">💊 Médicaments</div>
+        <div class="flow-arrow">↔</div>
+        <div class="flow-node">🎯 Activités</div>
+        <div class="flow-arrow">↔</div>
+        <div class="flow-node">📅 Agenda</div>
+      </div>
+      <div class="tip-box">
+        <h4>💡 Principe clé</h4>
+        <p>Les données saisies dans un module sont <strong>immédiatement disponibles</strong> dans les autres modules concernés. Il n'y a pas d'import/export manuel — tout est synchronisé en temps réel dans le navigateur.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROLES -->
+  <section id="roles">
+    <div class="section">
+      <div class="section-title">👤 Rôles & droits d'accès</div>
+      <div class="roles-grid">
+        <div class="role-card">
+          <div class="role-name"><span class="role-badge" style="background:#e11d48">Admin</span> Administrateur</div>
+          <ul>
+            <li>Accès total à tous les modules</li>
+            <li>Gestion des utilisateurs et droits</li>
+            <li>Configuration de l'établissement</li>
+            <li>Gestion multi-établissements</li>
+            <li>Accès aux logs et audit</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <div class="role-name"><span class="role-badge" style="background:#d97706">Éducateur</span> Éducateur</div>
+          <ul>
+            <li>Modifier les fiches résidents</li>
+            <li>Saisir présences, repas, médicaments</li>
+            <li>Créer des événements agenda</li>
+            <li>Rédiger journal et transmissions</li>
+            <li>Accès au cahier de nuit</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <div class="role-name"><span class="role-badge" style="background:#059669">Stagiaire</span> Stagiaire / Veilleur</div>
+          <ul>
+            <li>Consultation des fiches (lecture)</li>
+            <li>Saisir les présences</li>
+            <li>Lire les transmissions</li>
+            <li>Signaler un incident</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <div class="role-name"><span class="role-badge" style="background:#7c3aed">Direction</span> Direction</div>
+          <ul>
+            <li>Tableau de bord & statistiques</li>
+            <li>Accès aux rapports</li>
+            <li>Gestion RH (congés, entretiens)</li>
+            <li>Budget et facturation</li>
+            <li>Registre EIG</li>
+          </ul>
+        </div>
+      </div>
+      <div class="warn-box" style="margin-top:1rem">
+        <h4>⚠️ Important</h4>
+        <p>Les droits sont configurés par module dans <strong>Administration → Modules</strong>. Un module désactivé disparaît du menu pour tous les utilisateurs concernés.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYNC MAP -->
+  <section id="synchros">
+    <div class="section">
+      <div class="section-title">🔗 Carte des synchronisations</div>
+      <div class="sync-map">
+        <h3>Quoi se synchronise avec quoi ?</h3>
+        <table class="sync-table">
+          <thead>
+            <tr><th>Module source</th><th>Données partagées vers…</th><th>Ce qui est transmis</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="source-tag" style="background:#0891b2">Fiche résident</span></td>
+              <td>Présences · Repas · Médicaments · Activités · Agenda · Journal · Transmissions · Nuit · Évaluations · Documents</td>
+              <td>Nom, photo, couleur, régime alimentaire, allergies, médicaments, planning récurrent</td>
+            </tr>
+            <tr>
+              <td><span class="source-tag" style="background:#d97706">Agenda</span></td>
+              <td>Fiche résident (carte Planning) · Alertes</td>
+              <td>Événements par résident visibles dans la carte planning. Dates d'échéance → alertes automatiques</td>
+            </tr>
+            <tr>
+              <td><span class="source-tag" style="background:#059669">Activités</span></td>
+              <td>Fiche résident (carte Planning) · Présences</td>
+              <td>Inscriptions par jour de semaine → chips dans le planning résident · badge d'absence récurrente dans présences</td>
+            </tr>
+            <tr>
+              <td><span class="source-tag" style="background:#e11d48">Repas</span></td>
+              <td>Fiche résident (régime) · Synthèse cuisine</td>
+              <td>Allergies et régime pré-remplis depuis la fiche santé · choix menu M1/M2 visibles en synthèse</td>
+            </tr>
+            <tr>
+              <td><span class="source-tag" style="background:#7c3aed">Médicaments</span></td>
+              <td>Présences · Fiche résident</td>
+              <td>Traitements depuis la fiche résident · badge planning dans la page médicaments si résident travaille</td>
+            </tr>
+            <tr>
+              <td><span class="source-tag" style="background:#0d9488">Présences</span></td>
+              <td>Tableau de bord · Statistiques · Rapport</td>
+              <td>Taux de présence, absences, statistiques mensuelles</td>
+            </tr>
+            <tr>
+              <td><span class="source-tag" style="background:#b45309">Admissions</span></td>
+              <td>Résidents · Chambres · ViaTrajectoire</td>
+              <td>Dossier d'admission → création automatique de la fiche résident et attribution de chambre</td>
+            </tr>
+            <tr>
+              <td><span class="source-tag" style="background:#16a34a">Planning équipe</span></td>
+              <td>Congés · Astreintes</td>
+              <td>Absences validées reflétées dans le planning · astreintes affichées dans le planning équipe</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉSIDENTS ═══ -->
+  <section id="m-residents">
+    <div class="section">
+      <div class="section-title">🏘️ Résidents</div>
+      <div class="modules-grid">
+
+        <div class="mod-card" style="--c:#0891b2">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#0891b2">🏘️</div>
+            <div>
+              <div class="mod-title">Liste des résidents</div>
+              <span class="mod-page">residents.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Page principale listant tous les résidents actifs de l'établissement. Point d'entrée vers les fiches individuelles.</div>
+          <ul class="mod-features">
+            <li>Recherche et filtre par nom, statut, chambre</li>
+            <li>Vue cartes ou tableau</li>
+            <li>Accès direct à la fiche depuis chaque carte</li>
+            <li>Création d'un nouveau résident</li>
+            <li>Indicateurs visuels : couleur de la carte = couleur du résident</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#0891b2">→ Fiche résident</span>
+            <span class="sync-tag" style="--c:#0891b2">→ Agenda</span>
+            <span class="sync-tag" style="--c:#0891b2">→ Repas</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-fiche" style="--c:#0891b2">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#0891b2">📋</div>
+            <div>
+              <div class="mod-title">Fiche résident</div>
+              <span class="mod-page">resident.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Dossier complet du résident. Organisé en cartes thématiques, c'est la source de toutes les données personnelles.</div>
+          <ul class="mod-features">
+            <li><strong>Séjour</strong> : dates d'entrée/sortie, chambre, statut</li>
+            <li><strong>Santé</strong> : allergies, régime, médecin, traitements</li>
+            <li><strong>Situation</strong> (adulte) ou <strong>Profil enfant</strong></li>
+            <li><strong>Budget</strong> : argent de poche, caution</li>
+            <li><strong>Trousseau</strong> : liste des affaires</li>
+            <li><strong>Activités</strong> : inscriptions aux activités récurrentes</li>
+            <li><strong>Planning</strong> : vue 7 jours lue depuis l'agenda + activités</li>
+            <li><strong>Sorties & permissions</strong> : avec barre de défilement (3 visible)</li>
+            <li><strong>Objectifs</strong>, <strong>Évaluations</strong>, <strong>Notes</strong>, <strong>Contacts</strong></li>
+            <li>Mode lecture / mode édition selon droits</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#0891b2">← Agenda (planning 7j)</span>
+            <span class="sync-tag" style="--c:#0891b2">← Activités</span>
+            <span class="sync-tag" style="--c:#0891b2">→ Repas (régime)</span>
+            <span class="sync-tag" style="--c:#0891b2">→ Médicaments</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-admissions" style="--c:#b45309">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#b45309">🚪</div>
+            <div>
+              <div class="mod-title">Admissions</div>
+              <span class="mod-page">admissions.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Gestion du processus d'admission : du dossier de candidature jusqu'à l'entrée dans l'établissement.</div>
+          <ul class="mod-features">
+            <li>Suivi des dossiers en attente, en cours, validés</li>
+            <li>Création de dossier de pré-admission</li>
+            <li>Validation → création automatique de la fiche résident</li>
+            <li>Attribution de chambre dès l'admission</li>
+            <li>Lien avec ViaTrajectoire</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#b45309">→ Résidents</span>
+            <span class="sync-tag" style="--c:#b45309">→ Chambres</span>
+            <span class="sync-tag" style="--c:#b45309">→ ViaTrajectoire</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VIE QUOTIDIENNE ═══ -->
+  <section id="m-presences">
+    <div class="section">
+      <div class="section-title">🏡 Vie quotidienne</div>
+      <div class="modules-grid">
+
+        <div class="mod-card" style="--c:#059669">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#059669">✅</div>
+            <div>
+              <div class="mod-title">Présences</div>
+              <span class="mod-page">presences.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Pointage quotidien des présences et absences. Vue par date avec filtre de sélection.</div>
+          <ul class="mod-features">
+            <li>Cocher présent / absent / sortie pour chaque résident</li>
+            <li>Badge 📅 automatique si le résident a un planning d'absence récurrente (ex : travail)</li>
+            <li>Statistiques mensuelles par résident</li>
+            <li>Filtre "Présents seulement"</li>
+            <li>Navigation par date (flèches ou sélecteur)</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#059669">← Résidents (liste)</span>
+            <span class="sync-tag" style="--c:#059669">← Fiche résident (planning récurrent)</span>
+            <span class="sync-tag" style="--c:#059669">→ Tableau de bord</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-repas" style="--c:#f59e0b">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#f59e0b">🍽️</div>
+            <div>
+              <div class="mod-title">Repas & régimes</div>
+              <span class="mod-page">repas.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Gestion des inscriptions aux repas (midi et soir) avec choix de menu. Synthèse pour la cuisine.</div>
+          <ul class="mod-features">
+            <li><strong>Vue Cartes</strong> : carte par résident, cases à cocher midi/soir</li>
+            <li><strong>Vue Tableau</strong> : vue synthétique en liste</li>
+            <li><strong>Vue Semaine</strong> : 7 colonnes, réservation à l'avance</li>
+            <li>Choix <strong>Menu 1 / Menu 2</strong> sur les repas midi et soir</li>
+            <li>Copier une semaine vers la semaine suivante</li>
+            <li>Synthèse cuisine par régime avec compteurs M1/M2</li>
+            <li>Allergies pré-remplies depuis la fiche santé</li>
+            <li>Filtre de recherche résident au-dessus des cartes</li>
+            <li>Feuille cuisine imprimable</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#f59e0b">← Résidents (régime, allergies)</span>
+            <span class="sync-tag" style="--c:#f59e0b">→ Synthèse cuisine</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-medicaments" style="--c:#e11d48">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#e11d48">💊</div>
+            <div>
+              <div class="mod-title">Médicaments</div>
+              <span class="mod-page">medicaments.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Distribution quotidienne des médicaments par résident et par moment (matin, midi, soir, coucher).</div>
+          <ul class="mod-features">
+            <li>Traitements issus de la fiche santé du résident</li>
+            <li>Statut par prise : <span style="color:#059669">✓ Donné</span> · <span style="color:#e11d48">✗ Refusé</span> (+ motif) · <span style="color:#f59e0b">⊙ En attente</span></li>
+            <li>Bouton "Refusé" : ouvre automatiquement le modal de saisie du motif</li>
+            <li>Badge planning si le résident est absent ce jour (travail/autre)</li>
+            <li>Filtre "Présents seulement"</li>
+            <li>Navigation par date</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#e11d48">← Fiche résident (traitements)</span>
+            <span class="sync-tag" style="--c:#e11d48">← Présences (absences)</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-activites" style="--c:#8b5cf6">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#8b5cf6">🎯</div>
+            <div>
+              <div class="mod-title">Activités éducatives</div>
+              <span class="mod-page">activites.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Gestion des activités récurrentes hebdomadaires. Les résidents s'y inscrivent et les éducateurs suivent la participation.</div>
+          <ul class="mod-features">
+            <li>Créer des activités avec jour, heure, catégorie</li>
+            <li>Inscrire des résidents à une activité</li>
+            <li>Bilans de participation par session</li>
+            <li>Les activités apparaissent dans la carte Planning de la fiche résident (lecture seule, par jour de semaine)</li>
+            <li>Catégories configurables (sport, culture, cuisine…)</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#8b5cf6">→ Fiche résident (carte Planning)</span>
+            <span class="sync-tag" style="--c:#8b5cf6">→ Présences (badge absence)</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-planning" style="--c:#d97706">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#d97706">📅</div>
+            <div>
+              <div class="mod-title">Agenda</div>
+              <span class="mod-page">planning.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Agenda partagé de l'établissement. Tous les événements ponctuels ou récurrents des résidents et de la structure.</div>
+          <ul class="mod-features">
+            <li>Vue semaine / mois / liste</li>
+            <li>Créer un événement : titre, type, date, heure, couleur, lieu, notes</li>
+            <li>Récurrences : quotidienne, hebdomadaire, bimensuelle, mensuelle</li>
+            <li>Associer à un ou plusieurs résidents</li>
+            <li>Supprimer un événement ou toute la série</li>
+            <li>Les événements apparaissent dans la carte Planning de la fiche résident</li>
+            <li>Filtrer par résident ou type d'événement</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#d97706">→ Fiche résident (carte Planning 7j)</span>
+            <span class="sync-tag" style="--c:#d97706">→ Alertes (échéances)</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-journal" style="--c:#059669">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#059669">📖</div>
+            <div>
+              <div class="mod-title">Journal de bord</div>
+              <span class="mod-page">journal.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Cahier de bord collectif de l'établissement. Chaque entrée est horodatée et signée par l'auteur.</div>
+          <ul class="mod-features">
+            <li>Saisie libre avec tag de catégorie (observation, événement, soin…)</li>
+            <li>Lier une entrée à un résident</li>
+            <li>Recherche par date, auteur, résident ou catégorie</li>
+            <li>Visible par toute l'équipe</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#059669">← Résidents</span>
+            <span class="sync-tag" style="--c:#059669">↔ Transmissions (complémentaires)</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-transmissions" style="--c:#3b82f6">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#3b82f6">💬</div>
+            <div>
+              <div class="mod-title">Transmissions</div>
+              <span class="mod-page">transmissions.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Messages de passation entre équipes (relèves). Permet la continuité entre équipes du matin, de l'après-midi et de nuit.</div>
+          <ul class="mod-features">
+            <li>Rédiger une transmission ciblée (résident ou général)</li>
+            <li>Niveaux d'urgence : info / attention / urgent</li>
+            <li>Badge de notification non lue sur la page d'accueil</li>
+            <li>Marquer comme lu / résolu</li>
+            <li>Historique archivé par date</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#3b82f6">← Résidents</span>
+            <span class="sync-tag" style="--c:#3b82f6">→ Notifications accueil</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-nuit" style="--c:#4f46e5">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#4f46e5">🌙</div>
+            <div>
+              <div class="mod-title">Cahier de nuit</div>
+              <span class="mod-page">nuit.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Journal dédié aux équipes de nuit. Permet de consigner les événements et observations entre 20h et 8h.</div>
+          <ul class="mod-features">
+            <li>Saisie horodatée par résident</li>
+            <li>Catégories nuit : repos, levé, incident, soins…</li>
+            <li>Vue synthétique de la nuit passée</li>
+            <li>Accessible aux veilleurs sans droits complets</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#4f46e5">← Résidents</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-viequot" style="--c:#0d9488">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#0d9488">🏡</div>
+            <div>
+              <div class="mod-title">Vie quotidienne</div>
+              <span class="mod-page">vie-quotidienne.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Tableau de bord consolidé pour le travail du jour : présences, repas, médicaments et activités en un seul écran.</div>
+          <ul class="mod-features">
+            <li>Vue rapide de tous les modules du quotidien</li>
+            <li>Idéal pour démarrer la journée</li>
+            <li>Raccourcis vers chaque module en détail</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#0d9488">← Présences</span>
+            <span class="sync-tag" style="--c:#0d9488">← Repas</span>
+            <span class="sync-tag" style="--c:#0d9488">← Médicaments</span>
+            <span class="sync-tag" style="--c:#0d9488">← Activités</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ DOSSIERS ═══ -->
+  <section id="m-dossiers">
+    <div class="section">
+      <div class="section-title">📁 Dossiers & suivi</div>
+      <div class="modules-grid">
+
+        <div class="mod-card" style="--c:#b45309">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#b45309">📁</div>
+            <div>
+              <div class="mod-title">Dossiers & suivi</div>
+              <span class="mod-page">dossiers.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Portail centralisé vers tous les modules liés aux dossiers individuels des résidents (PPE, documents, admissions, etc.).</div>
+          <ul class="mod-features">
+            <li>Accès PPE (Projet Personnalisé d'Établissement)</li>
+            <li>Accès aux documents numérisés</li>
+            <li>Suivi ViaTrajectoire</li>
+            <li>Répertoire de contacts</li>
+            <li>Registre des incidents EIG</li>
+            <li>Dossiers d'admission</li>
+          </ul>
+        </div>
+
+        <div class="mod-card" id="m-documents" style="--c:#b45309">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#b45309">📄</div>
+            <div>
+              <div class="mod-title">Documents</div>
+              <span class="mod-page">documents.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Gestion documentaire par résident : dépôt, classement et consultation des pièces du dossier.</div>
+          <ul class="mod-features">
+            <li>Dépôt de documents (PDF, images, Word…)</li>
+            <li>Classement par catégorie (identité, médical, administratif…)</li>
+            <li>Consultation et téléchargement</li>
+            <li>Historique des documents par résident</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#b45309">← Résidents</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-evaluations" style="--c:#9333ea">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#9333ea">📊</div>
+            <div>
+              <div class="mod-title">Évaluations</div>
+              <span class="mod-page">evaluations.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Grilles d'évaluation standardisées par résident. Suivi de l'évolution dans le temps.</div>
+          <ul class="mod-features">
+            <li>Grilles personnalisables par type</li>
+            <li>Historique des évaluations avec comparaison</li>
+            <li>Export / impression</li>
+            <li>Résumé visible dans la fiche résident</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#9333ea">← Résidents</span>
+            <span class="sync-tag" style="--c:#9333ea">→ Fiche résident (carte Évaluations)</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-plansoins" style="--c:#0d9488">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#0d9488">🩺</div>
+            <div>
+              <div class="mod-title">Plan de soins</div>
+              <span class="mod-page">plan-soins.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Rédaction et suivi des plans de soins individualisés. Complémentaire à la fiche santé.</div>
+          <ul class="mod-features">
+            <li>Rédaction du plan par résident</li>
+            <li>Objectifs et actions de soins</li>
+            <li>Suivi d'avancement</li>
+            <li>Historique et révisions</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#0d9488">← Résidents</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-eig" style="--c:#e11d48">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#e11d48">⚠️</div>
+            <div>
+              <div class="mod-title">Registre EIG</div>
+              <span class="mod-page">eig.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Événements Indésirables Graves : déclaration, suivi et clôture des EIG réglementaires.</div>
+          <ul class="mod-features">
+            <li>Déclaration avec gravité, type et description</li>
+            <li>Suivi de l'analyse et des mesures correctives</li>
+            <li>Clôture et archivage</li>
+            <li>Export pour les autorités de contrôle</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#e11d48">← Résidents</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-viatrajectoire" style="--c:#0891b2">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#0891b2">🔁</div>
+            <div>
+              <div class="mod-title">ViaTrajectoire</div>
+              <span class="mod-page">viatrajectoire.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Interface de suivi des dossiers ViaTrajectoire (orientations médico-sociales) avec statuts mis à jour.</div>
+          <ul class="mod-features">
+            <li>Liste des dossiers en attente / acceptés / refusés</li>
+            <li>Mise à jour du statut</li>
+            <li>Lien avec le dossier d'admission</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#0891b2">← Admissions</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VIE SOCIALE ═══ -->
+  <section id="m-cvs">
+    <div class="section">
+      <div class="section-title">🤝 Vie sociale</div>
+      <div class="modules-grid">
+
+        <div class="mod-card" style="--c:#16a34a">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#16a34a">🤝</div>
+            <div>
+              <div class="mod-title">Vie Sociale (CVS)</div>
+              <span class="mod-page">cvs.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Conseil de la Vie Sociale : gestion des réunions, ordre du jour, comptes rendus et votes.</div>
+          <ul class="mod-features">
+            <li>Planification des réunions CVS</li>
+            <li>Saisie de l'ordre du jour</li>
+            <li>Rédaction du compte rendu</li>
+            <li>Suivi des décisions et points ouverts</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#16a34a">← Résidents</span>
+            <span class="sync-tag" style="--c:#16a34a">← Agenda</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-visites" style="--c:#7c3aed">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#7c3aed">👨‍👩‍👧</div>
+            <div>
+              <div class="mod-title">Visites & famille</div>
+              <span class="mod-page">visites.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Registre des visites reçues par les résidents. Suivi des visiteurs et fréquence des visites.</div>
+          <ul class="mod-features">
+            <li>Enregistrer une visite (visiteur, lien, durée)</li>
+            <li>Historique par résident</li>
+            <li>Statistiques de fréquence des visites</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#7c3aed">← Résidents</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-satisfaction" style="--c:#f59e0b">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#f59e0b">⭐</div>
+            <div>
+              <div class="mod-title">Satisfaction résidents</div>
+              <span class="mod-page">satisfaction.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Enquêtes de satisfaction périodiques auprès des résidents. Résultats et analyse.</div>
+          <ul class="mod-features">
+            <li>Création de questionnaires personnalisés</li>
+            <li>Collecte des réponses par résident</li>
+            <li>Visualisation des résultats et moyennes</li>
+            <li>Comparaison entre périodes</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#f59e0b">← Résidents</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RH ═══ -->
+  <section id="m-planningequipe">
+    <div class="section">
+      <div class="section-title">👥 RH & Pilotage</div>
+      <div class="modules-grid">
+
+        <div class="mod-card" style="--c:#0891b2">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#0891b2">📆</div>
+            <div>
+              <div class="mod-title">Planning équipe</div>
+              <span class="mod-page">planning-equipe.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Planning du personnel de l'établissement. Gestion des rotations, horaires et affectations.</div>
+          <ul class="mod-features">
+            <li>Vue semaine et mois pour tous les employés</li>
+            <li>Saisie des horaires par personne</li>
+            <li>Codes de présence personnalisables (matin, soir, nuit…)</li>
+            <li>Congés validés remontés automatiquement</li>
+            <li>Impression du planning</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#0891b2">← Congés (absences validées)</span>
+            <span class="sync-tag" style="--c:#0891b2">← Astreintes</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-conges" style="--c:#0891b2">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#0891b2">🏖️</div>
+            <div>
+              <div class="mod-title">Congés</div>
+              <span class="mod-page">conges.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Demande et validation des congés du personnel. Suivi du solde.</div>
+          <ul class="mod-features">
+            <li>Demande de congé par l'employé</li>
+            <li>Validation par le responsable</li>
+            <li>Solde de congés mis à jour automatiquement</li>
+            <li>Calendrier des absences validées</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#0891b2">→ Planning équipe</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-entretiens" style="--c:#7c3aed">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#7c3aed">🗣️</div>
+            <div>
+              <div class="mod-title">Entretiens professionnels</div>
+              <span class="mod-page">entretiens.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Planification et suivi des entretiens annuels et professionnels des employés.</div>
+          <ul class="mod-features">
+            <li>Planifier un entretien par employé</li>
+            <li>Grille d'évaluation employé</li>
+            <li>Objectifs fixés et suivi</li>
+            <li>Historique des entretiens passés</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#7c3aed">← Employés</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-formations" style="--c:#7c3aed">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#7c3aed">🎓</div>
+            <div>
+              <div class="mod-title">Plan de formation</div>
+              <span class="mod-page">formations.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Gestion du plan de formation de l'établissement. Suivi des formations par employé.</div>
+          <ul class="mod-features">
+            <li>Référencer les formations disponibles</li>
+            <li>Inscrire des employés à des formations</li>
+            <li>Suivi des coûts et financements</li>
+            <li>Attestations de formation</li>
+          </ul>
+        </div>
+
+        <div class="mod-card" id="m-budget" style="--c:#059669">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#059669">💰</div>
+            <div>
+              <div class="mod-title">Budget & dépenses</div>
+              <span class="mod-page">budget.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Suivi budgétaire de l'établissement. Enveloppes par poste, demandes de dépenses et soldes.</div>
+          <ul class="mod-features">
+            <li>Définir des enveloppes budgétaires par catégorie</li>
+            <li>Saisir des demandes de dépenses</li>
+            <li>Validation des dépenses</li>
+            <li>Suivi du solde en temps réel</li>
+            <li>Budget argent de poche résidents</li>
+          </ul>
+        </div>
+
+        <div class="mod-card" id="m-incidents" style="--c:#e11d48">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#e11d48">🚨</div>
+            <div>
+              <div class="mod-title">Incidents</div>
+              <span class="mod-page">incidents.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Registre des incidents déclarés. Accessible depuis le bouton rouge flottant de l'accueil.</div>
+          <ul class="mod-features">
+            <li>Déclaration rapide depuis l'accueil (bouton 🚨)</li>
+            <li>Qualification : type, gravité, personnes impliquées</li>
+            <li>Suivi de traitement et clôture</li>
+            <li>Badge de notification sur l'accueil</li>
+            <li>Lien avec le registre EIG pour les incidents graves</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#e11d48">← Résidents</span>
+            <span class="sync-tag" style="--c:#e11d48">→ EIG (si grave)</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ INFRASTRUCTURE ═══ -->
+  <section id="m-chambres">
+    <div class="section">
+      <div class="section-title">🏗️ Infrastructure</div>
+      <div class="modules-grid">
+
+        <div class="mod-card" style="--c:#6366f1">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#6366f1">🛏️</div>
+            <div>
+              <div class="mod-title">Chambres</div>
+              <span class="mod-page">chambres.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Plan de l'établissement avec occupation des chambres. État des lieux intégrés.</div>
+          <ul class="mod-features">
+            <li>Vue des chambres avec statut (occupé / libre / en travaux)</li>
+            <li>Attribution d'un résident à une chambre</li>
+            <li>État des lieux d'entrée et de sortie</li>
+            <li>Historique d'occupation</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#6366f1">← Résidents</span>
+            <span class="sync-tag" style="--c:#6366f1">← Admissions</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-vehicules" style="--c:#6366f1">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#6366f1">🚗</div>
+            <div>
+              <div class="mod-title">Véhicules</div>
+              <span class="mod-page">vehicules.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Gestion du parc véhicule de l'établissement. Réservations et carnet d'entretien.</div>
+          <ul class="mod-features">
+            <li>Liste des véhicules avec immatriculation</li>
+            <li>Réservation par créneau</li>
+            <li>Kilométrage et entretiens</li>
+            <li>Contrôles techniques et assurances</li>
+          </ul>
+        </div>
+
+        <div class="mod-card" id="m-inventaire" style="--c:#78716c">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#78716c">📦</div>
+            <div>
+              <div class="mod-title">Inventaire</div>
+              <span class="mod-page">inventaire.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Inventaire des biens de l'établissement et trousseau des résidents.</div>
+          <ul class="mod-features">
+            <li>Inventaire du matériel de l'établissement</li>
+            <li>Trousseau individuel par résident (depuis la fiche)</li>
+            <li>Signalement de manque ou de casse</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#78716c">← Résidents (trousseau)</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ADMIN ═══ -->
+  <section id="m-dashboard">
+    <div class="section">
+      <div class="section-title">⚙️ Administration & outils</div>
+      <div class="modules-grid">
+
+        <div class="mod-card" style="--c:#4f46e5">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#4f46e5">📈</div>
+            <div>
+              <div class="mod-title">Tableau de bord</div>
+              <span class="mod-page">dashboard.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Vue synthétique des indicateurs clés de l'établissement. Actualisé en temps réel.</div>
+          <ul class="mod-features">
+            <li>Taux d'occupation des chambres</li>
+            <li>Présences du jour</li>
+            <li>Repas du jour par type</li>
+            <li>Événements agenda à venir</li>
+            <li>Incidents non clôturés</li>
+            <li>Alertes actives</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#4f46e5">← Présences</span>
+            <span class="sync-tag" style="--c:#4f46e5">← Repas</span>
+            <span class="sync-tag" style="--c:#4f46e5">← Agenda</span>
+            <span class="sync-tag" style="--c:#4f46e5">← Incidents</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-alertes" style="--c:#e11d48">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#e11d48">🔔</div>
+            <div>
+              <div class="mod-title">Alertes</div>
+              <span class="mod-page">alertes.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Centre de notifications : alertes automatiques sur les échéances, incidents non traités, transmissions urgentes.</div>
+          <ul class="mod-features">
+            <li>Alertes d'échéances (renouvellements, bilans...)</li>
+            <li>Transmissions urgentes non lues</li>
+            <li>Incidents ouverts sans suivi</li>
+            <li>Badge rouge sur la page d'accueil</li>
+            <li>Marquer comme lu / traité</li>
+          </ul>
+          <div class="mod-syncs">
+            <span class="sync-tag" style="--c:#e11d48">← Agenda (dates)</span>
+            <span class="sync-tag" style="--c:#e11d48">← Transmissions (urgentes)</span>
+            <span class="sync-tag" style="--c:#e11d48">← Incidents</span>
+          </div>
+        </div>
+
+        <div class="mod-card" id="m-messages" style="--c:#3b82f6">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#3b82f6">✉️</div>
+            <div>
+              <div class="mod-title">Messages internes</div>
+              <span class="mod-page">messages.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Messagerie interne entre membres de l'équipe. Différent des transmissions (ciblé personne à personne).</div>
+          <ul class="mod-features">
+            <li>Envoyer un message à un ou plusieurs collègues</li>
+            <li>Notifications de nouveaux messages</li>
+            <li>Historique des conversations</li>
+          </ul>
+        </div>
+
+        <div class="mod-card" id="m-admin" style="--c:#78716c">
+          <div class="mod-card-head">
+            <div class="mod-icon" style="--c:#78716c">⚙️</div>
+            <div>
+              <div class="mod-title">Administration</div>
+              <span class="mod-page">admin.html · admin-modules.html</span>
+            </div>
+          </div>
+          <div class="mod-desc">Configuration complète du logiciel. Réservé aux administrateurs.</div>
+          <ul class="mod-features">
+            <li>Gestion des utilisateurs (ajout, droits, mot de passe)</li>
+            <li>Activation / désactivation des modules</li>
+            <li>Paramètres de l'établissement (nom, logo, couleur)</li>
+            <li>Gestion multi-établissements</li>
+            <li>Export des données</li>
+            <li>Logs de connexion et audit</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSEILS PRATIQUES -->
+  <section>
+    <div class="section">
+      <div class="section-title">💡 Conseils pratiques</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem">
+
+        <div class="tip-box">
+          <h4>🌅 Démarrage de journée</h4>
+          <ul>
+            <li>Commencer par <strong>Vie quotidienne</strong> pour une vue globale</li>
+            <li>Vérifier les <strong>Alertes</strong> (badge rouge accueil)</li>
+            <li>Pointer les <strong>Présences</strong> du jour</li>
+            <li>Vérifier les <strong>Transmissions</strong> de la nuit</li>
+          </ul>
+        </div>
+
+        <div class="tip-box">
+          <h4>🍽️ Gestion des repas</h4>
+          <ul>
+            <li>Utiliser la <strong>vue Semaine</strong> pour planifier à l'avance</li>
+            <li>Copier la semaine pour éviter la re-saisie</li>
+            <li>Les choix <strong>Menu 1 / Menu 2</strong> sont mémorisés</li>
+            <li>Imprimer la feuille cuisine avant chaque repas</li>
+          </ul>
+        </div>
+
+        <div class="tip-box">
+          <h4>📅 Agenda & planning résident</h4>
+          <ul>
+            <li>Les événements créés dans <strong>l'Agenda</strong> apparaissent automatiquement dans la carte Planning de chaque fiche résident</li>
+            <li>On peut aussi ajouter un événement directement depuis la fiche résident (bouton + Ajouter)</li>
+            <li>Les activités (par jour de semaine) s'affichent en bleu, les événements agenda en couleur</li>
+          </ul>
+        </div>
+
+        <div class="tip-box">
+          <h4>💊 Médicaments</h4>
+          <ul>
+            <li>Cliquer "Refusé" ouvre <strong>automatiquement</strong> la fenêtre de saisie du motif</li>
+            <li>Les traitements viennent de la fiche santé du résident</li>
+            <li>Un badge apparaît si le résident est censé être absent (planning récurrent)</li>
+          </ul>
+        </div>
+
+        <div class="tip-box">
+          <h4>🔍 Recherche rapide</h4>
+          <ul>
+            <li>La <strong>barre de recherche</strong> sur l'accueil cherche dans résidents, agenda et documents</li>
+            <li>Chaque module a son propre filtre de recherche par nom de résident</li>
+            <li>Le filtre Repas fonctionne aussi en vue Semaine</li>
+          </ul>
+        </div>
+
+        <div class="tip-box">
+          <h4>🚨 Signaler un incident</h4>
+          <ul>
+            <li>Le bouton rouge 🚨 flottant sur l'accueil est accessible à tous les rôles</li>
+            <li>Les admins accèdent à la liste complète sur <strong>incidents.html</strong></li>
+            <li>Les incidents graves peuvent être remontés en <strong>EIG</strong></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div style="height:2rem"></div>
+</main>
+</div>
+
+<script>
+function goto(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  event.target.closest('.nav-link').classList.add('active');
+}
+</script>
+</body>
+</html>

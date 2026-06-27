@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Connexion — INTERNALIS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:linear-gradient(135deg,#dbeafe 0%,#eff6ff 100%);
+      font-family:'Inter',system-ui,sans-serif;
+      min-height:100vh;display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    /* Champ d'aurores */
+    body::before,body::after{
+      content:'';position:fixed;z-index:0;border-radius:50%;pointer-events:none;filter:blur(70px);
+    }
+    body::before{
+      width:60vw;height:60vw;top:-20vw;right:-15vw;
+      background:radial-gradient(circle at 35% 35%,rgba(6,182,212,.14),rgba(99,102,241,.08) 55%,transparent 75%);
+      animation:aur-a 40s ease-in-out infinite alternate;
+    }
+    body::after{
+      width:50vw;height:50vw;bottom:-18vw;left:-12vw;
+      background:radial-gradient(circle at 60% 60%,rgba(168,85,247,.1),rgba(6,182,212,.06) 55%,transparent 75%);
+      animation:aur-b 52s ease-in-out infinite alternate;
+    }
+    @keyframes aur-a{from{transform:translate(0,0)}to{transform:translate(-8vw,6vh) scale(1.15)}}
+    @keyframes aur-b{from{transform:translate(0,0)}to{transform:translate(7vw,-5vh) scale(1.1)}}
+
+    input,button{border:none;outline:none;font-family:inherit}
+
+    .lc-wrap{width:100%;max-width:410px;padding:1.5rem;position:relative;z-index:1}
+    .lc-brand{text-align:center;margin-bottom:1.5rem;animation:lc-rise .6s cubic-bezier(.22,1,.36,1) backwards}
+    .lc-brand-name{
+      font-family:'Space Grotesk',sans-serif;font-size:1.9rem;font-weight:700;
+      letter-spacing:.14em;text-transform:uppercase;
+      background:linear-gradient(120deg,#0f2b4a,#6366f1 60%,#a855f7);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .lc-brand-sub{font-size:.75rem;color:#64748b;letter-spacing:.3em;text-transform:uppercase;margin-top:.3rem}
+
+    .lc-card{
+      background:rgba(255,255,255,.74);
+      backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
+      border:1px solid rgba(255,255,255,.85);
+      border-radius:24px;padding:2.5rem 2rem;
+      box-shadow:0 24px 60px rgba(15,43,74,.14);
+      position:relative;overflow:hidden;
+      animation:lc-rise .6s cubic-bezier(.22,1,.36,1) .12s backwards;
+    }
+    /* Scan-line en haut de la carte */
+    .lc-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,transparent,#06b6d4 20%,#6366f1 50%,#a855f7 80%,transparent);
+      background-size:220% 100%;animation:lc-scan 16s linear infinite;
+    }
+    @keyframes lc-scan{from{background-position:0% 0}to{background-position:220% 0}}
+    @keyframes lc-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+    .lc-title{
+      font-family:'Space Grotesk',sans-serif;color:#0f2b4a;font-weight:700;font-size:1.3rem;
+      text-align:center;margin-bottom:1.6rem;
+    }
+    .lc-field{margin-bottom:1.25rem}
+    .lc-field label{display:block;font-size:.7rem;font-weight:700;color:#475569;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.08em}
+    .lc-field input{
+      width:100%;padding:.8rem 1.1rem;border-radius:12px;
+      background:#fff;border:1px solid #e2e8f0;
+      font-size:.92rem;color:#1e293b;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .lc-field input:focus{
+      border-color:#06b6d4;
+      box-shadow:0 0 0 3px rgba(6,182,212,.14),0 0 12px rgba(6,182,212,.12);
+    }
+    .lc-btn{
+      display:block;width:100%;cursor:pointer;border-radius:12px;color:#fff;
+      background:linear-gradient(135deg,#6366f1,#a855f7);
+      padding:.85rem;font-size:.95rem;font-weight:600;
+      box-shadow:0 4px 16px rgba(124,58,237,.3);
+      transition:transform .15s,box-shadow .2s;
+      position:relative;overflow:hidden;
+    }
+    .lc-btn::after{
+      content:'';position:absolute;top:0;bottom:0;left:-80%;width:50%;
+      background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);
+      transform:skewX(-18deg);transition:left .45s ease;
+    }
+    .lc-btn:hover{box-shadow:0 5px 18px rgba(124,58,237,.3);transform:translateY(-1px)}
+    .lc-btn:hover::after{left:130%}
+    .lc-btn:active{transform:scale(.98)}
+    .lc-error{
+      display:none;margin:1rem auto 0;padding:10px 16px;border-radius:12px;
+      background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:.82rem;text-align:center;
+    }
+    .lc-footer{text-align:center;font-size:.75rem;color:#94a3b8;margin-top:1.5rem;animation:lc-rise .6s cubic-bezier(.22,1,.36,1) .24s backwards}
+    .lc-footer a{color:#94a3b8;text-decoration:none}
+    .lc-footer a:hover{text-decoration:underline}
+    @media (prefers-reduced-motion: reduce){
+      body::before,body::after,.lc-card::before{animation:none!important}
+      .lc-brand,.lc-card,.lc-footer{animation:none!important}
+    }
+  </style>
+</head>
+<body>
+
+<div class="lc-wrap">
+  <div class="lc-brand"><div class="lc-brand-name">INTERNALIS</div><div class="lc-brand-sub">Gestion médico-sociale</div></div>
+
+  <div class="lc-card" id="loginCard">
+    <div class="lc-title">Connexion</div>
+    <form id="loginForm">
+      <div class="lc-field">
+        <label for="login">Email</label>
+        <input type="email" id="login" placeholder="vous@exemple.fr" autocomplete="username"/>
+      </div>
+      <div class="lc-field">
+        <label for="pw">Mot de passe</label>
+        <input type="password" id="pw" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <button type="submit" class="lc-btn">Se connecter</button>
+      <div id="loginError" class="lc-error">Identifiant ou mot de passe incorrect.</div>
+      <div id="lockInfo" style="display:none;margin-top:.6rem;font-size:.8rem;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:.5rem .7rem;text-align:center">🔒 Session fermée après 15 min d'inactivité. Reconnectez-vous.</div>
+    </form>
+  </div>
+
+  <div class="lc-card" id="pwChangeCard" style="display:none">
+    <div class="lc-title">Choisissez votre mot de passe</div>
+    <form id="pwChangeForm">
+      <div class="lc-field">
+        <label for="newPw">Nouveau mot de passe</label>
+        <input type="password" id="newPw" placeholder="••••••••" autocomplete="new-password"/>
+      </div>
+      <div class="lc-field">
+        <label for="newPw2">Confirmer</label>
+        <input type="password" id="newPw2" placeholder="••••••••" autocomplete="new-password"/>
+      </div>
+      <ul id="pwRules" style="list-style:none;font-size:.78rem;color:#94a3b8;margin:-.4rem 0 1.1rem;padding:0;display:flex;flex-direction:column;gap:.3rem">
+        <li data-rule="len">○ Au moins 8 caractères</li>
+        <li data-rule="upper">○ Une majuscule</li>
+        <li data-rule="digit">○ Un chiffre</li>
+        <li data-rule="special">○ Un caractère spécial (! ? @ # …)</li>
+      </ul>
+      <button type="submit" class="lc-btn">Valider et continuer</button>
+      <div id="pwChangeError" class="lc-error"></div>
+    </form>
+  </div>
+
+  <div class="lc-footer">© INTERNALIS</div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/config-supabase.js"></script>
+<script>
+  sessionStorage.removeItem('ftr_current_etab');
+  initDefaults();
+  if (Auth.getSession()) window.location.href = 'accueil.html';
+  if (sessionStorage.getItem('ftr_lock_reason') === 'idle') {
+    const li = document.getElementById('lockInfo'); if (li) li.style.display = 'block';
+    sessionStorage.removeItem('ftr_lock_reason');
+  }
+
+  let _pending = null; // { user, profile, email } en attente de changement de mot de passe
+
+  async function finishLogin(user, profile, email) {
+    DB.set(DB.keys.session, {
+      userId: user.id, username: email, role: profile.role || 'employe',
+      super: profile.role === 'admin', prenom: profile.prenom || '', nom: profile.nom || '',
+      fonction: profile.fonction || '', mustChangePassword: false
+    });
+    logConnexion('login', { username: email, prenom: profile.prenom, nom: profile.nom, role: profile.role });
+    // Récupère la config partagée (permissions, majoration paie) depuis Supabase → localStorage
+    if (typeof hydrateConfigFromCloud === 'function') await hydrateConfigFromCloud();
+    window.location.href = 'accueil.html';
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = document.getElementById('login').value.trim();
+    const password = document.getElementById('pw').value;
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      const { data: profile, error: profileErr } = await supabaseClient
+        .from('profiles').select('*').eq('id', data.user.id).single();
+      if (profileErr) throw profileErr;
+      // Première connexion : mot de passe à changer obligatoirement
+      if (data.user.user_metadata?.must_change_password) {
+        _pending = { user: data.user, profile, email };
+        document.getElementById('loginCard').style.display = 'none';
+        document.getElementById('pwChangeCard').style.display = '';
+        document.getElementById('newPw').focus();
+        return;
+      }
+      finishLogin(data.user, profile, email);
+    } catch (err) {
+      console.error(err);
+      document.getElementById('loginError').textContent = 'Email ou mot de passe incorrect.';
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('pw').value = '';
+      document.getElementById('pw').focus();
+    }
+  });
+
+  ['login','pw'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      document.getElementById('loginError').style.display = 'none';
+    });
+  });
+
+  // ── Changement de mot de passe obligatoire ──
+  function pwChecks(pw) {
+    return {
+      len: pw.length >= 8,
+      upper: /[A-Z]/.test(pw),
+      digit: /[0-9]/.test(pw),
+      special: /[^A-Za-z0-9]/.test(pw)
+    };
+  }
+
+  document.getElementById('newPw').addEventListener('input', () => {
+    const checks = pwChecks(document.getElementById('newPw').value);
+    document.querySelectorAll('#pwRules li').forEach(li => {
+      const ok = checks[li.dataset.rule];
+      li.style.color = ok ? '#16a34a' : '#94a3b8';
+      li.textContent = (ok ? '● ' : '○ ') + li.textContent.replace(/^[○●]\s/, '');
+    });
+  });
+
+  document.getElementById('pwChangeForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const errEl = document.getElementById('pwChangeError');
+    errEl.style.display = 'none';
+    const pw = document.getElementById('newPw').value;
+    const pw2 = document.getElementById('newPw2').value;
+    const c = pwChecks(pw);
+    if (!c.len || !c.upper || !c.digit || !c.special) {
+      errEl.textContent = 'Le mot de passe doit respecter les 4 règles ci-dessus.';
+      errEl.style.display = 'block'; return;
+    }
+    if (pw !== pw2) {
+      errEl.textContent = 'Les deux mots de passe ne correspondent pas.';
+      errEl.style.display = 'block'; return;
+    }
+    try {
+      const { error } = await supabaseClient.auth.updateUser({ password: pw, data: { must_change_password: false } });
+      if (error) throw error;
+      finishLogin(_pending.user, _pending.profile, _pending.email);
+    } catch (err) {
+      console.error(err);
+      errEl.textContent = 'Erreur : ' + (err?.message || 'réessayez.');
+      errEl.style.display = 'block';
+    }
+  });
+</script>
+</body>
+</html>

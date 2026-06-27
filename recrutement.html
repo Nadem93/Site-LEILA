@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Recrutement — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    .rc-board{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;align-items:start}
+    @media(max-width:900px){.rc-board{grid-template-columns:1fr;}}
+    .rc-col-head{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.5rem .25rem;display:flex;align-items:center;gap:.4rem}
+    .rc-col-body{display:flex;flex-direction:column;gap:.6rem;min-height:60px}
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Recrutement</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <button id="btnAddCandidat" class="btn btn-accent btn-sm" onclick="openCandidatModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouveau candidat
+        </button>
+        <a href="pilotage.html" class="btn btn-ghost btn-sm">Portail</a>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:1150px">
+      <div id="rcStats" class="grid grid-4" style="margin-bottom:1.5rem"></div>
+      <div id="rcBoard" class="rc-board"></div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL CANDIDAT -->
+<div class="modal-overlay" id="modalCandidat">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <span class="modal-title" id="rcModalTitle">Nouveau candidat</span>
+      <button class="modal-close" onclick="closeModal('modalCandidat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:.75rem">
+      <div class="form-row">
+        <div class="form-group"><label class="required">Prénom</label><input type="text" id="rcPrenom"/></div>
+        <div class="form-group"><label class="required">Nom</label><input type="text" id="rcNom"/></div>
+      </div>
+      <div class="form-group"><label class="required">Poste visé</label><select id="rcPoste"><option value="">— Sélectionner un poste —</option></select></div>
+      <div class="form-row">
+        <div class="form-group"><label>Téléphone</label><input type="tel" id="rcTel"/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="rcEmail"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Date de candidature</label><input type="date" id="rcDate"/></div>
+        <div class="form-group"><label>Date d'entretien</label><input type="date" id="rcDateEntretien"/></div>
+      </div>
+      <div class="form-group"><label>Notes / impressions d'entretien</label><textarea id="rcNotes" rows="3" placeholder="Profil, ressenti, points à vérifier…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="color:#dc2626;margin-right:auto" id="rcDeleteBtn" onclick="deleteCandidat()">Supprimer</button>
+      <button class="btn btn-ghost" onclick="closeModal('modalCandidat')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveCandidat()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CRÉATION DE COMPTE (depuis un candidat accepté) -->
+<div class="modal-overlay" id="modalRcCompte">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title">🔑 Créer le compte utilisateur</span>
+      <button class="modal-close" onclick="closeModal('modalRcCompte')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:.75rem">
+      <input type="hidden" id="rcCompteCandId"/>
+      <div style="font-size:.76rem;color:var(--muted);line-height:1.5">Crée la fiche salarié <strong>et</strong> son compte de connexion. Un mot de passe temporaire est généré ; le salarié devra le changer à sa première connexion.</div>
+      <div class="form-row">
+        <div class="form-group"><label class="required">Prénom</label><input type="text" id="rcComptePrenom"/></div>
+        <div class="form-group"><label class="required">Nom</label><input type="text" id="rcCompteNom"/></div>
+      </div>
+      <div class="form-group"><label class="required">Email (identifiant de connexion)</label><input type="email" id="rcCompteEmail"/></div>
+      <div class="form-group"><label>Poste / fonction</label><select id="rcComptePoste"><option value="">— Sélectionner un poste —</option></select></div>
+      <div class="form-group"><label>Rôle du compte</label><select id="rcCompteRole">
+        <option value="educateur">Éducateur — accès de base</option>
+        <option value="rh">Encadrement / RH — accès aux données RH</option>
+        <option value="admin">Administrateur — accès complet</option>
+      </select></div>
+      <div id="rcCompteResult" style="display:none;font-size:.78rem;padding:.6rem .75rem;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;line-height:1.6"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modalRcCompte')">Fermer</button>
+      <button class="btn btn-primary" id="rcCompteBtn" onclick="rcSaveCompte()">🔑 Créer le compte</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/candidats-supabase.js"></script>
+<script src="js/recrutement.js"></script>
+</body>
+</html>

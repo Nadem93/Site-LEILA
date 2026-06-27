@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><link rel="manifest" href="manifest.json"/><link rel="apple-touch-icon" href="icon-192.png"/><meta name="theme-color" content="#0f2b4a"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Documents — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+.doc-card { background:var(--card-bg,#fff); border:1px solid var(--border); border-radius:var(--r); padding:1rem; display:flex; flex-direction:column; gap:.35rem; transition:box-shadow .15s; }
+.doc-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.06); }
+.doc-card .doc-icon { font-size:2rem; text-align:center; margin-bottom:.35rem; }
+.doc-card .doc-name { font-weight:600; font-size:.85rem; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.doc-card .doc-resident { font-size:.72rem; color:var(--muted); text-align:center; }
+.doc-card .doc-meta { display:flex; flex-wrap:wrap; gap:.35rem; justify-content:center; margin-top:.35rem; font-size:.7rem; color:var(--muted); }
+.doc-card .doc-actions { display:flex; gap:.35rem; margin-top:.5rem; justify-content:center; flex-wrap:wrap; }
+.doc-card.overdue { border-color:#ef4444; }
+</style>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Documents</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <a href="dashboard.html" class="btn btn-ghost btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Tableau de bord
+        </a>
+        <button class="btn btn-ghost btn-sm" onclick="openDocModal()">+ Ajouter</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="toolbar" style="margin-bottom:1.5rem;justify-content:center;max-width:760px;margin-left:auto;margin-right:auto">
+        <div class="search-box">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="docSearchInput" placeholder="Résident, document, catégorie…"/>
+        </div>
+        <select id="docFilterType" style="display:none"><option value="">Tous les types</option><option value="resident">Résidents</option><option value="resource">Ressources</option></select>
+        <select id="docFilterResident" style="display:none"><option value="">Tous les résidents</option></select>
+        <select id="docFilterCategory" style="width:auto"><option value="">Toutes catégories</option><option value="administratif">Administratif</option><option value="medical">Médical</option><option value="scolaire">Scolaire</option><option value="judiciaire">Judiciaire</option><option value="contrat">Contrat</option><option value="ressource">Ressource</option><option value="autre">Autre</option></select>
+      </div>
+      <div id="documentList"></div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-overlay" id="docModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><span id="docModalTitle">Ajouter un document</span></div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:.85rem">
+      <input type="hidden" id="docFormId"/>
+      <div class="form-group"><label>Type de document</label><div style="display:flex;gap:.75rem;padding:.25rem 0"><label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.85rem"><input type="radio" name="docType" value="resident" checked onchange="toggleDocType('resident')"/> Résident</label><label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.85rem"><input type="radio" name="docType" value="resource" onchange="toggleDocType('resource')"/> Ressource</label></div></div>
+      <div class="form-group" id="docFormResidentGroup"><label>Résident *</label><select id="docFormResident" class="form-input"></select></div>
+      <div class="form-group"><label>Nom du document</label><input type="text" id="docFormName" class="form-input" placeholder="ex: Contrat de séjour"/></div>
+      <div class="form-group"><label>Date du document</label><input type="date" id="docFormDate" class="form-input"/></div>
+      <div class="form-group"><label>Date d'échéance</label><input type="date" id="docFormDueDate" class="form-input"/></div>
+      <div class="form-group"><label>Catégorie</label><select id="docFormCategory" class="form-input"><option value="">—</option><option value="administratif">Administratif</option><option value="medical">Médical</option><option value="scolaire">Scolaire</option><option value="judiciaire">Judiciaire</option><option value="contrat">Contrat</option><option value="autre">Autre</option></select></div>
+      <div class="form-group">
+        <label>Fichier</label>
+        <div class="doc-upload-zone" onclick="document.getElementById('docFileInput').click()" style="cursor:pointer;padding:1.25rem;text-align:center;border:2px dashed var(--border);border-radius:var(--r);background:var(--g50)">
+          <div style="font-size:1.8rem;margin-bottom:.35rem">📎</div>
+          <div style="font-weight:600;font-size:.85rem">Cliquez pour sélectionner</div>
+          <div style="font-size:.75rem;color:var(--muted)">PDF, Word, image — max 3 Mo</div>
+        </div>
+        <input type="file" id="docFileInput" style="display:none" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.webp" onchange="handleDocFileSelect(event)"/>
+        <div id="docFilePending" style="display:none;margin-top:.5rem;padding:.6rem .85rem;border:1px solid var(--border);border-radius:var(--r-sm);display:flex;align-items:center;gap:.6rem">
+          <span style="font-size:1.1rem">📎</span>
+          <div style="flex:1;min-width:0">
+            <div id="docFilePendingName" style="font-weight:600;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+            <div id="docFilePendingSize" style="font-size:.7rem;color:var(--muted)"></div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="cancelDocFile()" style="color:var(--red)">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('docModal')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveDocument()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/residents.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/absences-supabase.js"></script>
+<script src="js/documents-resident-supabase.js"></script>
+<script src="js/documents.js"></script>
+</body>
+</html>

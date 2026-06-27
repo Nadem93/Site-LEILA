@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Mes fiches de paie — INTERNALIS</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Mes fiches de paie</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <a href="pilotage.html" class="btn btn-ghost btn-sm">Portail</a>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:1200px">
+      <div id="mfpInfo" style="margin-bottom:1rem"></div>
+      <div class="toolbar" style="margin-bottom:1.25rem">
+        <select id="mfpAnnee" style="width:auto" onchange="renderMesFichesPaie()"><option value="">Toutes les années</option></select>
+      </div>
+      <div id="mfpList"></div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/absences-supabase.js"></script>
+<script src="js/fiches-paie-supabase.js"></script>
+<script src="js/config-supabase.js"></script>
+<script src="js/money-mask.js"></script>
+<script>
+let _mfpFiche = null;
+let _mfpCache = [];
+
+function mfpFmtPeriode(p) {
+  if (!p) return '';
+  const [y, m] = p.split('-');
+  const mois = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  return `${mois[parseInt(m, 10) - 1] || m} ${y}`;
+}
+
+async function initMesFichesPaie() {
+  const s = Auth.requireAuth();
+  if (!s) return;
+  const info = document.getElementById('mfpInfo');
+  try {
+    // Récupère le taux de cotisations / majoration partagé (pour un net estimé à jour)
+    if (typeof hydrateConfigFromCloud === 'function') await hydrateConfigFromCloud();
+    const employes = await sbGetEmployes();
+    _mfpFiche = employes.find(e => String(e.profileId) === String(s.userId)) || null;
+    if (!_mfpFiche) {
+      info.innerHTML = `<div class="card" style="padding:1.25rem;text-align:center;color:var(--muted)">Votre compte n'est pas encore relié à une fiche salarié.<br>Contactez votre administrateur pour accéder à vos bulletins.</div>`;
+      return;
+    }
+    // La RLS ne renvoie que les bulletins du salarié connecté ; on filtre par sécurité
+    _mfpCache = (await sbGetFichesPaie()).filter(f => String(f.employeId) === String(_mfpFiche.id));
+    const annees = [...new Set(_mfpCache.map(f => (f.periode || '').slice(0, 4)).filter(Boolean))].sort((a, b) => b.localeCompare(a));
+    document.getElementById('mfpAnnee').innerHTML = '<option value="">Toutes les années</option>' + annees.map(a => `<option value="${a}">${a}</option>`).join('');
+    renderMesFichesPaie();
+  } catch (e) {
+    console.error('[initMesFichesPaie]', e);
+    info.innerHTML = `<div class="card" style="padding:1.25rem;text-align:center;color:var(--red)">Erreur de chargement : ${escHtml(e?.message || e)}</div>`;
+  }
+}
+
+function renderMesFichesPaie() {
+  const el = document.getElementById('mfpList');
+  const annee = document.getElementById('mfpAnnee').value;
+  let list = [..._mfpCache];
+  if (annee) list = list.filter(f => (f.periode || '').slice(0, 4) === annee);
+  list.sort((a, b) => (b.periode || '').localeCompare(a.periode || ''));
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty" style="padding:2.5rem;text-align:center"><div style="font-size:2.5rem;margin-bottom:.5rem">🧾</div><h3>Aucun bulletin</h3><p>Vos fiches de paie apparaîtront ici une fois déposées par votre employeur.</p></div>`;
+    return;
+  }
+  el.innerHTML = `<div class="pyx-grid">` + list.map(f => {
+    let _tx = 22; try { _tx = JSON.parse(localStorage.getItem('ftr_paie_majoration') || '{}').tauxCotisations ?? 22; } catch {}
+    const _ass = (Number(f.brut)||0) + (Number(f.primes)||0) + (Number(f.heuresSup)||0);
+    const _cot = _ass * _tx / 100;
+    const net = _ass ? (_ass - _cot - (Number(f.retenues)||0)) : (Number(f.net) || 0);
+    const stats = [];
+    if (f.brut) stats.push(`<div class="pyx-stat"><div class="v">${moneyMask(Math.round(f.brut) + ' €')}</div><div class="l">Brut</div></div>`);
+    if (f.primes) stats.push(`<div class="pyx-stat"><div class="v">${moneyMask(Math.round(f.primes) + ' €')}</div><div class="l">Primes</div></div>`);
+    if (_cot) stats.push(`<div class="pyx-stat neg"><div class="v">${moneyMask('-' + Math.round(_cot) + ' €')}</div><div class="l">Cotis. ${_tx}%</div></div>`);
+    if (f.retenues) stats.push(`<div class="pyx-stat neg"><div class="v">${moneyMask('-' + Math.round(f.retenues) + ' €')}</div><div class="l">Retenues</div></div>`);
+    return `<article class="pyx-card">
+      <div class="pyx-head">
+        <div class="pyx-ico">🧾</div>
+        <div class="pyx-h-txt"><div class="pyx-period">${mfpFmtPeriode(f.periode)}</div></div>
+      </div>
+      ${net > 0 ? `<div class="pyx-net"><div class="pyx-net-lbl">Net estimé</div><div class="pyx-net-val">${moneyMask(net.toFixed(2) + ' €', 'lead')}</div></div>` : `<div class="pyx-nofile">Bulletin déposé</div>`}
+      ${stats.length ? `<div class="pyx-break">${stats.join('')}</div>` : ''}
+      <div class="pyx-meta">${f.fichierNom ? escHtml(f.fichierNom) : 'Sans fichier joint'}</div>
+      <div class="pyx-foot">
+        ${f.fichierPath ? `<button class="pyx-btn dl" onclick="mfpDownload('${f.id}')">⬇ Télécharger</button>` : `<span class="pyx-meta">Aucun fichier</span>`}
+        <span class="sp"></span>
+      </div>
+    </article>`;
+  }).join('') + `</div>`;
+}
+
+async function mfpDownload(id) {
+  const f = _mfpCache.find(x => x.id === id);
+  if (!f || !f.fichierPath) return;
+  const url = await sbJustificatifUrl(f.fichierPath);
+  if (url) window.open(url, '_blank'); else toast('Bulletin introuvable', 'error');
+}
+
+document.addEventListener('DOMContentLoaded', initMesFichesPaie);
+</script>
+</body>
+</html>

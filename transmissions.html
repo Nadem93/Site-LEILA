@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Transmissions — FTR</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ── Kanban Board ── */
+.kb-header-bar{display:flex;align-items:center;gap:.65rem;background:#fff;border:1px solid var(--border);border-radius:12px;padding:.55rem .9rem;margin-bottom:.75rem}
+.kb-date-nav{display:flex;align-items:center;gap:.25rem;background:var(--g50);border:1px solid var(--border);border-radius:8px;padding:3px 6px}
+.kb-date-nav button{background:none;border:none;color:var(--muted);font-size:1.05rem;cursor:pointer;padding:0 3px;line-height:1;transition:color .1s}
+.kb-date-nav button:hover{color:var(--text)}
+.kb-date-label{font-size:.82rem;font-weight:700;color:var(--text);text-transform:capitalize;min-width:120px;text-align:center}
+
+.kb-filters{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;background:#fff;border:1px solid var(--border);border-radius:12px;padding:.5rem .9rem;margin-bottom:.75rem}
+.kb-filters select{font-size:.78rem;padding:.3rem .55rem;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text)}
+.kb-stat-pill{display:flex;align-items:center;gap:.55rem;margin-left:auto;font-size:.75rem}
+.kb-stat-pill .sp{display:flex;align-items:center;gap:.3rem}
+.kb-stat-pill .sp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.kb-stat-pill .spl{width:1px;height:14px;background:var(--border)}
+
+/* Board grid */
+.kb-board{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;align-items:start}
+.kb-col{background:var(--g50,#f8fafc);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.kb-col-hdr{padding:.9rem 1rem .65rem;border-bottom:1px solid var(--border);background:#fff}
+.kb-col-hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem}
+.kb-col-name{font-size:.88rem;font-weight:600;color:var(--text);display:flex;align-items:center;gap:.4rem}
+.kb-col-hours{font-size:.7rem;color:var(--muted);font-weight:400}
+.kb-col-count{font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px}
+.kb-col-bar{height:4px;border-radius:2px;margin-top:0}
+
+/* Cards container */
+.kb-cards{padding:.65rem;display:flex;flex-direction:column;gap:.55rem}
+
+/* Card */
+.kb-card{background:#fff;border:1px solid var(--border);border-radius:11px;padding:.85rem 1rem;transition:box-shadow .12s,border-color .12s}
+.kb-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.08);border-color:var(--primary)}
+.kb-card.kb-unread{border-left:3px solid #ef4444}
+.kb-card.kb-urgent{border-left:3px solid #dc2626;background:#fffbfb}
+.kb-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.55rem;gap:.4rem}
+.kb-resident{display:flex;align-items:center;gap:.5rem}
+.kb-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;text-transform:uppercase}
+.kb-avatar-img{object-fit:cover;border:2px solid var(--border)}
+.kb-card-name{font-size:.84rem;font-weight:600;color:var(--text);line-height:1.2}
+.kb-card-room{font-size:.7rem;color:var(--muted);margin-top:2px}
+.kb-time-wrap{display:flex;align-items:center;gap:.35rem;flex-shrink:0}
+.kb-unread-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0}
+.kb-card-time{font-size:.72rem;color:var(--muted)}
+.kb-card-body{font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:.55rem;white-space:pre-wrap}
+.kb-card-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.3rem}
+.kb-badges{display:flex;gap:.3rem;flex-wrap:wrap}
+.kb-badge{font-size:.69rem;font-weight:600;padding:3px 8px;border-radius:20px}
+.kb-actions{display:flex;gap:.3rem}
+.kb-actions button{font-size:.69rem;padding:3px 8px;border-radius:7px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--muted);transition:background .1s,color .1s,border-color .1s}
+.kb-actions button:hover{background:var(--g50);color:var(--text)}
+.kb-actions .btn-read{color:var(--primary);border-color:var(--primary)}
+.kb-actions .btn-del{color:#dc2626;border-color:#fecaca}
+.kb-actions .btn-incident{color:#dc2626;border-color:#fecaca;background:#fff5f5}
+.kb-actions .btn-incident.btn-on{color:#fff;border-color:#dc2626;background:#dc2626;font-weight:700}
+.kb-actions .btn-journal{color:#059669;border-color:#a7f3d0;background:#f0fdf4}
+.kb-actions .btn-journal.btn-on{color:#fff;border-color:#059669;background:#059669;font-weight:700}
+.kb-card-author{font-size:.69rem;color:var(--muted);margin-top:.4rem}
+.kb-add-btn{margin:.4rem .65rem .65rem;padding:.55rem;border:1.5px dashed var(--border);border-radius:9px;font-size:.78rem;color:var(--muted);text-align:center;cursor:pointer;background:none;width:calc(100% - 1.3rem);transition:background .1s,border-color .1s,color .1s}
+.kb-add-btn:hover{background:#fff;border-color:var(--primary);color:var(--primary)}
+.kb-empty-col{padding:2rem 1rem;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.45rem;opacity:.45}
+.kb-empty-col .ei{font-size:1.7rem}
+.kb-empty-col span{font-size:.78rem;color:var(--muted)}
+.kb-sep{height:1px;background:var(--border);margin:0 .25rem}
+.kb-replies{margin-top:.55rem;padding-top:.55rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:.4rem}
+.kb-reply{background:var(--g50);border-radius:8px;padding:.4rem .6rem;font-size:.78rem;line-height:1.5}
+.kb-reply-author{font-weight:700;color:var(--text)}
+.kb-reply-time{font-size:.66rem;color:var(--muted);margin-left:.4rem}
+.kb-reply-form{display:flex;gap:.4rem;margin-top:.45rem}
+.kb-reply-form textarea{flex:1;font-size:.78rem;padding:.4rem .6rem;border:1px solid var(--border);border-radius:8px;resize:vertical;min-height:2.3rem;font-family:inherit}
+.kb-reply-form button{font-size:.74rem;padding:0 .8rem;border-radius:8px;border:none;background:var(--primary);color:#fff;cursor:pointer;flex-shrink:0}
+.kb-reply-toggle{color:var(--primary)!important;border-color:var(--primary)!important}
+
+@media(max-width:900px){.kb-board{grid-template-columns:1fr 1fr}.kb-stat-pill{display:none}}
+@media(max-width:520px){.kb-board{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app-layout"><div class="main">
+  <header class="header">
+    <div class="header-info">
+      <div class="header-title">Transmissions</div>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+      <button class="btn btn-accent btn-sm" onclick="resetTrModal();openModal('modalTr')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouvelle transmission
+      </button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div style="max-width:1100px;margin:0 auto">
+
+      <!-- Titre du jour -->
+      <div style="margin-bottom:1.25rem">
+        <div id="trTodayLabel" style="font-size:1.45rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(90deg,var(--primary) 0%,#1786cf 60%,#7c3aed 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1"></div>
+        <div id="trTodayDate" style="font-size:.82rem;color:var(--muted);margin-top:.2rem;font-weight:500"></div>
+      </div>
+
+      <!-- Kanban board -->
+      <div id="trList"></div>
+
+      <!-- Historique jours précédents -->
+      <div class="section-label" style="margin:1.75rem 0 .75rem">🗂 Jours précédents</div>
+      <div id="trHisto" style="display:flex;flex-direction:column;gap:.5rem"></div>
+    </div>
+  </main>
+</div></div>
+
+<!-- MODAL NOUVELLE TRANSMISSION — Template 2 panneau latéral -->
+<div class="modal-overlay" id="modalTr">
+  <div class="modal" style="max-width:760px;flex-direction:row;padding:0">
+    <!-- Panneau latéral vert -->
+    <div style="width:220px;flex-shrink:0;background:linear-gradient(160deg,#064e3b 0%,#059669 100%);display:flex;flex-direction:column;padding:28px 20px 24px;border-radius:20px 0 0 20px;overflow:hidden;position:relative">
+      <div style="position:absolute;bottom:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)"></div>
+      <div style="position:absolute;top:-30px;left:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.04)"></div>
+
+      <!-- Icône + titre -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;position:relative">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📡</div>
+        <div>
+          <div style="font-size:.8rem;font-weight:700;color:#fff;line-height:1.2">Transmissions</div>
+          <div style="font-size:.65rem;color:rgba(255,255,255,.6);margin-top:1px">Passation d'équipe</div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <p style="font-size:.72rem;color:rgba(255,255,255,.8);line-height:1.6;margin:0 0 16px;position:relative">
+        Consignez ici tout ce que l'équipe suivante doit savoir avant de prendre son poste.
+      </p>
+
+      <!-- Exemples -->
+      <div style="display:flex;flex-direction:column;gap:8px;position:relative">
+        <div style="font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45);margin-bottom:2px">Exemples</div>
+
+        <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px">
+          <div style="font-size:.63rem;font-weight:700;color:#fbbf24;margin-bottom:3px">🌅 Matin · Santé</div>
+          <div style="font-size:.68rem;color:rgba(255,255,255,.85);line-height:1.5">"Mohamed a refusé son traitement ce matin, à surveiller."</div>
+        </div>
+
+        <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px">
+          <div style="font-size:.63rem;font-weight:700;color:#6ee7b7;margin-bottom:3px">☀️ Après-midi · Famille</div>
+          <div style="font-size:.68rem;color:rgba(255,255,255,.85);line-height:1.5">"Appel de la mère de Lucie, rappeler demain matin."</div>
+        </div>
+
+        <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px">
+          <div style="font-size:.63rem;font-weight:700;color:#f87171;margin-bottom:3px">⚡ Urgent</div>
+          <div style="font-size:.68rem;color:rgba(255,255,255,.85);line-height:1.5">"Sophie très agitée depuis 17h, risque de crise — veiller toute la nuit."</div>
+        </div>
+
+        <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px">
+          <div style="font-size:.63rem;font-weight:700;color:#a78bfa;margin-bottom:3px">🌙 Nuit · Administratif</div>
+          <div style="font-size:.68rem;color:rgba(255,255,255,.85);line-height:1.5">"Fuite signalée salle de bain couloir B — technicien attendu demain."</div>
+        </div>
+      </div>
+
+      <!-- Note bas -->
+      <div style="margin-top:auto;padding-top:16px;position:relative">
+        <div style="font-size:.63rem;color:rgba(255,255,255,.5);line-height:1.5">Les transmissions urgentes peuvent être converties en incident ou ajoutées au journal de bord.</div>
+      </div>
+    </div>
+
+    <!-- Formulaire (colonne droite) -->
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+      <div class="modal-header" style="border-radius:0 20px 0 0">
+        <div>
+          <div class="modal-title" id="modalTrTitle">Nouvelle transmission</div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:2px;font-weight:400">Journal de l'équipe soignante</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modalTr')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <input type="hidden" id="trEditId"/>
+      <div class="modal-body" style="gap:.85rem">
+        <!-- Étape 1 -->
+        <div id="trFormStep1">
+          <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#059669;margin-bottom:.6rem">Étape 1 — Catégorie</div>
+          <input type="hidden" id="trShift" value="matin"/>
+          <div style="display:grid;grid-template-columns:1fr;gap:.75rem">
+            <div class="form-group">
+              <label style="font-size:.7rem;text-transform:uppercase;letter-spacing:.04em">Catégorie *</label>
+              <select id="trCat">
+                <option value="sante">🏥 Santé</option>
+                <option value="medicament">💊 Médicament</option>
+                <option value="comportement">🧠 Comportement</option>
+                <option value="alimentation">🍽️ Alimentation</option>
+                <option value="hygiene">🚿 Hygiène</option>
+                <option value="activite">🎯 Activité</option>
+                <option value="famille">👨‍👩‍👧 Famille</option>
+                <option value="sortie">🚪 Sortie / Retour</option>
+                <option value="administratif">📋 Administratif</option>
+                <option value="maintenance">🔧 Maintenance</option>
+                <option value="urgent">⚡ Urgent</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Étape 2 -->
+        <div id="trFormStep2">
+          <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#059669;margin-bottom:.6rem">Étape 2 — Résident &amp; Priorité</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+            <div class="form-group">
+              <label style="font-size:.7rem;text-transform:uppercase;letter-spacing:.04em">Résident concerné</label>
+              <select id="trResident"></select>
+            </div>
+            <div class="form-group">
+              <label style="font-size:.7rem;text-transform:uppercase;letter-spacing:.04em">Priorité</label>
+              <select id="trPriority">
+                <option value="info">ℹ️ Information</option>
+                <option value="normal" selected>📌 Normal</option>
+                <option value="urgent">⚡ Urgent</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Étape 3 -->
+        <div id="trFormStep3">
+          <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#059669;margin-bottom:.6rem">Étape 3 — Contenu</div>
+          <div class="form-group">
+            <label style="font-size:.7rem;text-transform:uppercase;letter-spacing:.04em">Observation *</label>
+            <textarea id="trContent" rows="5" placeholder="Décrivez l'observation, l'événement ou la consigne à transmettre à l'équipe suivante…" style="resize:vertical"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="border-radius:0 0 20px 0;justify-content:space-between">
+        <span id="trStepLabel" style="font-size:.72rem;color:var(--muted)">Étape 1 sur 3</span>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-ghost" onclick="closeModal('modalTr')">Annuler</button>
+          <button class="btn btn-primary" onclick="saveTr_Modal()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/journal-supabase.js"></script>
+<script src="js/incidents-supabase.js"></script>
+<script src="js/transmissions-supabase.js"></script>
+<script src="js/transmissions.js"></script>
+</body>
+</html>

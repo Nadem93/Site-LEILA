@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Mes formations — INTERNALIS</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-layout">
+  <div class="main">
+    <header class="header">
+      <div class="header-info"><div class="header-title">Mes formations</div></div>
+      <div class="header-right">
+        <button class="btn btn-outline btn-sm" onclick="history.back()">← Retour</button>
+        <a href="pilotage.html" class="btn btn-ghost btn-sm">Portail</a>
+      </div>
+    </header>
+
+    <main class="content" style="max-width:1280px">
+      <div id="mfInfo" style="margin-bottom:1rem"></div>
+      <div class="toolbar" style="margin-bottom:1.25rem">
+        <select id="mfFiltre" style="width:auto" onchange="renderMesFormations()">
+          <option value="dispo">Formations à venir</option>
+          <option value="inscrit">Mes inscriptions</option>
+          <option value="passe">Passées / suivies</option>
+          <option value="tout">Toutes</option>
+        </select>
+      </div>
+      <div id="mfList"></div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/residents-supabase.js"></script>
+<script src="js/employes-supabase.js"></script>
+<script src="js/formations-supabase.js"></script>
+<script>
+const MF_STATUT_L = { planifiee: 'Planifiée', realisee: 'Réalisée', annulee: 'Annulée' };
+const MF_STATUT_C = { planifiee: '#d97706', realisee: '#16a34a', annulee: '#9ca3af' };
+
+let _mfFiche = null;
+let _mfCache = [];
+let _mfEmployesMap = new Map();
+
+function mfEur(n) { return (n || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+function mfToday() { return new Date().toISOString().slice(0, 10); }
+
+async function initMesFormations() {
+  const s = Auth.requireAuth();
+  if (!s) return;
+  const info = document.getElementById('mfInfo');
+  try {
+    const employes = await sbGetEmployes();
+    _mfEmployesMap = new Map(employes.map(e => [e.id, `${e.prenom || ''} ${e.nom || ''}`.trim()]));
+    _mfFiche = employes.find(e => String(e.profileId) === String(s.userId)) || null;
+    if (!_mfFiche) {
+      info.innerHTML = `<div class="card" style="padding:1.25rem;text-align:center;color:var(--muted)">Votre compte n'est pas encore relié à une fiche salarié.<br>Contactez votre administrateur pour pouvoir vous inscrire aux formations.</div>`;
+      return;
+    }
+    _mfCache = await sbGetFormations();
+    renderMesFormations();
+  } catch (e) {
+    console.error('[initMesFormations]', e);
+    info.innerHTML = `<div class="card" style="padding:1.25rem;text-align:center;color:var(--red)">Erreur de chargement : ${escHtml(e?.message || e)}</div>`;
+  }
+}
+
+function renderMesFormations() {
+  const el = document.getElementById('mfList');
+  const filtre = document.getElementById('mfFiltre').value;
+  const myId = _mfFiche.id;
+  let list = [..._mfCache];
+
+  if (filtre === 'inscrit') list = list.filter(f => (f.participants || []).includes(myId));
+  else if (filtre === 'dispo') list = list.filter(f => f.statut === 'planifiee' && (f.dateFin || f.dateDebut) >= mfToday());
+  else if (filtre === 'passe') list = list.filter(f => (f.participants || []).includes(myId) && (f.statut === 'realisee' || (f.dateFin || f.dateDebut) < mfToday()));
+
+  // Passées : du plus récent au plus ancien ; à venir : du plus proche au plus lointain
+  if (filtre === 'passe') list.sort((a, b) => (b.dateFin || b.dateDebut || '').localeCompare(a.dateFin || a.dateDebut || ''));
+  else list.sort((a, b) => (a.dateDebut || '').localeCompare(b.dateDebut || ''));
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty" style="padding:2.5rem;text-align:center"><div style="font-size:2.5rem;margin-bottom:.5rem">🎓</div><h3>Aucune formation</h3><p>${filtre === 'inscrit' ? 'Vous n\'êtes inscrit à aucune formation.' : filtre === 'passe' ? 'Aucune formation passée pour le moment.' : 'Aucune formation à venir pour le moment.'}</p></div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="frx-grid">` + list.map(f => {
+    const color = MF_STATUT_C[f.statut] || '#6b7280';
+    const parts = f.participants || [];
+    const inscrit = parts.includes(myId);
+    const dateRef = f.dateFin || f.dateDebut;
+    const passe = dateRef && dateRef < mfToday();
+    const complet = f.maxParticipants && parts.length >= f.maxParticipants && !inscrit;
+
+    let action = '';
+    if (f.statut === 'planifiee' && !passe) {
+      if (inscrit) action = `<button class="frx-act ok" onclick="mfDesinscrire('${f.id}')">✓ Inscrit · Se désinscrire</button>`;
+      else if (complet) action = `<span class="frx-act muted">Complet (${parts.length}/${f.maxParticipants})</span>`;
+      else action = `<button class="frx-act primary" onclick="mfInscrire('${f.id}')">S'inscrire${f.maxParticipants ? ` · ${parts.length}/${f.maxParticipants}` : ''}</button>`;
+    } else if (passe) {
+      action = `<span class="frx-act muted">${inscrit ? 'Suivie' : 'Terminée'}</span>`;
+    }
+
+    const meta = [`📅 ${formatDate(f.dateDebut)}${f.dateFin && f.dateFin !== f.dateDebut ? ' → ' + formatDate(f.dateFin) : ''}`];
+    if (f.organisme) meta.push(`🏢 ${escHtml(f.organisme)}`);
+    if (f.dureeHeures) meta.push(`⏱ ${f.dureeHeures} h`);
+
+    let capHtml = '';
+    if (f.maxParticipants) {
+      const pct = Math.min(100, Math.round(parts.length / f.maxParticipants * 100));
+      capHtml = `<div><div class="frx-cap-top"><span>Places</span><span>${parts.length}/${f.maxParticipants}</span></div><div class="frx-cap-bar"><div class="frx-cap-fill" style="width:${pct}%"></div></div></div>`;
+    }
+    const noms = parts.map(id => _mfEmployesMap.get(id) || _mfEmployesMap.get(String(id))).filter(Boolean);
+
+    return `<article class="frx-card ${f.statut === 'annulee' ? 'annulee' : ''}" style="--ac:${color}">
+      <div class="frx-head">
+        <div class="frx-ico">🎓</div>
+        <div class="frx-h-txt">
+          <div class="frx-title">${escHtml(f.titre)}</div>
+          ${f.domaine ? `<div class="frx-chips" style="margin-top:.25rem"><span class="frx-chip dom">${escHtml(f.domaine)}</span></div>` : ''}
+        </div>
+        <span class="frx-status">${MF_STATUT_L[f.statut] || f.statut}</span>
+      </div>
+      <div class="frx-meta">${meta.map(m => `<span>${m}</span>`).join('')}</div>
+      ${capHtml}
+      ${parts.length ? `<div class="frx-names"><b>Inscrits (${parts.length}${f.maxParticipants ? '/' + f.maxParticipants : ''}) :</b> ${noms.length ? noms.map(escHtml).join(', ') : '<span style="color:var(--muted);font-style:italic">noms indisponibles</span>'}</div>` : ''}
+      ${f.notes ? `<div class="frx-notes">${escHtml(f.notes)}</div>` : ''}
+      ${action ? `<div class="frx-foot">${action}</div>` : ''}
+    </article>`;
+  }).join('') + `</div>`;
+}
+
+async function mfInscrire(id) {
+  const f = _mfCache.find(x => x.id === id);
+  if (!f) return;
+  const parts = f.participants || [];
+  if (parts.includes(_mfFiche.id)) { toast('Vous êtes déjà inscrit', 'info'); return; }
+  if (f.maxParticipants && parts.length >= f.maxParticipants) { toast('Formation complète', 'error'); return; }
+  try {
+    const saved = await sbSetFormationParticipants(id, [...parts, _mfFiche.id]);
+    const idx = _mfCache.findIndex(x => x.id === id);
+    if (idx >= 0) _mfCache[idx] = saved;
+    toast('Inscription confirmée ✓', 'success');
+    renderMesFormations();
+  } catch (e) { toast('Erreur : ' + (e?.message || e), 'error'); console.error('[mfInscrire]', e); }
+}
+
+async function mfDesinscrire(id) {
+  const f = _mfCache.find(x => x.id === id);
+  if (!f) return;
+  try {
+    const saved = await sbSetFormationParticipants(id, (f.participants || []).filter(p => p !== _mfFiche.id));
+    const idx = _mfCache.findIndex(x => x.id === id);
+    if (idx >= 0) _mfCache[idx] = saved;
+    toast('Désinscription effectuée', 'info');
+    renderMesFormations();
+  } catch (e) { toast('Erreur : ' + (e?.message || e), 'error'); console.error('[mfDesinscrire]', e); }
+}
+
+document.addEventListener('DOMContentLoaded', initMesFormations);
+</script>
+</body>
+</html>
