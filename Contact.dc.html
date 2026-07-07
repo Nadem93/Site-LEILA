@@ -9,44 +9,44 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
-  a { color: #F5EFE3; text-decoration: none; }
-  a:hover { color: #C8963E; }
+  body { margin: 0; background: #FCFAF4; font-family: 'Nunito', sans-serif; }
+  a { color: #2E7D5B; text-decoration: none; }
+  a:hover { color: #1F5940; }
   @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
   input, textarea, select { outline: none; }
-  input:focus, textarea:focus, select:focus { border-color: #C8963E !important; }
+  input:focus, textarea:focus, select:focus { border-color: #2E7D5B !important; }
 </style>
 </helmet>
 
-<div data-screen-label="Contact" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+<div data-screen-label="Contact 1c" style="background: #FCFAF4; color: #1F3327; min-height: 100vh;">
 
-  <dc-import name="Nav" active="contact" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+  <dc-import name="Nav" active="contact" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,76px"></dc-import>
 
   <!-- ═══ EN-TÊTE ═══ -->
-  <div style="padding: 100px 56px 60px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; border-bottom: 1px solid rgba(200,150,62,0.25);">
-    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">CONTACT</span>
-    <h1 style="font: 800 56px/1.05 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">Parlons de votre demande</h1>
-    <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 620px; animation: fadeUp 0.9s 0.6s ease both;">Information, admission, partenariat : notre équipe vous répond.</p>
+  <div style="padding: 90px 48px 50px; max-width: 1000px; margin: 0 auto; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center;">
+    <span style="background: #EAF3EC; color: #2E7D5B; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px; animation: fadeUp 0.9s 0.2s ease both;">Contact</span>
+    <h1 style="font: 900 50px/1.1 'Nunito'; margin: 0; animation: fadeUp 0.9s 0.4s ease both;">Parlons de votre <span style="color: #2E7D5B;">demande</span></h1>
+    <p style="font: 600 17px/1.65 'Nunito'; color: #4E6B58; margin: 0; animation: fadeUp 0.9s 0.6s ease both;">Information, admission, partenariat : notre équipe vous répond.</p>
   </div>
 
   <!-- ═══ FORMULAIRE + COORDONNÉES ═══ -->
-  <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 72px; padding: 70px 56px 100px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
-    <div data-reveal style="display: flex; flex-direction: column; gap: 22px;">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
-        <label style="display: flex; flex-direction: column; gap: 8px;">
-          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">NOM</span>
-          <input type="text" placeholder="Votre nom" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+  <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; padding: 20px 24px 60px;">
+    <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 32px; padding: 44px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+        <label style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Nom</span>
+          <input type="text" placeholder="Votre nom" style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px 'Nunito'; padding: 14px 16px; transition: border-color 0.3s;">
         </label>
-        <label style="display: flex; flex-direction: column; gap: 8px;">
-          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">EMAIL</span>
-          <input type="email" placeholder="vous@exemple.fr" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+        <label style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Email</span>
+          <input type="email" placeholder="vous@exemple.fr" style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px 'Nunito'; padding: 14px 16px; transition: border-color 0.3s;">
         </label>
       </div>
-      <label style="display: flex; flex-direction: column; gap: 8px;">
-        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">SERVICE CONCERNÉ</span>
-        <select style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+      <label style="display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Service concerné</span>
+        <select style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px 'Nunito'; padding: 14px 16px; transition: border-color 0.3s;">
           <option>Association LEILA (général)</option>
           <option>Foyer Les Trois Rivières</option>
           <option>SAJ Les Trois Rivières</option>
@@ -54,34 +54,34 @@
           <option>EMP Henri Wallon</option>
         </select>
       </label>
-      <label style="display: flex; flex-direction: column; gap: 8px;">
-        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">VOTRE MESSAGE</span>
-        <textarea rows="6" placeholder="Décrivez votre demande…" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px/1.6 'Public Sans'; padding: 15px 18px; resize: vertical; transition: border-color 0.3s;"></textarea>
+      <label style="display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Votre message</span>
+        <textarea rows="6" placeholder="Décrivez votre demande…" style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px/1.6 'Nunito'; padding: 14px 16px; resize: vertical; transition: border-color 0.3s;"></textarea>
       </label>
-      <button onClick="{{ envoyer }}" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; letter-spacing: 1px; padding: 16px 34px; border: none; border-radius: 999px; cursor: pointer; align-self: flex-start; transition: transform 0.3s, box-shadow 0.3s;" style-hover="transform: translateY(-3px); box-shadow: 0 12px 28px rgba(200,150,62,0.35);">{{ btnLabel }}</button>
+      <button onClick="{{ envoyer }}" style="background: #2E7D5B; color: #fff; font: 800 15px 'Nunito'; padding: 15px 30px; border: none; border-radius: 999px; cursor: pointer; align-self: flex-start; transition: transform 0.3s;" style-hover="transform: translateY(-3px) scale(1.02);">{{ btnLabel }}</button>
     </div>
-    <div data-reveal style="display: flex; flex-direction: column; gap: 0; align-self: start;">
-      <div style="border-top: 1px solid rgba(200,150,62,0.35); padding: 24px 0; display: flex; flex-direction: column; gap: 6px;">
-        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">ADRESSE</span>
-        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">Mail des Trois Rivières<br>Moulin Neuf, 93240 Stains</span>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div data-reveal style="background: #EAF3EC; border-radius: 28px; padding: 32px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 900 14px 'Nunito'; color: #2E7D5B;">📍 Adresse</span>
+        <span style="font: 600 15px/1.6 'Nunito'; color: #4E6B58;">Mail des Trois Rivières<br>Moulin Neuf, 93240 Stains</span>
       </div>
-      <div style="border-top: 1px solid rgba(200,150,62,0.35); padding: 24px 0; display: flex; flex-direction: column; gap: 6px;">
-        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">TÉLÉPHONE</span>
-        <a href="tel:0149462440" style="font: 400 16px 'Public Sans'; color: #CFC5B0;">01 49 46 24 40</a>
+      <div data-reveal style="background: #FBEEDD; border-radius: 28px; padding: 32px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 900 14px 'Nunito'; color: #E0873A;">📞 Téléphone</span>
+        <a href="tel:0149462440" style="font: 800 17px 'Nunito'; color: #1F3327;">01 49 46 24 40</a>
       </div>
-      <div style="border-top: 1px solid rgba(200,150,62,0.35); padding: 24px 0; display: flex; flex-direction: column; gap: 6px;">
-        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">EMAIL</span>
-        <a href="mailto:contact@asso-leila.org" style="font: 400 16px 'Public Sans'; color: #CFC5B0;">contact@asso-leila.org</a>
-        <a href="mailto:residence@asso-leila.org" style="font: 400 16px 'Public Sans'; color: #CFC5B0;">residence@asso-leila.org (Foyer)</a>
+      <div data-reveal style="background: #FCF6DC; border-radius: 28px; padding: 32px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 900 14px 'Nunito'; color: #B0921F;">📧 Email</span>
+        <a href="mailto:contact@asso-leila.org" style="font: 600 15px 'Nunito'; color: #1F3327;">contact@asso-leila.org</a>
+        <a href="mailto:residence@asso-leila.org" style="font: 600 15px 'Nunito'; color: #1F3327;">residence@asso-leila.org (Foyer)</a>
       </div>
-      <div style="border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35); padding: 24px 0; display: flex; flex-direction: column; gap: 6px;">
-        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">HORAIRES</span>
-        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">Foyer : 7j/7, 365 jours par an<br>SAJ : lundi – vendredi, 9h – 16h<br>SAVS : sur rendez-vous</span>
+      <div data-reveal style="background: #E7EEF8; border-radius: 28px; padding: 32px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 900 14px 'Nunito'; color: #4A78B8;">🕐 Horaires</span>
+        <span style="font: 600 15px/1.7 'Nunito'; color: #40587A;">Foyer : 7j/7, 365 jours par an<br>SAJ : lundi – vendredi, 9h – 16h<br>SAVS : sur rendez-vous</span>
       </div>
     </div>
   </div>
 
-  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+  <dc-import name="Footer" hint-size="100%,400px"></dc-import>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -116,7 +116,7 @@ class Component extends DCLogic {
 
   renderVals() {
     return {
-      btnLabel: this.state.sent ? 'Message envoyé ✦' : 'Envoyer le message',
+      btnLabel: this.state.sent ? 'Message envoyé ✓' : 'Envoyer le message',
       envoyer: () => {
         this.setState({ sent: true });
         setTimeout(() => this.setState({ sent: false }), 3000);

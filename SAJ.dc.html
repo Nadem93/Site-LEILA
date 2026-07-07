@@ -9,112 +9,118 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
-  a { color: #F5EFE3; text-decoration: none; }
-  a:hover { color: #C8963E; }
+  body { margin: 0; background: #FCFAF4; font-family: 'Nunito', sans-serif; }
+  a { color: #2E7D5B; text-decoration: none; }
+  a:hover { color: #1F5940; }
   @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
 </style>
 </helmet>
 
-<div data-screen-label="SAJ" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+<div data-screen-label="SAJ 1c" style="background: #FCFAF4; color: #1F3327; min-height: 100vh;">
 
-  <dc-import name="Nav" active="saj" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+  <dc-import name="Nav" active="saj" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,76px"></dc-import>
 
   <!-- ═══ HERO ═══ -->
-  <div style="position: relative; height: 480px; overflow: hidden; background: repeating-linear-gradient(45deg, #1A1610, #1A1610 16px, #14110B 16px, #14110B 32px);">
-    <div style="position: absolute; top: 26px; right: 56px; font: 400 12px monospace; color: #9A8F79; letter-spacing: 1px;">[ photo : ateliers du SAJ ]</div>
-    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,12,9,0.3) 0%, rgba(14,12,9,0.92) 100%);"></div>
-    <div style="position: absolute; left: 56px; right: 56px; bottom: 64px; display: flex; flex-direction: column; gap: 18px;">
-      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">02 — ACCUEIL DE JOUR · DEPUIS 2018</span>
-      <h1 style="font: 800 58px/1.05 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">SAJ Les Trois Rivières</h1>
-      <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 620px; animation: fadeUp 0.9s 0.6s ease both;">Un Service d'Accueil de Jour pour adultes en situation de handicap psychique et/ou mental. Démarche collaborative, ateliers créatifs et projets ouverts sur le territoire.</p>
+  <div style="background: #F2994A; margin: 20px 24px 0; border-radius: 36px; padding: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; color: #fff; overflow: hidden; position: relative;">
+    <div style="position: absolute; top: -60px; right: 32%; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.12); animation: floaty 8s ease-in-out infinite;"></div>
+    <div style="display: flex; flex-direction: column; gap: 20px; position: relative;">
+      <span style="background: rgba(255,255,255,0.2); color: #fff; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px; align-self: flex-start; animation: fadeUp 0.9s 0.2s ease both;">🎨 Accueil de jour · depuis 2018</span>
+      <h1 style="font: 900 48px/1.1 'Nunito'; margin: 0; animation: fadeUp 0.9s 0.4s ease both;">Des journées bien remplies, <span style="color: #1F3327;">ensemble</span></h1>
+      <p style="font: 600 17px/1.65 'Nunito'; color: #FDEBD7; margin: 0; animation: fadeUp 0.9s 0.6s ease both;">Le SAJ accueille 15 adultes en situation de handicap psychique et/ou mental. Démarche collaborative, ateliers créatifs et projets ouverts sur le territoire.</p>
       <div style="display: flex; gap: 14px; animation: fadeUp 0.9s 0.8s ease both;">
-        <a href="#ateliers" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; padding: 14px 28px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Découvrir les ateliers</a>
-        <a href="Contact.dc.html" style="border: 1px solid rgba(245,239,227,0.45); color: #F5EFE3; font: 700 15px 'Archivo'; padding: 14px 28px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Nous contacter</a>
+        <a href="#ateliers" style="background: #1F3327; color: #FCFAF4; font: 800 15px 'Nunito'; padding: 14px 26px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Découvrir les ateliers</a>
+        <a href="Contact.dc.html" style="border: 2px solid rgba(255,255,255,0.5); color: #fff; font: 800 15px 'Nunito'; padding: 12px 26px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Nous contacter</a>
       </div>
+    </div>
+    <div style="border-radius: 28px; height: 340px; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.14), rgba(255,255,255,0.14) 14px, rgba(255,255,255,0.05) 14px, rgba(255,255,255,0.05) 28px); display: grid; place-items: center;">
+      <span style="font: 400 12px monospace; color: rgba(255,255,255,0.85); letter-spacing: 1px;">[ photo : ateliers du SAJ ]</span>
     </div>
   </div>
 
   <!-- ═══ STATS ═══ -->
-  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(200,150,62,0.25); border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35);">
-    <div style="background: #0E0C09; padding: 34px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
-      <span style="font: 800 40px 'Archivo'; color: #C8963E;">15</span><span style="font: 500 13px 'Public Sans'; color: #9A8F79;">places</span>
+  <div data-reveal style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 32px 24px 0;">
+    <div style="background: #FBEEDD; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 2px; align-items: center;">
+      <span style="font: 900 36px 'Nunito'; color: #E0873A;">15</span><span style="font: 700 13px 'Nunito'; color: #7A5B38;">places</span>
     </div>
-    <div style="background: #0E0C09; padding: 34px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
-      <span style="font: 800 40px 'Archivo'; color: #C8963E;">L-V</span><span style="font: 500 13px 'Public Sans'; color: #9A8F79;">9h – 16h</span>
+    <div style="background: #FBEEDD; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 2px; align-items: center;">
+      <span style="font: 900 36px 'Nunito'; color: #E0873A;">L-V</span><span style="font: 700 13px 'Nunito'; color: #7A5B38;">9h – 16h</span>
     </div>
-    <div style="background: #0E0C09; padding: 34px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
-      <span style="font: 800 40px 'Archivo'; color: #C8963E;">2018</span><span style="font: 500 13px 'Public Sans'; color: #9A8F79;">ouverture</span>
+    <div style="background: #FBEEDD; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 2px; align-items: center;">
+      <span style="font: 900 36px 'Nunito'; color: #E0873A;">2018</span><span style="font: 700 13px 'Nunito'; color: #7A5B38;">ouverture</span>
     </div>
-  </div>
-
-  <!-- ═══ MISSION ═══ -->
-  <div data-reveal style="padding: 100px 56px 70px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px;">
-    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">NOTRE APPROCHE</span>
-    <h2 style="font: 800 40px/1.15 'Archivo'; margin: 0; text-transform: uppercase; max-width: 760px;">Des méthodes actives et participatives</h2>
-    <p style="font: 400 17px/1.7 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 820px;">Le SAJ s'appuie sur une démarche collaborative : chaque personne accueillie participe à la construction de son parcours, des activités et des projets collectifs, ouverts sur le quartier et le territoire.</p>
   </div>
 
   <!-- ═══ ATELIERS ═══ -->
-  <div id="ateliers" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 32px; padding: 0 56px 60px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
-    <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
-      <span style="font: 700 17px 'Archivo';">Musique</span>
-      <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Pratique collective, écoute et expression par le son.</span>
+  <div id="ateliers" style="padding: 90px 24px 70px;">
+    <div data-reveal style="text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; padding-bottom: 40px;">
+      <span style="background: #FBEEDD; color: #E0873A; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px;">Notre approche</span>
+      <h2 style="font: 900 38px/1.15 'Nunito'; margin: 0;">Des méthodes actives et participatives</h2>
+      <p style="font: 600 17px/1.7 'Nunito'; color: #4E6B58; margin: 0; max-width: 720px;">Chaque personne accueillie participe à la construction de son parcours, des activités et des projets collectifs.</p>
     </div>
-    <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
-      <span style="font: 700 17px 'Archivo';">Cuisine</span>
-      <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Préparer, partager, apprendre autour du repas.</span>
-    </div>
-    <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
-      <span style="font: 700 17px 'Archivo';">Écriture</span>
-      <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Ateliers d'expression écrite et de récit de soi.</span>
-    </div>
-    <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
-      <span style="font: 700 17px 'Archivo';">Jardin</span>
-      <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Cultiver ensemble, au rythme des saisons.</span>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+      <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: #F2994A;"></div>
+        <span style="font: 900 18px 'Nunito';">Musique</span>
+        <span style="font: 600 14px/1.55 'Nunito'; color: #4E6B58;">Pratique collective, écoute et expression par le son.</span>
+      </div>
+      <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: #2E7D5B;"></div>
+        <span style="font: 900 18px 'Nunito';">Cuisine</span>
+        <span style="font: 600 14px/1.55 'Nunito'; color: #4E6B58;">Préparer, partager, apprendre autour du repas.</span>
+      </div>
+      <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: #E4BC2B;"></div>
+        <span style="font: 900 18px 'Nunito';">Écriture</span>
+        <span style="font: 600 14px/1.55 'Nunito'; color: #4E6B58;">Ateliers d'expression écrite et de récit de soi.</span>
+      </div>
+      <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: #4A78B8;"></div>
+        <span style="font: 900 18px 'Nunito';">Jardin</span>
+        <span style="font: 600 14px/1.55 'Nunito'; color: #4E6B58;">Cultiver ensemble, au rythme des saisons.</span>
+      </div>
     </div>
   </div>
 
   <!-- ═══ PROJETS ═══ -->
-  <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.25); padding: 90px 56px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 40px;">
-    <div style="display: flex; flex-direction: column; gap: 14px;">
-      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">PROJETS OUVERTS SUR LE TERRITOIRE</span>
-      <h2 style="font: 800 40px/1.15 'Archivo'; margin: 0; text-transform: uppercase;">Le Kiosque, La Comète, les séjours</h2>
+  <div data-reveal style="margin: 0 24px; background: #FBEEDD; border-radius: 36px; padding: 60px 48px;">
+    <div style="text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; padding-bottom: 36px;">
+      <span style="background: #FCFAF4; color: #E0873A; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px;">Projets ouverts sur le territoire</span>
+      <h2 style="font: 900 36px/1.15 'Nunito'; margin: 0;">Le Kiosque, La Comète, les séjours</h2>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
-      <div style="border: 1px solid rgba(200,150,62,0.3); padding: 34px; display: flex; flex-direction: column; gap: 12px; transition: background 0.4s;" style-hover="background: #1A1610;">
-        <span style="font: 700 20px 'Archivo';">Le Kiosque</span>
-        <span style="font: 400 15px/1.65 'Public Sans'; color: #CFC5B0;">Un espace ouvert sur le quartier du Moulin Neuf, lieu de rencontre entre les personnes accueillies et les habitants.</span>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+      <div style="background: #FCFAF4; border-radius: 28px; padding: 32px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <span style="font: 900 20px 'Nunito'; color: #E0873A;">Le Kiosque</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">Un espace ouvert sur le quartier du Moulin Neuf, lieu de rencontre avec les habitants.</span>
       </div>
-      <div style="border: 1px solid rgba(200,150,62,0.3); padding: 34px; display: flex; flex-direction: column; gap: 12px; transition: background 0.4s;" style-hover="background: #1A1610;">
-        <span style="font: 700 20px 'Archivo';">La Comète</span>
-        <span style="font: 400 15px/1.65 'Public Sans'; color: #CFC5B0;">Un projet collectif porté avec les personnes accueillies, tourné vers la culture et la participation.</span>
+      <div style="background: #FCFAF4; border-radius: 28px; padding: 32px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <span style="font: 900 20px 'Nunito'; color: #E0873A;">La Comète</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">Un projet collectif tourné vers la culture et la participation.</span>
       </div>
-      <div style="border: 1px solid rgba(200,150,62,0.3); padding: 34px; display: flex; flex-direction: column; gap: 12px; transition: background 0.4s;" style-hover="background: #1A1610;">
-        <span style="font: 700 20px 'Archivo';">Les séjours</span>
-        <span style="font: 400 15px/1.65 'Public Sans'; color: #CFC5B0;">Des séjours et sorties qui ouvrent le quotidien : découverte, autonomie et souvenirs partagés.</span>
+      <div style="background: #FCFAF4; border-radius: 28px; padding: 32px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <span style="font: 900 20px 'Nunito'; color: #E0873A;">Les séjours</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">Découverte, autonomie et souvenirs partagés, loin du quotidien.</span>
       </div>
     </div>
   </div>
 
-  <!-- ═══ CONTACT ═══ -->
-  <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding: 100px 56px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 22px; background: radial-gradient(ellipse at 50% 100%, rgba(200,150,62,0.14), transparent 65%);">
-    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">CONTACTER LE SAJ</span>
-    <h2 style="font: 800 44px/1.1 'Archivo'; margin: 0; text-transform: uppercase;">Envie d'en savoir plus ?</h2>
-    <div style="display: flex; gap: 40px; font: 400 16px/1.6 'Public Sans'; color: #CFC5B0; flex-wrap: wrap; justify-content: center;">
+  <!-- ═══ CTA ═══ -->
+  <div data-reveal style="margin: 20px 24px 40px; background: #2E7D5B; border-radius: 36px; padding: 70px 48px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; color: #fff;">
+    <h2 style="font: 900 38px/1.1 'Nunito'; margin: 0;">Envie d'en savoir plus ?</h2>
+    <div style="display: flex; gap: 32px; font: 600 15px/1.6 'Nunito'; color: #D3E8DA; flex-wrap: wrap; justify-content: center;">
       <span>Mail des Trois Rivières, 93240 Stains</span>
-      <a href="tel:0149462440" style="color: #C8963E;">01 49 46 24 40</a>
+      <a href="tel:0149462440" style="color: #F9D65C;">01 49 46 24 40</a>
       <span>Lundi – vendredi, 9h – 16h</span>
     </div>
     <div style="display: flex; gap: 14px;">
-      <a href="Contact.dc.html" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; padding: 15px 30px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Formulaire de contact</a>
-      <a href="Candidater.dc.html" style="border: 1px solid rgba(245,239,227,0.45); color: #F5EFE3; font: 700 15px 'Archivo'; padding: 15px 30px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Candidater à un stage</a>
+      <a href="Contact.dc.html" style="background: #F9D65C; color: #1F3327; font: 800 15px 'Nunito'; padding: 14px 28px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Formulaire de contact</a>
+      <a href="Candidater.dc.html" style="border: 2px solid rgba(255,255,255,0.5); color: #fff; font: 800 15px 'Nunito'; padding: 12px 28px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Candidater à un stage</a>
     </div>
   </div>
 
-  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+  <dc-import name="Footer" hint-size="100%,400px"></dc-import>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>

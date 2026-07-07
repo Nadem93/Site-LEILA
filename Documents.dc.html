@@ -9,64 +9,60 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
-  a { color: #F5EFE3; text-decoration: none; }
-  a:hover { color: #C8963E; }
+  body { margin: 0; background: #FCFAF4; font-family: 'Nunito', sans-serif; }
+  a { color: #2E7D5B; text-decoration: none; }
+  a:hover { color: #1F5940; }
   @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
 </style>
 </helmet>
 
-<div data-screen-label="Documents" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+<div data-screen-label="Documents 1c" style="background: #FCFAF4; color: #1F3327; min-height: 100vh;">
 
-  <dc-import name="Nav" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+  <dc-import name="Nav" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,76px"></dc-import>
 
   <!-- ═══ EN-TÊTE ═══ -->
-  <div style="padding: 100px 56px 60px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; border-bottom: 1px solid rgba(200,150,62,0.25);">
-    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">RESSOURCES</span>
-    <h1 style="font: 800 56px/1.05 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">Documents</h1>
-    <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 620px; animation: fadeUp 0.9s 0.6s ease both;">Rapports, projets d'établissement, livrets d'accueil et documents officiels de l'association.</p>
+  <div style="padding: 90px 48px 50px; max-width: 1000px; margin: 0 auto; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center;">
+    <span style="background: #E7EEF8; color: #4A78B8; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px; animation: fadeUp 0.9s 0.2s ease both;">Ressources</span>
+    <h1 style="font: 900 50px/1.1 'Nunito'; margin: 0; animation: fadeUp 0.9s 0.4s ease both;">Documents</h1>
+    <p style="font: 600 17px/1.65 'Nunito'; color: #4E6B58; margin: 0; animation: fadeUp 0.9s 0.6s ease both;">Rapports, projets d'établissement, livrets d'accueil et documents officiels de l'association.</p>
   </div>
 
   <!-- ═══ LISTE ═══ -->
-  <div style="padding: 70px 56px 100px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column;">
-    <div data-reveal style="display: grid; grid-template-columns: 1fr auto auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
-      <div style="display: flex; flex-direction: column; gap: 4px;">
-        <span style="font: 700 19px 'Archivo';">Livret d'accueil — Foyer Les Trois Rivières</span>
-        <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Présentation du Foyer, règles de vie, droits des résidents</span>
+  <div style="padding: 20px 24px 60px; max-width: 1000px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px;">
+    <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 24px; padding: 24px 30px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font: 900 17px 'Nunito';">Livret d'accueil — Foyer Les Trois Rivières</span>
+        <span style="font: 600 13px 'Nunito'; color: #4E6B58;">Présentation du Foyer, règles de vie, droits des résidents · PDF</span>
       </div>
-      <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">PDF</span>
-      <a href="#" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px; padding: 10px 22px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">Télécharger ↓</a>
+      <a href="#" style="background: #2E7D5B; color: #fff; font: 800 13px 'Nunito'; padding: 11px 22px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: scale(1.05);">Télécharger ↓</a>
     </div>
-    <div data-reveal style="display: grid; grid-template-columns: 1fr auto auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
-      <div style="display: flex; flex-direction: column; gap: 4px;">
-        <span style="font: 700 19px 'Archivo';">Projet d'établissement</span>
-        <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Les 5 axes de l'accompagnement éducatif</span>
+    <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 24px; padding: 24px 30px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font: 900 17px 'Nunito';">Projet d'établissement</span>
+        <span style="font: 600 13px 'Nunito'; color: #4E6B58;">Les 5 axes de l'accompagnement éducatif · PDF</span>
       </div>
-      <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">PDF</span>
-      <a href="#" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px; padding: 10px 22px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">Télécharger ↓</a>
+      <a href="#" style="background: #2E7D5B; color: #fff; font: 800 13px 'Nunito'; padding: 11px 22px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: scale(1.05);">Télécharger ↓</a>
     </div>
-    <div data-reveal style="display: grid; grid-template-columns: 1fr auto auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
-      <div style="display: flex; flex-direction: column; gap: 4px;">
-        <span style="font: 700 19px 'Archivo';">Rapport d'activité</span>
-        <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Bilan annuel de l'association et de ses services</span>
+    <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 24px; padding: 24px 30px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font: 900 17px 'Nunito';">Rapport d'activité</span>
+        <span style="font: 600 13px 'Nunito'; color: #4E6B58;">Bilan annuel de l'association et de ses services · PDF</span>
       </div>
-      <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">PDF</span>
-      <a href="#" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px; padding: 10px 22px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">Télécharger ↓</a>
+      <a href="#" style="background: #2E7D5B; color: #fff; font: 800 13px 'Nunito'; padding: 11px 22px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: scale(1.05);">Télécharger ↓</a>
     </div>
-    <div data-reveal style="display: grid; grid-template-columns: 1fr auto auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
-      <div style="display: flex; flex-direction: column; gap: 4px;">
-        <span style="font: 700 19px 'Archivo';">Dossier de demande d'admission</span>
-        <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Formulaire à compléter pour toute demande d'admission</span>
+    <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 24px; padding: 24px 30px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font: 900 17px 'Nunito';">Dossier de demande d'admission</span>
+        <span style="font: 600 13px 'Nunito'; color: #4E6B58;">Formulaire à compléter pour toute demande d'admission · PDF</span>
       </div>
-      <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">PDF</span>
-      <a href="#" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px; padding: 10px 22px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">Télécharger ↓</a>
+      <a href="#" style="background: #2E7D5B; color: #fff; font: 800 13px 'Nunito'; padding: 11px 22px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: scale(1.05);">Télécharger ↓</a>
     </div>
-    <div data-reveal style="margin-top: 40px; border: 1px dashed rgba(200,150,62,0.4); padding: 22px 28px; font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Les documents sont gérés depuis l'espace admin — cette liste affichera automatiquement les fichiers publiés.</div>
+    <div data-reveal style="margin-top: 20px; border: 2px dashed #DCD5C2; border-radius: 24px; padding: 20px 28px; font: 600 14px/1.6 'Nunito'; color: #7D8C81;">Les documents sont gérés depuis l'espace admin — cette liste affichera automatiquement les fichiers publiés.</div>
   </div>
 
-  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+  <dc-import name="Footer" hint-size="100%,400px"></dc-import>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>

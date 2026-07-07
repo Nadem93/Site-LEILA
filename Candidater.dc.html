@@ -9,45 +9,45 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
-  a { color: #F5EFE3; text-decoration: none; }
-  a:hover { color: #C8963E; }
+  body { margin: 0; background: #FCFAF4; font-family: 'Nunito', sans-serif; }
+  a { color: #2E7D5B; text-decoration: none; }
+  a:hover { color: #1F5940; }
   @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
   input, textarea, select { outline: none; }
-  input:focus, textarea:focus, select:focus { border-color: #C8963E !important; }
+  input:focus, textarea:focus, select:focus { border-color: #F2994A !important; }
 </style>
 </helmet>
 
-<div data-screen-label="Candidater" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+<div data-screen-label="Candidater 1c" style="background: #FCFAF4; color: #1F3327; min-height: 100vh;">
 
-  <dc-import name="Nav" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+  <dc-import name="Nav" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,76px"></dc-import>
 
   <!-- ═══ EN-TÊTE ═══ -->
-  <div style="padding: 100px 56px 60px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; border-bottom: 1px solid rgba(200,150,62,0.25);">
-    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">STAGES &amp; CANDIDATURES</span>
-    <h1 style="font: 800 56px/1.05 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">Candidater à un stage</h1>
-    <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 680px; animation: fadeUp 0.9s 0.6s ease both;">L'association LEILA accueille des stagiaires dans tous ses services : une équipe qui forme, se questionne et considère les stagiaires comme un vivier. Envoyez CV et lettre de motivation.</p>
+  <div style="padding: 90px 48px 50px; max-width: 1000px; margin: 0 auto; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center;">
+    <span style="background: #FBEEDD; color: #E0873A; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px; animation: fadeUp 0.9s 0.2s ease both;">Stages &amp; candidatures</span>
+    <h1 style="font: 900 50px/1.1 'Nunito'; margin: 0; animation: fadeUp 0.9s 0.4s ease both;">Candidater à <span style="color: #E0873A;">un stage</span></h1>
+    <p style="font: 600 17px/1.65 'Nunito'; color: #4E6B58; margin: 0; max-width: 680px; animation: fadeUp 0.9s 0.6s ease both;">L'association LEILA accueille des stagiaires dans tous ses services : une équipe qui forme, se questionne et considère les stagiaires comme un vivier. Envoyez CV et lettre de motivation.</p>
   </div>
 
   <!-- ═══ FORMULAIRE ═══ -->
-  <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 72px; padding: 70px 56px 100px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
-    <div data-reveal style="display: flex; flex-direction: column; gap: 22px;">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
-        <label style="display: flex; flex-direction: column; gap: 8px;">
-          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">NOM &amp; PRÉNOM</span>
-          <input type="text" placeholder="Votre nom complet" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+  <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; padding: 20px 24px 60px;">
+    <div data-reveal style="background: #fff; border: 1px solid #EDE8DB; border-radius: 32px; padding: 44px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+        <label style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Nom &amp; prénom</span>
+          <input type="text" placeholder="Votre nom complet" style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px 'Nunito'; padding: 14px 16px; transition: border-color 0.3s;">
         </label>
-        <label style="display: flex; flex-direction: column; gap: 8px;">
-          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">EMAIL</span>
-          <input type="email" placeholder="vous@exemple.fr" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+        <label style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Email</span>
+          <input type="email" placeholder="vous@exemple.fr" style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px 'Nunito'; padding: 14px 16px; transition: border-color 0.3s;">
         </label>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
-        <label style="display: flex; flex-direction: column; gap: 8px;">
-          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">SERVICE SOUHAITÉ</span>
-          <select style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+        <label style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Service souhaité</span>
+          <select style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px 'Nunito'; padding: 14px 16px; transition: border-color 0.3s;">
             <option>Foyer Les Trois Rivières</option>
             <option>SAJ Les Trois Rivières</option>
             <option>SAVS Les Trois Rivières</option>
@@ -55,39 +55,39 @@
             <option>Indifférent</option>
           </select>
         </label>
-        <label style="display: flex; flex-direction: column; gap: 8px;">
-          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">FORMATION EN COURS</span>
-          <input type="text" placeholder="Ex. : ME, ES, AES, CESF…" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+        <label style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Formation en cours</span>
+          <input type="text" placeholder="Ex. : ME, ES, AES, CESF…" style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px 'Nunito'; padding: 14px 16px; transition: border-color 0.3s;">
         </label>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
-        <label style="display: flex; flex-direction: column; gap: 8px;">
-          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">CV (PDF)</span>
-          <div style="background: #1A1610; border: 1px dashed rgba(200,150,62,0.45); padding: 26px 18px; text-align: center; font: 400 14px 'Public Sans'; color: #9A8F79; cursor: pointer; transition: border-color 0.3s;" style-hover="border-color: #C8963E;">Déposer votre CV ici ↑</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+        <label style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font: 800 13px 'Nunito'; color: #4E6B58;">CV (PDF)</span>
+          <div style="background: #FCFAF4; border: 2px dashed #DCD5C2; border-radius: 16px; padding: 24px 16px; text-align: center; font: 600 14px 'Nunito'; color: #7D8C81; cursor: pointer; transition: border-color 0.3s;" style-hover="border-color: #F2994A;">Déposer votre CV ici ↑</div>
         </label>
-        <label style="display: flex; flex-direction: column; gap: 8px;">
-          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">LETTRE DE MOTIVATION (PDF)</span>
-          <div style="background: #1A1610; border: 1px dashed rgba(200,150,62,0.45); padding: 26px 18px; text-align: center; font: 400 14px 'Public Sans'; color: #9A8F79; cursor: pointer; transition: border-color 0.3s;" style-hover="border-color: #C8963E;">Déposer votre lettre ici ↑</div>
+        <label style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Lettre de motivation (PDF)</span>
+          <div style="background: #FCFAF4; border: 2px dashed #DCD5C2; border-radius: 16px; padding: 24px 16px; text-align: center; font: 600 14px 'Nunito'; color: #7D8C81; cursor: pointer; transition: border-color 0.3s;" style-hover="border-color: #F2994A;">Déposer votre lettre ici ↑</div>
         </label>
       </div>
-      <label style="display: flex; flex-direction: column; gap: 8px;">
-        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">MESSAGE (FACULTATIF)</span>
-        <textarea rows="4" placeholder="Périodes de stage souhaitées, objectifs…" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px/1.6 'Public Sans'; padding: 15px 18px; resize: vertical; transition: border-color 0.3s;"></textarea>
+      <label style="display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 800 13px 'Nunito'; color: #4E6B58;">Message (facultatif)</span>
+        <textarea rows="4" placeholder="Périodes de stage souhaitées, objectifs…" style="background: #FCFAF4; border: 2px solid #EDE8DB; border-radius: 16px; color: #1F3327; font: 600 15px/1.6 'Nunito'; padding: 14px 16px; resize: vertical; transition: border-color 0.3s;"></textarea>
       </label>
-      <button onClick="{{ envoyer }}" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; letter-spacing: 1px; padding: 16px 34px; border: none; border-radius: 999px; cursor: pointer; align-self: flex-start; transition: transform 0.3s, box-shadow 0.3s;" style-hover="transform: translateY(-3px); box-shadow: 0 12px 28px rgba(200,150,62,0.35);">{{ btnLabel }}</button>
+      <button onClick="{{ envoyer }}" style="background: #F2994A; color: #fff; font: 800 15px 'Nunito'; padding: 15px 30px; border: none; border-radius: 999px; cursor: pointer; align-self: flex-start; transition: transform 0.3s;" style-hover="transform: translateY(-3px) scale(1.02);">{{ btnLabel }}</button>
     </div>
-    <div data-reveal style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); padding: 44px; display: flex; flex-direction: column; gap: 18px; align-self: start;">
-      <span style="font: 600 13px 'Archivo'; letter-spacing: 3px; color: #C8963E;">POURQUOI LEILA ?</span>
-      <div style="display: flex; flex-direction: column; gap: 14px;">
-        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.6 'Public Sans'; color: #CFC5B0;">4 services, 4 terrains de stage complémentaires</span></div>
-        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.6 'Public Sans'; color: #CFC5B0;">Équipes pluridisciplinaires et tutorat impliqué</span></div>
-        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.6 'Public Sans'; color: #CFC5B0;">Projets ouverts sur le territoire (Kiosque, CapDroits…)</span></div>
-        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.6 'Public Sans'; color: #CFC5B0;">Les stagiaires, un vivier pour nos recrutements</span></div>
+    <div data-reveal style="background: #FBEEDD; border-radius: 32px; padding: 40px; display: flex; flex-direction: column; gap: 18px; align-self: start;">
+      <span style="font: 900 16px 'Nunito'; color: #E0873A;">Pourquoi LEILA ?</span>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; gap: 10px; align-items: baseline;"><span style="color: #E0873A; font-weight: 900;">✓</span><span style="font: 600 14px/1.6 'Nunito'; color: #7A5B38;">4 services, 4 terrains de stage complémentaires</span></div>
+        <div style="display: flex; gap: 10px; align-items: baseline;"><span style="color: #E0873A; font-weight: 900;">✓</span><span style="font: 600 14px/1.6 'Nunito'; color: #7A5B38;">Équipes pluridisciplinaires et tutorat impliqué</span></div>
+        <div style="display: flex; gap: 10px; align-items: baseline;"><span style="color: #E0873A; font-weight: 900;">✓</span><span style="font: 600 14px/1.6 'Nunito'; color: #7A5B38;">Projets ouverts sur le territoire (Kiosque, CapDroits…)</span></div>
+        <div style="display: flex; gap: 10px; align-items: baseline;"><span style="color: #E0873A; font-weight: 900;">✓</span><span style="font: 600 14px/1.6 'Nunito'; color: #7A5B38;">Les stagiaires, un vivier pour nos recrutements</span></div>
       </div>
     </div>
   </div>
 
-  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+  <dc-import name="Footer" hint-size="100%,400px"></dc-import>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -122,7 +122,7 @@ class Component extends DCLogic {
 
   renderVals() {
     return {
-      btnLabel: this.state.sent ? 'Candidature envoyée ✦' : 'Envoyer ma candidature',
+      btnLabel: this.state.sent ? 'Candidature envoyée ✓' : 'Envoyer ma candidature',
       envoyer: () => {
         this.setState({ sent: true });
         setTimeout(() => this.setState({ sent: false }), 3000);

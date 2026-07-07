@@ -9,105 +9,105 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
-  a { color: #F5EFE3; text-decoration: none; }
-  a:hover { color: #C8963E; }
+  body { margin: 0; background: #FCFAF4; font-family: 'Nunito', sans-serif; }
+  a { color: #2E7D5B; text-decoration: none; }
+  a:hover { color: #1F5940; }
   @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
 </style>
 </helmet>
 
-<div data-screen-label="Association" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+<div data-screen-label="Association 1c" style="background: #FCFAF4; color: #1F3327; min-height: 100vh;">
 
-  <dc-import name="Nav" active="association" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+  <dc-import name="Nav" active="association" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,76px"></dc-import>
 
-  <!-- ═══ HERO ═══ -->
-  <div style="padding: 110px 56px 90px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; border-bottom: 1px solid rgba(200,150,62,0.25);">
-    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">L'ASSOCIATION · DEPUIS 1963</span>
-    <h1 style="font: 800 60px/1.05 'Archivo'; margin: 0; text-transform: uppercase; max-width: 900px; animation: fadeUp 0.9s 0.4s ease both;">Une histoire associative engagée</h1>
-    <p style="font: 400 19px/1.65 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 720px; animation: fadeUp 0.9s 0.6s ease both;">Créée en 1963, l'association LEILA accompagne adultes et enfants en situation de handicap mental et/ou psychique à Stains, en Seine-Saint-Denis. Quatre établissements et services, une équipe pluridisciplinaire, un même engagement : la dignité, l'autonomie et l'inclusion.</p>
+  <!-- ═══ EN-TÊTE ═══ -->
+  <div style="padding: 90px 48px 70px; max-width: 1000px; margin: 0 auto; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; gap: 18px; align-items: center;">
+    <span style="background: #EAF3EC; color: #2E7D5B; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px; animation: fadeUp 0.9s 0.2s ease both;">L'association · depuis 1963</span>
+    <h1 style="font: 900 52px/1.1 'Nunito'; margin: 0; animation: fadeUp 0.9s 0.4s ease both;">Une histoire associative <span style="color: #2E7D5B;">engagée</span></h1>
+    <p style="font: 600 18px/1.7 'Nunito'; color: #4E6B58; margin: 0; animation: fadeUp 0.9s 0.6s ease both;">Créée en 1963, l'association LEILA accompagne adultes et enfants en situation de handicap mental et/ou psychique à Stains. Quatre établissements et services, une équipe pluridisciplinaire, un même engagement : la dignité, l'autonomie et l'inclusion.</p>
   </div>
 
   <!-- ═══ HISTOIRE ═══ -->
-  <div data-reveal style="padding: 90px 56px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: grid; grid-template-columns: 1fr 1.3fr; gap: 72px;">
-    <div style="display: flex; flex-direction: column; gap: 14px;">
-      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">NOTRE HISTOIRE</span>
-      <h2 style="font: 800 38px/1.15 'Archivo'; margin: 0; text-transform: uppercase;">60 ans au service des personnes</h2>
+  <div data-reveal style="margin: 0 24px; background: #EAF3EC; border-radius: 36px; padding: 60px 48px;">
+    <div style="text-align: center; padding-bottom: 40px;">
+      <h2 style="font: 900 36px/1.15 'Nunito'; margin: 0;">60 ans au service des personnes</h2>
     </div>
-    <div style="display: flex; flex-direction: column; gap: 0;">
-      <div style="display: flex; gap: 28px; padding: 24px 0; border-top: 1px solid rgba(200,150,62,0.35);">
-        <span style="font: 800 22px 'Archivo'; color: #C8963E; min-width: 80px;">1963</span>
-        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">Création de l'association LEILA à Stains, en Seine-Saint-Denis.</span>
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <span style="font: 900 26px 'Nunito'; color: #2E7D5B;">1963</span>
+        <span style="font: 600 13px/1.55 'Nunito'; color: #4E6B58;">Création de l'association LEILA à Stains.</span>
       </div>
-      <div style="display: flex; gap: 28px; padding: 24px 0; border-top: 1px solid rgba(200,150,62,0.35);">
-        <span style="font: 800 22px 'Archivo'; color: #C8963E; min-width: 80px;">2005</span>
-        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">Ouverture du Foyer d'hébergement Les Trois Rivières — 45 places pour adultes travaillant en ESAT.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <span style="font: 900 26px 'Nunito'; color: #2E7D5B;">2005</span>
+        <span style="font: 600 13px/1.55 'Nunito'; color: #4E6B58;">Ouverture du Foyer Les Trois Rivières — 45 places.</span>
       </div>
-      <div style="display: flex; gap: 28px; padding: 24px 0; border-top: 1px solid rgba(200,150,62,0.35);">
-        <span style="font: 800 22px 'Archivo'; color: #C8963E; min-width: 80px;">2016</span>
-        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">Création du SAVS — accompagnement à la vie sociale de 42 adultes vivant à domicile.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <span style="font: 900 26px 'Nunito'; color: #2E7D5B;">2016</span>
+        <span style="font: 600 13px/1.55 'Nunito'; color: #4E6B58;">Création du SAVS — 42 adultes accompagnés à domicile.</span>
       </div>
-      <div style="display: flex; gap: 28px; padding: 24px 0; border-top: 1px solid rgba(200,150,62,0.35);">
-        <span style="font: 800 22px 'Archivo'; color: #C8963E; min-width: 80px;">2018</span>
-        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">Ouverture du SAJ — service d'accueil de jour de 15 places, ouvert sur le territoire.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <span style="font: 900 26px 'Nunito'; color: #2E7D5B;">2018</span>
+        <span style="font: 600 13px/1.55 'Nunito'; color: #4E6B58;">Ouverture du SAJ — 15 places, ouvert sur le territoire.</span>
       </div>
-      <div style="display: flex; gap: 28px; padding: 24px 0; border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35);">
-        <span style="font: 800 22px 'Archivo'; color: #C8963E; min-width: 80px;">Auj.</span>
-        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">L'EMP Henri Wallon rejoint l'association : plus de 100 personnes accompagnées, de l'enfance à l'âge adulte.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 26px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.3s;" style-hover="transform: translateY(-5px);">
+        <span style="font: 900 26px 'Nunito'; color: #2E7D5B;">Auj.</span>
+        <span style="font: 600 13px/1.55 'Nunito'; color: #4E6B58;">L'EMP Henri Wallon rejoint l'association : 100+ personnes accompagnées.</span>
       </div>
     </div>
   </div>
 
   <!-- ═══ GOUVERNANCE ═══ -->
-  <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.25); padding: 90px 56px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: grid; grid-template-columns: 1fr 1fr; gap: 72px;">
-    <div style="display: flex; flex-direction: column; gap: 18px;">
-      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">GOUVERNANCE</span>
-      <h2 style="font: 800 36px/1.15 'Archivo'; margin: 0; text-transform: uppercase;">Direction et conseil d'administration</h2>
-      <p style="font: 400 16px/1.7 'Public Sans'; color: #CFC5B0; margin: 0;">L'association est administrée par un conseil d'administration bénévole et dirigée par une équipe de direction commune aux établissements. Elle inscrit son action dans un CPOM et une démarche continue d'évaluation et de qualité.</p>
+  <div data-reveal style="padding: 80px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="background: #fff; border: 1px solid #EDE8DB; border-radius: 28px; padding: 44px; display: flex; flex-direction: column; gap: 14px;">
+      <span style="background: #FBEEDD; color: #E0873A; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px; align-self: flex-start;">Gouvernance</span>
+      <h2 style="font: 900 26px/1.2 'Nunito'; margin: 0;">Direction et conseil d'administration</h2>
+      <p style="font: 600 15px/1.7 'Nunito'; color: #4E6B58; margin: 0;">Un conseil d'administration bénévole et une équipe de direction commune aux établissements. L'action s'inscrit dans un CPOM et une démarche continue d'évaluation et de qualité.</p>
     </div>
-    <div style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); padding: 44px; display: flex; flex-direction: column; gap: 16px; align-self: start;">
-      <span style="font: 600 13px 'Archivo'; letter-spacing: 3px; color: #C8963E;">TRAVAIL EN RÉSEAU</span>
-      <p style="font: 400 16px/1.7 'Public Sans'; color: #CFC5B0; margin: 0;">ESAT, CMP, bailleurs, MDPH, institutions et associations partenaires : LEILA agit au sein d'un réseau territorial dense, et participe à la recherche participative CapDroits sur l'exercice des droits.</p>
-      <a href="Contact.dc.html" style="color: #C8963E; font: 700 14px 'Archivo'; letter-spacing: 1px;">Devenir partenaire →</a>
+    <div style="background: #fff; border: 1px solid #EDE8DB; border-radius: 28px; padding: 44px; display: flex; flex-direction: column; gap: 14px;">
+      <span style="background: #E7EEF8; color: #4A78B8; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px; align-self: flex-start;">Travail en réseau</span>
+      <h2 style="font: 900 26px/1.2 'Nunito'; margin: 0;">Partenaires et territoire</h2>
+      <p style="font: 600 15px/1.7 'Nunito'; color: #4E6B58; margin: 0;">ESAT, CMP, bailleurs, MDPH, institutions et associations partenaires : LEILA agit au sein d'un réseau territorial dense, et participe à la recherche participative CapDroits.</p>
+      <a href="Contact.dc.html" style="color: #4A78B8; font: 800 14px 'Nunito';">Devenir partenaire →</a>
     </div>
   </div>
 
   <!-- ═══ VALEURS ═══ -->
-  <div style="border-top: 1px solid rgba(200,150,62,0.25);">
-    <div data-reveal style="padding: 90px 56px 50px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px;">
-      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">NOS ENGAGEMENTS</span>
-      <h2 style="font: 800 40px/1.15 'Archivo'; margin: 0; text-transform: uppercase; max-width: 720px;">Des valeurs partagées entre tous nos services</h2>
+  <div data-reveal style="margin: 0 24px 40px; background: #EAF3EC; border-radius: 36px; padding: 60px 48px;">
+    <div style="text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; padding-bottom: 40px;">
+      <span style="background: #FCFAF4; color: #2E7D5B; font: 800 13px 'Nunito'; letter-spacing: 1px; padding: 8px 18px; border-radius: 999px;">Nos engagements</span>
+      <h2 style="font: 900 36px/1.15 'Nunito'; margin: 0;">Des valeurs partagées entre tous nos services</h2>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 48px; padding: 0 56px 100px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
-      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
-        <span style="font: 700 19px 'Archivo';">Dignité &amp; bienveillance</span>
-        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">La personne au cœur, dans le respect de ses choix et de son histoire.</span>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 900 17px 'Nunito';">Dignité &amp; bienveillance</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">La personne au cœur, dans le respect de ses choix et de son histoire.</span>
       </div>
-      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
-        <span style="font: 700 19px 'Archivo';">Autodétermination</span>
-        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Soutenir l'expression, la participation et les choix de chacun.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 900 17px 'Nunito';">Autodétermination</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">Soutenir l'expression, la participation et les choix de chacun.</span>
       </div>
-      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
-        <span style="font: 700 19px 'Archivo';">Inclusion</span>
-        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Tisser des liens avec le territoire et les acteurs du droit commun.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 900 17px 'Nunito';">Inclusion</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">Tisser des liens avec le territoire et les acteurs du droit commun.</span>
       </div>
-      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
-        <span style="font: 700 19px 'Archivo';">Formation continue</span>
-        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Une équipe qui se forme, se questionne et accueille des stagiaires.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 900 17px 'Nunito';">Formation continue</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">Une équipe qui se forme, se questionne et accueille des stagiaires.</span>
       </div>
-      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
-        <span style="font: 700 19px 'Archivo';">Travail en réseau</span>
-        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">ESAT, CMP, bailleurs, institutions et associations partenaires.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 900 17px 'Nunito';">Travail en réseau</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">ESAT, CMP, bailleurs, institutions et associations partenaires.</span>
       </div>
-      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
-        <span style="font: 700 19px 'Archivo';">Amélioration continue</span>
-        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Démarche qualité, CapDroits, CPOM, évaluations régulières.</span>
+      <div style="background: #FCFAF4; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 900 17px 'Nunito';">Amélioration continue</span>
+        <span style="font: 600 14px/1.6 'Nunito'; color: #4E6B58;">Démarche qualité, CapDroits, CPOM, évaluations régulières.</span>
       </div>
     </div>
   </div>
 
-  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+  <dc-import name="Footer" hint-size="100%,400px"></dc-import>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
