@@ -1,0 +1,330 @@
+/* ============================================================
+   leila.css — Surcouches multi-services & ergonomie
+   À charger APRÈS style.css. Ne modifie pas le design existant
+   mais ajoute les composants des pages association/SAJ/SAVS.
+   ============================================================ */
+
+/* ── Variables couleurs services ────────────────────── */
+:root {
+  --svc-foyer: #256880;
+  --svc-foyer-dark: #ffffff;
+  --svc-saj: #d9924a;
+  --svc-saj-dark: #b97331;
+  --svc-savs: #5b8c4a;
+  --svc-savs-dark: #406935;
+  --svc-emp: #9b6dc4;
+  --svc-emp-dark: #6e4690;
+  --svc-leila: #1d4f64;
+}
+
+/* ── Bandeau d'alerte ─────────────────────────────── */
+.alert-banner {
+  background: linear-gradient(90deg, #c25a5a, #d9924a);
+  color: white;
+  padding: .8rem 1rem;
+  text-align: center;
+  font-size: .95rem;
+  position: relative;
+  z-index: 50;
+}
+.alert-banner strong { font-weight: 700; }
+
+/* ── Header avec dropdowns ────────────────────────── */
+.header-asso .nav-asso { gap: .5rem; }
+
+.nav-dropdown { position: relative; }
+.nav-dropdown-btn {
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--text);
+  padding: .55rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background .2s, color .2s;
+}
+.nav-dropdown-btn:hover, .nav-dropdown.open .nav-dropdown-btn {
+  background: var(--bg-alt, #f4ede4);
+  color: var(--primary);
+}
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + .5rem);
+  left: 0;
+  min-width: 280px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.12);
+  padding: .8rem;
+  display: none;
+  z-index: 30;
+  border: 1px solid rgba(0,0,0,.06);
+}
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a {
+  display: block;
+  padding: .7rem .9rem;
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  transition: background .15s;
+}
+.nav-dropdown-menu a:hover { background: var(--bg-alt, #f4ede4); }
+.nav-dropdown-menu a strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: .15rem;
+}
+.nav-dropdown-menu a span {
+  font-size: .82rem;
+  color: var(--text-light);
+}
+
+/* Sous-menu services — design compact */
+.nav-services-menu { min-width: 300px; }
+.nav-service-link {
+  display: flex !important;
+  align-items: center;
+  gap: .65rem;
+  padding: .5rem .9rem;
+}
+.nav-service-link .nav-service-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  font-size: .9rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.nav-service-link[data-svc="foyer"] .nav-service-icon { background: rgba(37,104,128,.12); }
+.nav-service-link[data-svc="saj"]   .nav-service-icon { background: rgba(217,146,74,.15); }
+.nav-service-link[data-svc="savs"]  .nav-service-icon { background: rgba(91,140,74,.12); }
+.nav-service-link[data-svc="emp"]   .nav-service-icon { background: rgba(155,109,196,.12); }
+.nav-service-link .nav-service-text { flex: 1; line-height: 1.3; }
+.nav-service-link strong { display: block; font-size: .88rem; font-weight: 600; }
+.nav-service-link .nav-service-text span { font-size: .76rem; color: var(--text-light); }
+.nav-service-link[data-svc="foyer"]:hover { background: rgba(37,104,128,.06); }
+.nav-service-link[data-svc="saj"]:hover   { background: rgba(217,146,74,.08); }
+.nav-service-link[data-svc="savs"]:hover  { background: rgba(91,140,74,.08); }
+.nav-service-link[data-svc="emp"]:hover   { background: rgba(155,109,196,.08); }
+
+/* Adaptations mobile : tous les dropdowns deviennent verticaux */
+@media (max-width: 980px) {
+  .nav-dropdown-menu {
+    position: static;
+    box-shadow: none;
+    padding: 0 0 0 1rem;
+    border: none;
+    background: transparent;
+  }
+  .nav-dropdown.open .nav-dropdown-menu { display: block; }
+}
+
+/* ── Hero Association (variante) ──────────────────── */
+.hero-asso h1 .accent { color: var(--svc-leila); font-style: italic; }
+
+/* ── Grille des 3 services ─────────────────────────── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.6rem;
+  margin-top: 2rem;
+}
+.service-card {
+  background: white;
+  border-radius: 18px;
+  padding: 2rem 1.8rem;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+  border-top: 5px solid var(--svc-leila);
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  transition: transform .25s, box-shadow .25s;
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.10); }
+.service-foyer { border-top-color: var(--svc-foyer); }
+.service-saj   { border-top-color: var(--svc-saj); }
+.service-savs  { border-top-color: var(--svc-savs); }
+.service-emp   { border-top-color: var(--svc-emp); }
+
+.service-card-icon {
+  font-size: 2.4rem;
+  margin-bottom: .2rem;
+}
+.service-card-tag {
+  display: inline-block;
+  align-self: flex-start;
+  background: rgba(0,0,0,.05);
+  color: var(--text-light);
+  padding: .25rem .8rem;
+  border-radius: 12px;
+  font-size: .78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.service-foyer .service-card-tag { background: rgba(37,104,128,.10);  color: var(--svc-foyer); }
+.service-saj   .service-card-tag { background: rgba(217,146,74,.12);  color: var(--svc-saj-dark); }
+.service-savs  .service-card-tag { background: rgba(91,140,74,.12);   color: var(--svc-savs-dark); }
+.service-emp   .service-card-tag { background: rgba(155,109,196,.12); color: var(--svc-emp-dark); }
+
+.service-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  margin: .3rem 0 .1rem;
+}
+.service-card-meta {
+  font-size: .9rem;
+  color: var(--text-light);
+}
+.service-card-list {
+  list-style: none;
+  padding: 0;
+  margin: .8rem 0 1rem;
+}
+.service-card-list li {
+  padding: .3rem 0 .3rem 1.5rem;
+  position: relative;
+  font-size: .92rem;
+}
+.service-card-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--svc-leila);
+  font-weight: 700;
+}
+.service-foyer .service-card-list li::before { color: var(--svc-foyer); }
+.service-saj   .service-card-list li::before { color: var(--svc-saj-dark); }
+.service-savs  .service-card-list li::before { color: var(--svc-savs-dark); }
+.service-emp   .service-card-list li::before { color: var(--svc-emp-dark); }
+.service-card .btn { margin-top: auto; align-self: flex-start; }
+
+/* Bannière EMP */
+.service-emp-banner {
+  margin-top: 2.5rem;
+  background: linear-gradient(135deg, var(--svc-leila), #2a6a85);
+  color: white;
+  border-radius: 18px;
+  padding: 1.8rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.service-emp-banner h3 { font-family: 'Playfair Display', serif; margin: .3rem 0 .4rem; color:white; }
+.service-emp-banner .eyebrow { color: rgba(255,255,255,.85); }
+.service-emp-banner p { color: rgba(255,255,255,.92); }
+.service-emp-icon { font-size: 4rem; flex-shrink: 0; }
+@media (max-width: 600px) {
+  .service-emp-banner { flex-direction: column; text-align: center; }
+}
+
+/* ── Badges service (sur cartes news/témoignages) ──── */
+.news-service-badge {
+  position: absolute;
+  bottom: .8rem;
+  left: .8rem;
+  background: rgba(0,0,0,.7);
+  color: white;
+  padding: .25rem .7rem;
+  border-radius: 12px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.news-service-badge.svc-foyer { background: var(--svc-foyer); }
+.news-service-badge.svc-saj   { background: var(--svc-saj); }
+.news-service-badge.svc-savs  { background: var(--svc-savs); }
+.news-service-badge.svc-emp   { background: var(--svc-emp); }
+
+.svc-foyer { color: var(--svc-foyer); }
+.svc-saj   { color: var(--svc-saj-dark); }
+.svc-savs  { color: var(--svc-savs-dark); }
+.svc-emp   { color: var(--svc-emp-dark); }
+
+/* ── Bandeau service (en-tête des pages SAJ/SAVS) ── */
+.service-bar {
+  background: var(--svc-leila);
+  color: rgb(255, 255, 255);
+  padding: .6rem 0;
+  font-size: .9rem;
+}
+.service-bar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.service-bar a { color: white; text-decoration: underline; }
+.service-bar.svc-foyer { background: var(--svc-foyer); }
+.service-bar.svc-saj   { background: var(--svc-saj); }
+.service-bar.svc-savs  { background: var(--svc-savs); }
+.service-bar.svc-emp   { background: var(--svc-emp); }
+
+.service-switcher {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.service-switcher a {
+  background: rgba(255,255,255,.18);
+  padding: .25rem .8rem;
+  border-radius: 999px;
+  text-decoration: none !important;
+  font-weight: 500;
+  transition: background .15s;
+}
+.service-switcher a:hover { background: rgba(255,255,255,.32); }
+.service-switcher a.active { background: white; color: var(--text); }
+
+/* ── Page de service hero (variantes couleur) ──── */
+.page-header.svc-saj  { background: linear-gradient(135deg, #fff5e8, #fbe5cc); }
+.page-header.svc-savs { background: linear-gradient(135deg, #ecf3e8, #d4e6cc); }
+.page-header.svc-emp  { background: linear-gradient(135deg, #f3ebfa, #e2d0f0); }
+
+/* ── Mode sombre ──────────────────────────────────── */
+:root[data-theme="dark"] {
+  --bg: #1a1f24;
+  --bg-alt: #232a31;
+  --text: #e8eaed;
+  --text-light: #b0b6bc;
+  --text-faint: #8a8f95;
+  --border-soft: #353c44;
+}
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] .section,
+:root[data-theme="dark"] .hero { background: var(--bg); color: var(--text); }
+:root[data-theme="dark"] .section-alt { background: #1f262d; }
+:root[data-theme="dark"] .header { background: rgba(26,31,36,.95); border-bottom: 1px solid #2a3239; }
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .news-card,
+:root[data-theme="dark"] .service-card,
+:root[data-theme="dark"] .testimonial,
+:root[data-theme="dark"] .nav-dropdown-menu,
+:root[data-theme="dark"] .visual-card { background: #232a31; color: var(--text); }
+:root[data-theme="dark"] .nav-dropdown-btn { color: var(--text); }
+:root[data-theme="dark"] .nav a { color: var(--text); }
+
+/* ── Floating contact button ──────────────────────── */
+.floating-contact {
+  position: fixed;
+  bottom: 1.4rem;
+  right: 1.4rem;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--svc-leila);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,.2);
+  text-decoration: none;
+  z-index: 40;
+  transition: transform .2s;
+}
+.floating-contact:hover { transform: scale(1.08); }
+@media print { .floating-contact { display: none; } }

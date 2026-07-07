@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foyer Les Trois Rivières — Hébergement · Association LEILA · Stains</title>
+<meta name="description" content="Le Foyer d'hébergement Les Trois Rivières accueille 45 adultes en situation de handicap travaillant en ESAT, à Stains (93240).">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/leila.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  .hero.svc-foyer-hero { background: linear-gradient(135deg, #e6f2f6, #c4dde6); }
+  .hero.svc-foyer-hero h1 .accent { color: var(--svc-foyer-dark, #1d4f64); font-style: italic; }
+  /* ── Auto-contraste : si une image de fond est appliquée via l'admin,
+       le texte passe en blanc et un voile sombre est ajouté pour la lisibilité.
+       Ce comportement se déclenche dès que le script section-styles.js pose
+       l'attribut data-section-styled="1" + qu'une image est définie. */
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] { color: white; }
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] h1,
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] .hero-lead,
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] .hero-tag,
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] .hero-stats strong,
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] .hero-stats span {
+    color: white;
+    text-shadow: 0 2px 6px rgba(0,0,0,.65), 0 0 18px rgba(0,0,0,.4);
+  }
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] h1 .accent { color: #ffd9a6; }
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] .hero-tag {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.35);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] .hero-stats > div {
+    background: rgba(0,0,0,0.35);
+    padding: .8rem 1rem;
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] .btn-ghost {
+    color: white;
+    border-color: rgba(255,255,255,0.7);
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .hero.svc-foyer-hero[data-section-styled="1"][style*="url("] .btn-ghost:hover { background: rgba(0,0,0,0.45); }
+  .btn-svc { background: var(--svc-foyer); color: white; }
+  .btn-svc:hover { background: var(--svc-foyer-dark, #1d4f64); }
+  .hebergement-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .hebergement-card { background: white; border-radius: 12px; padding: 1.4rem; box-shadow: 0 4px 14px rgba(0,0,0,.05); border-left: 4px solid var(--svc-foyer); transition: transform .2s; }
+  .hebergement-card:hover { transform: translateY(-3px); }
+  .hebergement-card h4 { font-family: 'Inter', sans-serif; font-size: 1rem; margin: .4rem 0 .3rem; color: var(--svc-foyer-dark, #1d4f64); }
+  .hebergement-card p { font-size: .9rem; color: var(--text-light); margin: 0; }
+  .hebergement-icon { font-size: 1.6rem; }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+<div class="service-bar svc-foyer">
+  <div class="container">
+    <span>🏡 Vous consultez le <strong>Foyer Les Trois Rivières</strong> · <a href="index.html">Retour Association LEILA</a></span>
+    <div class="service-switcher">
+      <a href="foyer-accueil.html" class="active">Foyer</a>
+      <a href="saj-accueil.html">SAJ</a>
+      <a href="savs-accueil.html">SAVS</a>
+      <a href="emp-accueil.html">EMP</a>
+    </div>
+  </div>
+</div>
+
+<header class="header" role="banner">
+  <div class="container nav-container">
+    <a href="index.html" class="logo" aria-label="Association LEILA — accueil">
+      <span class="logo-icon" aria-hidden="true">🏡</span>
+      <div>
+        <span class="logo-name">Les Trois Rivières — Foyer</span>
+        <span class="logo-sub">Association LEILA</span>
+      </div>
+    </a>
+    <nav class="nav" id="nav" aria-label="Navigation principale">
+      <a href="foyer-accueil.html" class="active" aria-current="page">Accueil Foyer</a>
+      <a href="#presentation">Présentation</a>
+      <a href="#hebergement">Hébergement</a>
+      <a href="#equipe">Équipe</a>
+      <a href="#actualites">Actualités</a>
+      <a href="#agenda">Agenda</a>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main-content">
+
+<!-- Hero Foyer -->
+<section class="hero svc-foyer-hero" id="hero">
+  <div class="container hero-inner">
+    <div class="hero-tag">Depuis 2005 · 20 ans d'engagement · Foyer d'hébergement</div>
+    <h1>Un foyer où chacun trouve <span class="accent">sa place</span>.</h1>
+    <p class="hero-lead">
+      Le Foyer Les Trois Rivières accueille 45 adultes en situation de handicap travaillant
+      en ESAT, à Stains. Cadre de vie sécurisé, bienveillant et structurant, accompagnement
+      éducatif global 7 jours sur 7.
+    </p>
+    <div class="hero-actions">
+      <a href="#presentation" class="btn btn-svc">Découvrir le Foyer</a>
+      <a href="#contact" class="btn btn-ghost">Nous contacter</a>
+      <a href="candidater.html?service=foyer" class="btn btn-ghost" style="border-color:var(--svc-foyer);color:var(--svc-foyer-dark,#ffffff);">✏️ Candidater à un stage</a>
+    </div>
+    <div class="hero-stats">
+      <div><strong>45</strong><span>places</span></div>
+      <div><strong>98,5 %</strong><span>taux d'occupation</span></div>
+      <div><strong>365j/365</strong><span>d'ouverture</span></div>
+      <div><strong>2005</strong><span>ouverture</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Présentation -->
+<section class="section" id="presentation">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Notre mission</span>
+      <h2>Accompagner avec dignité, soutenir l'autonomie</h2>
+      <p class="lead">
+        Le Foyer accueille des adultes (hommes et femmes, à partir de 18 ans) présentant une
+        déficience intellectuelle et/ou des troubles psychiques, titulaires d'une RQTH et engagés
+        dans une activité professionnelle en ESAT, entreprise adaptée ou milieu ordinaire.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="card">
+        <div class="card-icon">🏡</div>
+        <h3>Un lieu de vie</h3>
+        <p>30 chambres individuelles meublées et 15 studios équipés dans un cadre résidentiel à Stains, intégré au cœur de la cité.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">🤝</div>
+        <h3>Un accompagnement individualisé</h3>
+        <p>Une équipe pluridisciplinaire dédiée à l'épanouissement, à l'autonomie et à l'inclusion sociale et professionnelle de chacun.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">🌱</div>
+        <h3>Un parcours évolutif</h3>
+        <p>Du logement collectif vers le studio, jusqu'à un logement extérieur lorsque c'est possible — grâce à des stages progressifs.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Public accueilli -->
+<section class="section section-alt" id="public-accueilli">
+  <div class="container two-col">
+    <div class="two-col-text">
+      <span class="eyebrow">Public accueilli</span>
+      <h2>45 adultes du Nord-Ouest de la Seine-Saint-Denis</h2>
+      <p>
+        Le Foyer accueille des adultes reconnus en situation de handicap, résidant prioritairement
+        dans le département du 93. L'accueil est subordonné à une activité professionnelle en ESAT,
+        entreprise adaptée ou milieu ordinaire.
+      </p>
+      <ul class="check-list">
+        <li>Capacité : 45 places (30 chambres + 15 studios)</li>
+        <li>Service éducatif : 7h–22h, 7j/7</li>
+        <li>Veilleur de nuit + astreinte éducative</li>
+        <li>Projet personnalisé pour chaque résident</li>
+        <li>Liens maintenus avec familles et tuteurs</li>
+      </ul>
+    </div>
+    <div class="two-col-visual" style="grid-template-columns: 1fr;">
+      <div class="visual-card" style="transform:none; padding:2rem; background:white;">
+        <h3 style="font-family:'Inter',sans-serif; color:var(--svc-foyer-dark,#1d4f64); margin-bottom:1rem;">Projet d'établissement</h3>
+        <p style="text-align:left;">
+          L'accompagnement éducatif est flexible, attentif aux besoins spécifiques et aux aspirations
+          de chaque résident. Notre équipe garantit un environnement convivial, structurant et sécurisé.
+        </p>
+        <p style="text-align:left; margin-top:.8rem;">
+          Les 5 axes : épanouissement personnel, maintien de l'autonomie, valorisation des compétences,
+          développement des liens sociaux, inclusion sociale et professionnelle.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Hébergement -->
+<section class="section" id="hebergement">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">La vie au Foyer</span>
+      <h2>Un cadre de vie structurant et bienveillant</h2>
+      <p class="lead">Le Foyer offre deux types de logement et une vie collective riche, rythmée par des activités et des projets partagés.</p>
+    </div>
+    <div class="hebergement-grid">
+      <div class="hebergement-card"><span class="hebergement-icon">🛏</span><h4>Chambres individuelles</h4><p>30 chambres meublées avec espace personnel, au sein de la résidence collective.</p></div>
+      <div class="hebergement-card"><span class="hebergement-icon">🏠</span><h4>Studios équipés</h4><p>15 studios avec cuisine, pour favoriser l'autonomie dans un cadre semi-autonome.</p></div>
+      <div class="hebergement-card"><span class="hebergement-icon">🍳</span><h4>Cuisine pédagogique</h4><p>Espace rénové pour l'apprentissage autour des repas, de l'hygiène alimentaire et du quotidien.</p></div>
+      <div class="hebergement-card"><span class="hebergement-icon">🎨</span><h4>Ateliers créatifs</h4><p>Peinture, danse, musique, couture inter-services — créativité et expression au quotidien.</p></div>
+      <div class="hebergement-card"><span class="hebergement-icon">🏊</span><h4>Activités sportives</h4><p>Piscine, sport collectif, sorties — bien-être physique et socialisation par le sport.</p></div>
+      <div class="hebergement-card"><span class="hebergement-icon">🌿</span><h4>Bien-être & sorties</h4><p>Sorties culturelles, séjours, transferts éducatifs — ouverture sur le monde extérieur.</p></div>
+      <div class="hebergement-card"><span class="hebergement-icon">🌙</span><h4>Présence 24h/24</h4><p>Veilleur de nuit et astreinte éducative : une équipe disponible tous les jours de l'année.</p></div>
+      <div class="hebergement-card"><span class="hebergement-icon">📋</span><h4>Projet personnalisé</h4><p>Chaque résident co-construit son projet de vie avec l'équipe éducative et ses proches.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Équipe (dynamique) -->
+<section class="section section-alt" id="equipe">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Notre équipe</span>
+      <h2>Une équipe pluridisciplinaire</h2>
+      <p class="lead">L'équipe du Foyer travaille en étroite collaboration avec le SAJ, le SAVS et les services généraux des Trois Rivières.</p>
+    </div>
+    <div class="team-grid" id="team-list" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Galerie -->
+<section class="section" id="galerie">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Galerie</span>
+      <h2>Le Foyer en images</h2>
+    </div>
+    <div class="gallery-grid" id="gallery-list" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Actualités -->
+<section class="section section-alt" id="actualites">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Actualités</span>
+      <h2>Les dernières nouvelles du Foyer</h2>
+    </div>
+    <div class="news-grid" id="news-list" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Agenda -->
+<section class="section" id="agenda">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Agenda</span>
+      <h2>Prochains événements</h2>
+    </div>
+    <div id="agenda-content" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section section-alt" id="faq">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Questions fréquentes</span>
+      <h2>Vos questions, nos réponses</h2>
+    </div>
+    <div class="faq-list" id="faq-list" style="max-width:860px; margin:0 auto;"></div>
+  </div>
+</section>
+
+<!-- Sections personnalisées (admin) -->
+<div id="custom-sections-slot"></div>
+
+<!-- Contact -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Nous contacter</span>
+      <h2>Contacter le Foyer</h2>
+    </div>
+    <div style="max-width:760px; margin:2rem auto 0; background:white; padding:2.5rem; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,.06); border-top:5px solid var(--svc-foyer);">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.5rem;">
+        <div><strong style="color:var(--svc-foyer-dark,#1d4f64);">📍 Adresse</strong><p>Mail des Trois Rivières<br>93240 STAINS</p></div>
+        <div><strong style="color:var(--svc-foyer-dark,#1d4f64);">📞 Téléphone</strong><p><a href="tel:0149462440">01 49 46 24 40</a></p></div>
+        <div><strong style="color:var(--svc-foyer-dark,#1d4f64);">📧 Email</strong><p><a href="mailto:residence@asso-leila.org">residence@asso-leila.org</a></p></div>
+        <div><strong style="color:var(--svc-foyer-dark,#1d4f64);">🕐 Horaires</strong><p id="hours-content">7j/7 · Ouvert 365 jours par an</p></div>
+      </div>
+      <div style="text-align:center; margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="contact.html" class="btn btn-svc">Formulaire de contact</a>
+        <a href="admission.html?service=foyer" class="btn btn-ghost">Demande d'admission</a>
+        <a href="candidater.html?service=foyer" class="btn btn-ghost">Candidater à un stage</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-logo"><span>🏡</span><strong>Foyer Les Trois Rivières</strong></div>
+      <p>Foyer d'hébergement pour adultes en situation de handicap travaillant en ESAT — Association LEILA depuis 2005.</p>
+    </div>
+    <div><h4>Adresse</h4><p>Mail des Trois Rivières<br>93240 STAINS</p></div>
+    <div><h4>Contact</h4><p>01 49 46 24 40<br>residence@asso-leila.org</p></div>
+    <div>
+      <h4>Liens</h4>
+      <ul class="footer-links">
+        <li><a href="index.html">Association LEILA</a></li>
+        <li><a href="saj-accueil.html">SAJ</a></li>
+        <li><a href="savs-accueil.html">SAVS</a></li>
+        <li><a href="emp-accueil.html">EMP Henri Wallon</a></li>
+        <li><a href="documents.html">Documents</a></li>
+        <li><a href="admission.html">Demande d'admission</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© 2026 Association LEILA</p>
+      <ul class="footer-legal">
+        <li><a href="page.html?slug=mentions-legales">Mentions légales</a></li>
+        <li><a href="page.html?slug=accessibilite">Accessibilité</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="js/db.js"></script>
+<script src="js/section-styles.js"></script>
+<script src="js/branding.js"></script>
+<script src="js/custom-sections.js"></script>
+<script src="js/script.js"></script>
+<script src="js/leila.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (typeof FoyerDB === 'undefined') return;
+  const SVC = 'foyer';
+
+  const escapeHtml = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const fmtDate = iso => { try { return new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); } catch(_) { return iso; }};
+  const nl2br = s => escapeHtml(s).replace(/\n/g,'<br>');
+
+  function renderTeam() {
+    const grid = document.getElementById('team-list');
+    if (!grid) return;
+    const items = FoyerDB.getTeam({ published: true, service: SVC });
+    if (!items.length) { grid.innerHTML = '<p>Composition de l\'équipe en cours de mise à jour.</p>'; return; }
+    grid.innerHTML = items.map(t => `
+      <article class="team-card">
+        <div class="team-avatar">${escapeHtml(t.icon||'👥')}</div>
+        ${t.count?`<span class="team-count">${escapeHtml(t.count)}</span>`:''}
+        <div class="team-role">${escapeHtml(t.role||'')}</div>
+        ${t.description?`<p>${escapeHtml(t.description)}</p>`:''}
+      </article>`).join('');
+  }
+
+  function renderGallery() {
+    const grid = document.getElementById('gallery-list');
+    if (!grid) return;
+    const items = FoyerDB.getPhotos({ published: true, service: SVC });
+    if (!items.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;">Aucune photo publiée.</p>'; return; }
+    grid.innerHTML = items.map((p, i) => {
+      const cls = 'gallery-item' + (p.size==='large'||(i===0&&!p.size)?' gallery-large':'') + (p.size==='tall'?' gallery-tall':'');
+      const src = p.src || ('https://picsum.photos/seed/'+(p.id||i)+'/600/600');
+      return `<figure class="${cls}">
+        <img src="${escapeHtml(src)}" alt="${escapeHtml(p.alt||p.title||'')}" loading="lazy">
+        <figcaption>${p.tag?`<span class="gallery-tag">${escapeHtml(p.tag)}</span>`:''}${p.title?`<h3>${escapeHtml(p.title)}</h3>`:''}${p.description?`<p>${escapeHtml(p.description)}</p>`:''}</figcaption>
+      </figure>`;
+    }).join('');
+  }
+
+  function renderNews() {
+    const grid = document.getElementById('news-list');
+    if (!grid) return;
+    const items = FoyerDB.getArticles({ published: true, service: SVC }).slice(0, 3);
+    if (!items.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;">Aucune actualité.</p>'; return; }
+    grid.innerHTML = items.map(a => `
+      <article class="news-card">
+        <div class="news-image">
+          <img src="${escapeHtml(a.img||'https://picsum.photos/seed/'+a.id+'/600/400')}" alt="${escapeHtml(a.title)}" loading="lazy">
+          <span class="news-category">${escapeHtml(a.catLabel||a.cat||'')}</span>
+        </div>
+        <div class="news-body">
+          <div class="news-meta"><time datetime="${escapeHtml(a.date||'')}">${escapeHtml(fmtDate(a.date))}</time></div>
+          <h3>${escapeHtml(a.title)}</h3>
+          <p>${escapeHtml(a.excerpt||'')}</p>
+          <a href="actualites.html#${escapeHtml(a.id)}" class="news-link">Lire la suite →</a>
+        </div>
+      </article>`).join('');
+  }
+
+  const MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  function renderAgenda() {
+    const root = document.getElementById('agenda-content');
+    if (!root) return;
+    const all = FoyerDB.getEvents({ published: true, service: SVC });
+    const now = new Date(); now.setHours(0,0,0,0);
+    const items = all.filter(e=>{const d=new Date(e.date); return !isNaN(d.getTime()) && d>=now;});
+    if (!items.length) { root.innerHTML = '<p style="text-align:center;">Aucun événement à venir.</p>'; return; }
+    root.innerHTML = '<div style="display:grid;gap:.8rem;max-width:760px;margin:0 auto;">' + items.slice(0,5).map(e=>{
+      const d=new Date(e.date);
+      return `<div style="background:white;padding:1.2rem 1.5rem;border-radius:12px;border-left:4px solid var(--svc-foyer);box-shadow:0 4px 14px rgba(0,0,0,.05);">
+        <strong style="color:var(--svc-foyer-dark,#1d4f64);">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}${e.time?' · '+escapeHtml(e.time):''}</strong>
+        <h3 style="margin:.3rem 0;font-family:'Inter',sans-serif;font-size:1.1rem;">${escapeHtml(e.title||'')}</h3>
+        ${e.location?`<p style="margin:.2rem 0;font-size:.9rem;color:var(--text-light);">📍 ${escapeHtml(e.location)}</p>`:''}
+        ${e.description?`<p style="margin:.4rem 0 0;font-size:.9rem;">${escapeHtml(e.description)}</p>`:''}
+      </div>`;
+    }).join('') + '</div>';
+  }
+
+  function renderFaq() {
+    const list = document.getElementById('faq-list');
+    if (!list) return;
+    const items = FoyerDB.getFaq({ published: true, service: SVC });
+    if (!items.length) { list.innerHTML = '<p style="text-align:center;">Aucune question pour le moment.</p>'; return; }
+    list.innerHTML = items.map(f => `
+      <div class="faq-item" style="border:1px solid #e5e0d6;border-radius:14px;margin-bottom:.8rem;background:white;">
+        <button class="faq-question" type="button" aria-expanded="false" style="width:100%;text-align:left;background:none;border:none;padding:1.2rem 1.4rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;gap:1rem;font-size:1rem;">
+          <span>${escapeHtml(f.question||'')}</span><span aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-answer" style="max-height:0;opacity:0;overflow:hidden;transition:max-height .3s,opacity .3s;padding:0 1.4rem;">
+          <p style="padding-bottom:1.2rem;color:var(--text-light);">${nl2br(f.answer||'')}</p>
+        </div>
+      </div>`).join('');
+    list.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const ans  = item.querySelector('.faq-answer');
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !open);
+        ans.style.maxHeight = open ? '0' : ans.scrollHeight+'px';
+        ans.style.opacity   = open ? '0' : '1';
+      });
+    });
+  }
+
+  function renderHours() {
+    const s = FoyerDB.getSettings(SVC);
+    const el = document.getElementById('hours-content');
+    if (!el || !s || !s.hours) return;
+    const lines = [s.hours.weekday, s.hours.weekend, s.hours.notes].filter(Boolean);
+    if (lines.length) el.innerHTML = lines.map(escapeHtml).join('<br>');
+  }
+
+  function applyPageContent() {
+    const s  = FoyerDB.getSettings(SVC);
+    if (!s) return;
+    const pc = s.pageContent || {};
+    const set = (sel, val) => { if (!val) return; const el = document.querySelector(sel); if (el) el.textContent = val; };
+    set('.hero-tag',           pc.heroTag);
+    set('.hero h1',            pc.heroTitle);
+    set('.hero-lead',          pc.heroLead);
+    set('#presentation h2',    pc.missionTitle);
+    set('#presentation .lead', pc.missionLead);
+    // Stats héro
+    if (s.heroStats && s.heroStats.length) {
+      document.querySelectorAll('.hero-stats > div').forEach((div, i) => {
+        const stat = s.heroStats[i];
+        if (!stat) return;
+        const strong = div.querySelector('strong');
+        const span   = div.querySelector('span');
+        if (strong && stat.value) strong.textContent = stat.value;
+        if (span   && stat.label) span.textContent   = stat.label;
+      });
+    }
+  }
+
+  function renderCustomSections() {
+    if (window.LeilaCustomSections && typeof window.LeilaCustomSections.render === 'function') {
+      window.LeilaCustomSections.render(SVC);
+    }
+  }
+  function renderAll() { applyPageContent(); renderTeam(); renderGallery(); renderNews(); renderAgenda(); renderFaq(); renderHours(); renderCustomSections(); }
+  renderAll();
+
+  window.addEventListener('storage', (e) => {
+    if ([FoyerDB.KEYS.team,FoyerDB.KEYS.photos,FoyerDB.KEYS.articles,FoyerDB.KEYS.events,FoyerDB.KEYS.faq,FoyerDB.KEYS.settings].includes(e.key)) renderAll();
+  });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) renderAll(); });
+  window.addEventListener('focus', renderAll);
+})();
+</script>
+</body>
+</html>

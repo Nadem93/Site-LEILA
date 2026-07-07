@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAVS — Service d'Accompagnement à la Vie Sociale · Stains</title>
+<meta name="description" content="Le SAVS accompagne 42 adultes en situation de handicap psychique et/ou mental vivant à domicile, à Stains.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/leila.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  .hero.svc-savs { background: linear-gradient(135deg, #ecf3e8, #d4e6cc); }
+  .hero.svc-savs h1 .accent { color: var(--svc-savs-dark); font-style: italic; }
+  /* Auto-contraste pour image admin */
+  .hero.svc-savs[data-section-styled="1"][style*="url("] { color: white; }
+  .hero.svc-savs[data-section-styled="1"][style*="url("] h1,
+  .hero.svc-savs[data-section-styled="1"][style*="url("] .hero-lead,
+  .hero.svc-savs[data-section-styled="1"][style*="url("] .hero-tag,
+  .hero.svc-savs[data-section-styled="1"][style*="url("] .hero-stats strong,
+  .hero.svc-savs[data-section-styled="1"][style*="url("] .hero-stats span { color: white; }
+  .hero.svc-savs[data-section-styled="1"][style*="url("] h1 .accent { color: #ffd9a6; }
+  .hero.svc-savs[data-section-styled="1"][style*="url("] .hero-tag { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); }
+  .hero.svc-savs[data-section-styled="1"][style*="url("] .btn-ghost { color: white; border-color: rgba(255,255,255,0.6); }
+  .btn-svc { background: var(--svc-savs); color: white; }
+  .btn-svc:hover { background: var(--svc-savs-dark); }
+  .accomp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .accomp-card { background: white; border-radius: 12px; padding: 1.4rem; box-shadow: 0 4px 14px rgba(0,0,0,.05); border-left: 4px solid var(--svc-savs); transition: transform .2s; }
+  .accomp-card:hover { transform: translateY(-3px); }
+  .accomp-card h4 { font-family: 'Inter', sans-serif; font-size: 1rem; margin: .3rem 0; color: var(--svc-savs-dark); }
+  .accomp-card p { font-size: .9rem; color: var(--text-light); margin: 0; }
+  .accomp-icon { font-size: 1.5rem; }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+<div class="service-bar svc-savs">
+  <div class="container">
+    <span>🤝 Vous consultez le <strong>SAVS</strong> · <a href="index.html">Retour Association LEILA</a></span>
+    <div class="service-switcher">
+      <a href="foyer-accueil.html">Foyer</a>
+      <a href="saj-accueil.html">SAJ</a>
+      <a href="savs-accueil.html" class="active">SAVS</a>
+      <a href="emp-accueil.html">EMP</a>
+    </div>
+  </div>
+</div>
+
+<header class="header" role="banner">
+  <div class="container nav-container">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🤝</span>
+      <div>
+        <span class="logo-name">SAVS</span>
+        <span class="logo-sub">Association LEILA</span>
+      </div>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="savs-accueil.html" class="active" aria-current="page">Accueil SAVS</a>
+      <a href="#presentation">Présentation</a>
+      <a href="#accompagnement">Accompagnement</a>
+      <a href="#equipe">Équipe</a>
+      <a href="#actualites">Actualités</a>
+      <a href="#agenda">Agenda</a>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main-content">
+
+<!-- Hero -->
+<section class="hero svc-savs" id="hero">
+  <div class="container hero-inner">
+    <div class="hero-tag">Depuis janvier 2016 · Service d'Accompagnement à la Vie Sociale</div>
+    <h1>Accompagner vers <span class="accent">l'autonomie</span> et l'inclusion sociale.</h1>
+    <p class="hero-lead">
+      Le SAVS accompagne 42 adultes en situation de handicap psychique et/ou mental
+      vivant à domicile : visites, entretiens, démarches, temps collectifs, accompagnement à la parentalité.
+      Une approche horizontale qui place la personne au cœur du projet.
+    </p>
+    <div class="hero-actions">
+      <a href="#presentation" class="btn btn-svc">Découvrir le SAVS</a>
+      <a href="#contact" class="btn btn-ghost">Nous contacter</a>
+      <a href="candidater.html?service=savs" class="btn btn-ghost" style="border-color:var(--svc-savs);color:var(--svc-savs-dark);">✏️ Candidater à un stage</a>
+    </div>
+    <div class="hero-stats">
+      <div><strong>42</strong><span>places</span></div>
+      <div><strong>57</strong><span>personnes accompagnées en 2024</span></div>
+      <div><strong>3</strong><span>logements en sous-location</span></div>
+      <div><strong>2016</strong><span>ouverture</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Présentation -->
+<section class="section" id="presentation">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Notre mission</span>
+      <h2>Favoriser l'autonomie par des actions individuelles et collectives</h2>
+      <p class="lead">
+        Le SAVS a pour mission de favoriser l'autonomie et l'insertion sociale des personnes
+        adultes en situation de handicap psychique et/ou mental, par le biais d'actions individuelles
+        et collectives, d'accueil et d'accompagnement social, pluridimensionnelles et personnalisées.
+      </p>
+      <p class="lead">
+        Le SAVS assume également un rôle <strong>d'appui et de ressources</strong> sur le territoire
+        auprès des acteurs du droit commun, des partenaires et des futurs travailleurs sociaux en formation.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="card">
+        <div class="card-icon">🏠</div>
+        <h3>Visites à domicile</h3>
+        <p>Un accompagnement au plus près de la réalité quotidienne, dans le respect de l'intimité de chacun.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">🗣</div>
+        <h3>Entretiens individualisés</h3>
+        <p>Espace d'écoute et de dialogue pour construire ensemble le projet personnalisé.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">👥</div>
+        <h3>Temps collectifs</h3>
+        <p>Quoi de neuf, ateliers, sorties, séjours : se rencontrer dans un cadre convivial et sécurisant.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Modalités d'accompagnement -->
+<section class="section section-alt" id="accompagnement">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Modalités</span>
+      <h2>5 modalités d'accompagnement</h2>
+      <p class="lead">L'accompagnement s'adapte à chaque situation, dans une logique de continuité et de cohérence.</p>
+    </div>
+    <div class="accomp-grid">
+      <div class="accomp-card"><span class="accomp-icon">🏡</span><h4>Visites à domicile</h4><p>Accompagnement dans le lieu de vie de la personne.</p></div>
+      <div class="accomp-card"><span class="accomp-icon">💬</span><h4>Entretiens individualisés</h4><p>Échanges au SAVS ou en visioconférence.</p></div>
+      <div class="accomp-card"><span class="accomp-icon">🚶</span><h4>Accompagnements extérieurs</h4><p>Démarches sociales, médicales, administratives.</p></div>
+      <div class="accomp-card"><span class="accomp-icon">📞</span><h4>Échanges téléphoniques</h4><p>Soutien et accompagnement à distance.</p></div>
+      <div class="accomp-card"><span class="accomp-icon">🧩</span><h4>Coordination</h4><p>Liens avec soignants, mandataires, aidants familiaux, services sociaux.</p></div>
+      <div class="accomp-card"><span class="accomp-icon">🎉</span><h4>Temps collectifs</h4><p>Atelier mouvement, écriture, gravure, cinéma, jardin, séjours.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Accompagnement parentalité + logement -->
+<section class="section" id="parentalite-logement">
+  <div class="container two-col">
+    <div class="two-col-text">
+      <span class="eyebrow">Spécificités</span>
+      <h2>Parentalité et accès au logement</h2>
+      <p>
+        Le SAVS propose un <strong>accompagnement spécifique à la parentalité</strong> aux adultes en
+        situation de handicap exprimant un désir d'enfant, préparant l'arrivée d'un enfant ou en ayant déjà.
+      </p>
+      <p>
+        L'association loue 3 appartements (F1, F2, F3) auprès de Seine-Saint-Denis Habitat
+        qu'elle <strong>sous-loue à des personnes accompagnées</strong>, rendant accessible le logement
+        autonome aux personnes sortant du foyer ou mal logées.
+      </p>
+      <ul class="check-list">
+        <li>Accompagnement périnatal et coordination avec la PMI</li>
+        <li>Soutien dans les liens avec les structures enfance</li>
+        <li>3 logements en sous-location accompagnée</li>
+        <li>Lien renforcé avec les bailleurs sociaux</li>
+      </ul>
+    </div>
+    <div class="two-col-visual" style="grid-template-columns:1fr;">
+      <div class="visual-card" style="transform:none; padding:2.2rem; background:white;">
+        <h3 style="font-family:'Inter',sans-serif; color:var(--svc-savs-dark); margin-bottom:1rem;">🎓 Site qualifiant</h3>
+        <p style="text-align:left;">Le SAVS accueille étudiants et stagiaires (éducateurs spécialisés, CAFERUIS), avec une originalité : <strong>les personnes accompagnées participent aux entretiens de recrutement</strong>.</p>
+        <p style="text-align:left; margin-top:.8rem;">Une démarche concrète d'auto-détermination et de participation effective.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projet AUVI -->
+<section class="section section-alt" id="projet-auvi">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Recherche participative</span>
+      <h2>Le projet AUVI — CapDroits</h2>
+      <p class="lead">
+        Le SAVS s'est engagé en 2024 dans le projet AUVI (Ancrer l'Autonomie de Vie),
+        une recherche participative menée sur 5 ans avec le collectif CapDroits.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="card"><div class="card-icon">📚</div><h3>Recherche participative</h3><p>Méthode collaborative impliquant les personnes accompagnées comme co-chercheurs.</p></article>
+      <article class="card"><div class="card-icon">⚖️</div><h3>Accès aux droits</h3><p>Accompagnement vers la connaissance et l'exercice effectif des droits.</p></article>
+      <article class="card"><div class="card-icon">🎯</div><h3>Émancipation</h3><p>Développer l'autodétermination individuelle et collective.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- Équipe -->
+<section class="section" id="equipe">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Notre équipe</span>
+      <h2>Une équipe stable et engagée</h2>
+      <p class="lead">L'équipe du SAVS au complet n'a pas connu de mouvements de personnel en 2024 et se montre particulièrement stable sur les dernières années.</p>
+    </div>
+    <div class="team-grid" id="team-list" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Galerie -->
+<section class="section section-alt" id="galerie">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Galerie</span>
+      <h2>Le SAVS en images</h2>
+    </div>
+    <div class="gallery-grid" id="gallery-list" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Actualités -->
+<section class="section" id="actualites">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Actualités</span>
+      <h2>Les dernières nouvelles du SAVS</h2>
+    </div>
+    <div class="news-grid" id="news-list" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Agenda -->
+<section class="section section-alt" id="agenda">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Agenda</span>
+      <h2>Prochains événements</h2>
+    </div>
+    <div id="agenda-content" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Questions fréquentes</span>
+      <h2>Vos questions, nos réponses</h2>
+    </div>
+    <div class="faq-list" id="faq-list" style="max-width:860px; margin:0 auto;"></div>
+  </div>
+</section>
+
+<!-- Sections personnalisées (admin) -->
+<div id="custom-sections-slot"></div>
+
+<!-- Contact -->
+<section class="section section-alt" id="contact">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Nous contacter</span>
+      <h2>Contacter le SAVS</h2>
+    </div>
+    <div style="max-width:760px; margin:2rem auto 0; background:white; padding:2.5rem; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,.06); border-top:5px solid var(--svc-savs);">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.5rem;">
+        <div><strong style="color:var(--svc-savs-dark);">📍 Adresse</strong><p>18 rue de la Vieille Mer<br>93240 STAINS</p></div>
+        <div><strong style="color:var(--svc-savs-dark);">📞 Téléphone</strong><p><a href="tel:0185586814">01 85 58 68 14</a></p></div>
+        <div><strong style="color:var(--svc-savs-dark);">📧 Email</strong><p><a href="mailto:savs@asso-leila.org">savs@asso-leila.org</a></p></div>
+        <div><strong style="color:var(--svc-savs-dark);">🕐 Horaires</strong><p id="hours-content">Sur rendez-vous</p></div>
+      </div>
+      <div style="text-align:center; margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="contact.html" class="btn btn-svc">Formulaire de contact</a>
+        <a href="admission.html?service=savs" class="btn btn-ghost">Demande d'admission</a>
+        <a href="candidater.html?service=savs" class="btn btn-ghost">Candidater à un stage</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-logo"><span>🌊</span><strong>Association LEILA</strong></div>
+      <p>SAVS   — Service d'Accompagnement à la Vie Sociale.</p>
+    </div>
+    <div><h4>Adresse</h4><p>18 rue de la Vieille Mer<br>93240 STAINS</p></div>
+    <div><h4>Contact</h4><p>01 85 58 68 14<br>savs@asso-leila.org</p></div>
+    <div>
+      <h4>Liens</h4>
+      <ul class="footer-links">
+        <li><a href="index.html">Association LEILA</a></li>
+        <li><a href="foyer-accueil.html">Foyer</a></li>
+        <li><a href="saj-accueil.html">SAJ</a></li>
+        <li><a href="documents.html">Documents</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© 2026 Association LEILA</p>
+      <ul class="footer-legal">
+        <li><a href="page.html?slug=mentions-legales">Mentions légales</a></li>
+        <li><a href="page.html?slug=accessibilite">Accessibilité</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="js/db.js"></script>
+<script src="js/section-styles.js"></script>
+<script src="js/branding.js"></script>
+<script src="js/custom-sections.js"></script>
+<script src="js/script.js"></script>
+<script src="js/leila.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (typeof FoyerDB === 'undefined') return;
+  const SVC = 'savs';
+
+  const escapeHtml = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const fmtDate = iso => { try { return new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); } catch(_) { return iso; }};
+  const nl2br = s => escapeHtml(s).replace(/\n/g,'<br>');
+
+  function renderTeam() {
+    const grid = document.getElementById('team-list');
+    if (!grid) return;
+    const items = FoyerDB.getTeam({ published: true, service: SVC });
+    if (!items.length) { grid.innerHTML = '<p>Composition de l\'équipe en cours de mise à jour.</p>'; return; }
+    grid.innerHTML = items.map(t => `
+      <article class="team-card">
+        <div class="team-avatar">${escapeHtml(t.icon||'👥')}</div>
+        ${t.count?`<span class="team-count">${escapeHtml(t.count)}</span>`:''}
+        <div class="team-role">${escapeHtml(t.role||'')}</div>
+        ${t.description?`<p>${escapeHtml(t.description)}</p>`:''}
+      </article>`).join('');
+  }
+
+  function renderGallery() {
+    const grid = document.getElementById('gallery-list');
+    if (!grid) return;
+    const items = FoyerDB.getPhotos({ published: true, service: SVC });
+    if (!items.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;">Aucune photo publiée.</p>'; return; }
+    grid.innerHTML = items.map((p, i) => {
+      const cls = 'gallery-item' + (p.size==='large'||(i===0&&!p.size)?' gallery-large':'') + (p.size==='tall'?' gallery-tall':'');
+      const src = p.src || ('https://picsum.photos/seed/'+(p.id||i)+'/600/600');
+      return `<figure class="${cls}">
+        <img src="${escapeHtml(src)}" alt="${escapeHtml(p.alt||p.title||'')}" loading="lazy">
+        <figcaption>${p.tag?`<span class="gallery-tag">${escapeHtml(p.tag)}</span>`:''}${p.title?`<h3>${escapeHtml(p.title)}</h3>`:''}${p.description?`<p>${escapeHtml(p.description)}</p>`:''}</figcaption>
+      </figure>`;
+    }).join('');
+  }
+
+  function renderNews() {
+    const grid = document.getElementById('news-list');
+    if (!grid) return;
+    const items = FoyerDB.getArticles({ published: true, service: SVC }).slice(0, 3);
+    if (!items.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;">Aucune actualité.</p>'; return; }
+    grid.innerHTML = items.map(a => `
+      <article class="news-card">
+        <div class="news-image">
+          <img src="${escapeHtml(a.img||'https://picsum.photos/seed/'+a.id+'/600/400')}" alt="${escapeHtml(a.title)}" loading="lazy">
+          <span class="news-category">${escapeHtml(a.catLabel||a.cat||'')}</span>
+        </div>
+        <div class="news-body">
+          <div class="news-meta"><time datetime="${escapeHtml(a.date||'')}">${escapeHtml(fmtDate(a.date))}</time></div>
+          <h3>${escapeHtml(a.title)}</h3>
+          <p>${escapeHtml(a.excerpt||'')}</p>
+          <a href="actualites.html#${escapeHtml(a.id)}" class="news-link">Lire la suite →</a>
+        </div>
+      </article>`).join('');
+  }
+
+  const MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  function renderAgenda() {
+    const root = document.getElementById('agenda-content');
+    if (!root) return;
+    const all = FoyerDB.getEvents({ published: true, service: SVC });
+    const now = new Date(); now.setHours(0,0,0,0);
+    const items = all.filter(e=>{const d=new Date(e.date); return !isNaN(d.getTime()) && d>=now;});
+    if (!items.length) { root.innerHTML = '<p style="text-align:center;">Aucun événement à venir.</p>'; return; }
+    root.innerHTML = '<div style="display:grid;gap:.8rem;max-width:760px;margin:0 auto;">' + items.slice(0,5).map(e=>{
+      const d=new Date(e.date);
+      return `<div style="background:white;padding:1.2rem 1.5rem;border-radius:12px;border-left:4px solid var(--svc-savs);box-shadow:0 4px 14px rgba(0,0,0,.05);">
+        <strong style="color:var(--svc-savs-dark);">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}${e.time?' · '+escapeHtml(e.time):''}</strong>
+        <h3 style="margin:.3rem 0;font-family:'Inter',sans-serif;font-size:1.1rem;">${escapeHtml(e.title||'')}</h3>
+        ${e.location?`<p style="margin:.2rem 0;font-size:.9rem;color:var(--text-light);">📍 ${escapeHtml(e.location)}</p>`:''}
+        ${e.description?`<p style="margin:.4rem 0 0;font-size:.9rem;">${escapeHtml(e.description)}</p>`:''}
+      </div>`;
+    }).join('') + '</div>';
+  }
+
+  function renderFaq() {
+    const list = document.getElementById('faq-list');
+    if (!list) return;
+    const items = FoyerDB.getFaq({ published: true, service: SVC });
+    if (!items.length) { list.innerHTML = '<p style="text-align:center;">Aucune question pour le moment.</p>'; return; }
+    list.innerHTML = items.map(f => `
+      <div class="faq-item" style="border:1px solid #e5e0d6;border-radius:14px;margin-bottom:.8rem;background:white;">
+        <button class="faq-question" type="button" aria-expanded="false" style="width:100%;text-align:left;background:none;border:none;padding:1.2rem 1.4rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;gap:1rem;font-size:1rem;">
+          <span>${escapeHtml(f.question||'')}</span><span aria-hidden="true">▾</span>
+        </button>
+        <div class="faq-answer" style="max-height:0;opacity:0;overflow:hidden;transition:max-height .3s,opacity .3s;padding:0 1.4rem;">
+          <p style="padding-bottom:1.2rem;color:var(--text-light);">${nl2br(f.answer||'')}</p>
+        </div>
+      </div>`).join('');
+    list.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const ans  = item.querySelector('.faq-answer');
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !open);
+        ans.style.maxHeight = open ? '0' : ans.scrollHeight+'px';
+        ans.style.opacity   = open ? '0' : '1';
+      });
+    });
+  }
+
+  function renderHours() {
+    const s = FoyerDB.getSettings(SVC);
+    const el = document.getElementById('hours-content');
+    if (!el || !s || !s.hours) return;
+    const lines = [s.hours.weekday, s.hours.weekend, s.hours.notes].filter(l=>l && l!=='—');
+    if (lines.length) el.innerHTML = lines.map(escapeHtml).join('<br>');
+  }
+
+  function applyPageContent() {
+    const s  = FoyerDB.getSettings(SVC);
+    if (!s) return;
+    const pc = s.pageContent || {};
+    const set = (sel, val) => { if (!val) return; const el = document.querySelector(sel); if (el) el.textContent = val; };
+    set('.hero-tag',           pc.heroTag);
+    set('.hero h1',            pc.heroTitle);
+    set('.hero-lead',          pc.heroLead);
+    set('#presentation h2',    pc.missionTitle);
+    set('#presentation .lead', pc.missionLead);
+    if (s.heroStats && s.heroStats.length) {
+      document.querySelectorAll('.hero-stats > div').forEach((div, i) => {
+        const stat = s.heroStats[i];
+        if (!stat) return;
+        const strong = div.querySelector('strong');
+        const span   = div.querySelector('span');
+        if (strong && stat.value) strong.textContent = stat.value;
+        if (span   && stat.label) span.textContent   = stat.label;
+      });
+    }
+  }
+
+  function renderCustomSections() {
+    if (window.LeilaCustomSections && typeof window.LeilaCustomSections.render === 'function') {
+      window.LeilaCustomSections.render(SVC);
+    }
+  }
+  function renderAll() { applyPageContent(); renderTeam(); renderGallery(); renderNews(); renderAgenda(); renderFaq(); renderHours(); renderCustomSections(); }
+  renderAll();
+
+  window.addEventListener('storage', (e) => {
+    if ([FoyerDB.KEYS.team,FoyerDB.KEYS.photos,FoyerDB.KEYS.articles,FoyerDB.KEYS.events,FoyerDB.KEYS.faq,FoyerDB.KEYS.settings].includes(e.key)) renderAll();
+  });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) renderAll(); });
+  window.addEventListener('focus', renderAll);
+})();
+</script>
+</body>
+</html>

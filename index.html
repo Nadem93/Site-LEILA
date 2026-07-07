@@ -1,262 +1,466 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Connexion — INTERNALIS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"/>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      background:linear-gradient(135deg,#dbeafe 0%,#eff6ff 100%);
-      font-family:'Inter',system-ui,sans-serif;
-      min-height:100vh;display:flex;align-items:center;justify-content:center;
-      overflow:hidden;
-    }
-    /* Champ d'aurores */
-    body::before,body::after{
-      content:'';position:fixed;z-index:0;border-radius:50%;pointer-events:none;filter:blur(70px);
-    }
-    body::before{
-      width:60vw;height:60vw;top:-20vw;right:-15vw;
-      background:radial-gradient(circle at 35% 35%,rgba(6,182,212,.14),rgba(99,102,241,.08) 55%,transparent 75%);
-      animation:aur-a 40s ease-in-out infinite alternate;
-    }
-    body::after{
-      width:50vw;height:50vw;bottom:-18vw;left:-12vw;
-      background:radial-gradient(circle at 60% 60%,rgba(168,85,247,.1),rgba(6,182,212,.06) 55%,transparent 75%);
-      animation:aur-b 52s ease-in-out infinite alternate;
-    }
-    @keyframes aur-a{from{transform:translate(0,0)}to{transform:translate(-8vw,6vh) scale(1.15)}}
-    @keyframes aur-b{from{transform:translate(0,0)}to{transform:translate(7vw,-5vh) scale(1.1)}}
-
-    input,button{border:none;outline:none;font-family:inherit}
-
-    .lc-wrap{width:100%;max-width:410px;padding:1.5rem;position:relative;z-index:1}
-    .lc-brand{text-align:center;margin-bottom:1.5rem;animation:lc-rise .6s cubic-bezier(.22,1,.36,1) backwards}
-    .lc-brand-name{
-      font-family:'Space Grotesk',sans-serif;font-size:1.9rem;font-weight:700;
-      letter-spacing:.14em;text-transform:uppercase;
-      background:linear-gradient(120deg,#0f2b4a,#6366f1 60%,#a855f7);
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-    }
-    .lc-brand-sub{font-size:.75rem;color:#64748b;letter-spacing:.3em;text-transform:uppercase;margin-top:.3rem}
-
-    .lc-card{
-      background:rgba(255,255,255,.74);
-      backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
-      border:1px solid rgba(255,255,255,.85);
-      border-radius:24px;padding:2.5rem 2rem;
-      box-shadow:0 24px 60px rgba(15,43,74,.14);
-      position:relative;overflow:hidden;
-      animation:lc-rise .6s cubic-bezier(.22,1,.36,1) .12s backwards;
-    }
-    /* Scan-line en haut de la carte */
-    .lc-card::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:3px;
-      background:linear-gradient(90deg,transparent,#06b6d4 20%,#6366f1 50%,#a855f7 80%,transparent);
-      background-size:220% 100%;animation:lc-scan 16s linear infinite;
-    }
-    @keyframes lc-scan{from{background-position:0% 0}to{background-position:220% 0}}
-    @keyframes lc-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-
-    .lc-title{
-      font-family:'Space Grotesk',sans-serif;color:#0f2b4a;font-weight:700;font-size:1.3rem;
-      text-align:center;margin-bottom:1.6rem;
-    }
-    .lc-field{margin-bottom:1.25rem}
-    .lc-field label{display:block;font-size:.7rem;font-weight:700;color:#475569;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.08em}
-    .lc-field input{
-      width:100%;padding:.8rem 1.1rem;border-radius:12px;
-      background:#fff;border:1px solid #e2e8f0;
-      font-size:.92rem;color:#1e293b;
-      transition:border-color .2s,box-shadow .2s;
-    }
-    .lc-field input:focus{
-      border-color:#06b6d4;
-      box-shadow:0 0 0 3px rgba(6,182,212,.14),0 0 12px rgba(6,182,212,.12);
-    }
-    .lc-btn{
-      display:block;width:100%;cursor:pointer;border-radius:12px;color:#fff;
-      background:linear-gradient(135deg,#6366f1,#a855f7);
-      padding:.85rem;font-size:.95rem;font-weight:600;
-      box-shadow:0 4px 16px rgba(124,58,237,.3);
-      transition:transform .15s,box-shadow .2s;
-      position:relative;overflow:hidden;
-    }
-    .lc-btn::after{
-      content:'';position:absolute;top:0;bottom:0;left:-80%;width:50%;
-      background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);
-      transform:skewX(-18deg);transition:left .45s ease;
-    }
-    .lc-btn:hover{box-shadow:0 5px 18px rgba(124,58,237,.3);transform:translateY(-1px)}
-    .lc-btn:hover::after{left:130%}
-    .lc-btn:active{transform:scale(.98)}
-    .lc-error{
-      display:none;margin:1rem auto 0;padding:10px 16px;border-radius:12px;
-      background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:.82rem;text-align:center;
-    }
-    .lc-footer{text-align:center;font-size:.75rem;color:#94a3b8;margin-top:1.5rem;animation:lc-rise .6s cubic-bezier(.22,1,.36,1) .24s backwards}
-    .lc-footer a{color:#94a3b8;text-decoration:none}
-    .lc-footer a:hover{text-decoration:underline}
-    @media (prefers-reduced-motion: reduce){
-      body::before,body::after,.lc-card::before{animation:none!important}
-      .lc-brand,.lc-card,.lc-footer{animation:none!important}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Association LEILA — Foyer · SAJ · SAVS · EMP · Stains (93)</title>
+<meta name="description" content="Association LEILA, créée en 1963 : Foyer d'hébergement Les Trois Rivières, SAJ, SAVS et EMP Henri Wallon. Accompagnement d'adultes et enfants en situation de handicap mental et/ou psychique à Stains.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/leila.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  /* Auto-contraste pour image admin sur le hero d'accueil */
+  .hero.hero-asso[data-section-styled="1"][style*="url("] { color: white; }
+  .hero.hero-asso[data-section-styled="1"][style*="url("] h1,
+  .hero.hero-asso[data-section-styled="1"][style*="url("] .hero-lead,
+  .hero.hero-asso[data-section-styled="1"][style*="url("] .hero-tag,
+  .hero.hero-asso[data-section-styled="1"][style*="url("] .hero-stats strong,
+  .hero.hero-asso[data-section-styled="1"][style*="url("] .hero-stats span { color: white; }
+  .hero.hero-asso[data-section-styled="1"][style*="url("] h1 .accent { color: #ffd9a6; }
+  .hero.hero-asso[data-section-styled="1"][style*="url("] .hero-tag { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); }
+  .hero.hero-asso[data-section-styled="1"][style*="url("] .btn-ghost { color: white; border-color: rgba(255,255,255,0.6); }
+</style>
 </head>
 <body>
 
-<div class="lc-wrap">
-  <div class="lc-brand"><div class="lc-brand-name">INTERNALIS</div><div class="lc-brand-sub">Gestion médico-sociale</div></div>
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
-  <div class="lc-card" id="loginCard">
-    <div class="lc-title">Connexion</div>
-    <form id="loginForm">
-      <div class="lc-field">
-        <label for="login">Email</label>
-        <input type="email" id="login" placeholder="vous@exemple.fr" autocomplete="username"/>
+<!-- ===== Bandeau d'alerte (dynamique) ===== -->
+<div id="alert-banner" class="alert-banner" hidden></div>
+
+<!-- ===== Header avec méga-menu ===== -->
+<header class="header header-asso" role="banner">
+  <div class="container nav-container">
+    <a href="index.html" class="logo logo-asso" aria-label="Association LEILA — accueil">
+      <span class="logo-icon" aria-hidden="true">🌊</span>
+      <div>
+        <span class="logo-name">Association LEILA</span>
+        <span class="logo-sub">Foyer · SAJ · SAVS · EMP — Stains</span>
       </div>
-      <div class="lc-field">
-        <label for="pw">Mot de passe</label>
-        <input type="password" id="pw" placeholder="••••••••" autocomplete="current-password"/>
+    </a>
+    <nav class="nav nav-asso" id="nav" aria-label="Navigation principale">
+      <a href="index.html" class="active" aria-current="page">Accueil</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Association ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="page.html?slug=association"><strong>L'association LEILA</strong><span>Notre histoire, nos valeurs</span></a>
+          <a href="page.html?slug=gouvernance"><strong>Gouvernance</strong><span>Direction et conseil d'administration</span></a>
+          <a href="partenaires.html"><strong>Partenaires</strong><span>Réseau et collaborations</span></a>
+        </div>
       </div>
-      <button type="submit" class="lc-btn">Se connecter</button>
-      <div id="loginError" class="lc-error">Identifiant ou mot de passe incorrect.</div>
-      <div id="lockInfo" style="display:none;margin-top:.6rem;font-size:.8rem;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:.5rem .7rem;text-align:center">🔒 Session fermée après 15 min d'inactivité. Reconnectez-vous.</div>
-    </form>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Nos services ▾</button>
+        <div class="nav-dropdown-menu nav-services-menu">
+          <a href="foyer-accueil.html" class="nav-service-link" data-svc="foyer">
+            <span class="nav-service-icon">🏡</span>
+            <span class="nav-service-text"><strong>Foyer Les Trois Rivières</strong><span>Hébergement · 45 places</span></span>
+          </a>
+          <a href="saj-accueil.html" class="nav-service-link" data-svc="saj">
+            <span class="nav-service-icon">🎨</span>
+            <span class="nav-service-text"><strong>SAJ Les Trois Rivières</strong><span>Accueil de jour · 15 places</span></span>
+          </a>
+          <a href="savs-accueil.html" class="nav-service-link" data-svc="savs">
+            <span class="nav-service-icon">🤝</span>
+            <span class="nav-service-text"><strong>SAVS Les Trois Rivières</strong><span>Accompagnement à la vie sociale · 42 places</span></span>
+          </a>
+          <a href="emp-accueil.html" class="nav-service-link" data-svc="emp">
+            <span class="nav-service-icon">🎒</span>
+            <span class="nav-service-text"><strong>EMP Henri Wallon</strong><span>Externat médico-pédagogique · enfants</span></span>
+          </a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Ressources ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="actualites.html"><strong>Actualités</strong><span>Tous services confondus</span></a>
+          <a href="agenda.html"><strong>Agenda</strong><span>Activités, sorties, événements</span></a>
+          <a href="documents.html"><strong>Documents</strong><span>Rapports, projets, livrets</span></a>
+          <a href="candidater.html"><strong>Candidater à un stage</strong><span>CV + lettre de motivation</span></a>
+        </div>
+      </div>
+      <a href="contact.html" class="nav-cta">Contact</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+</header>
 
-  <div class="lc-card" id="pwChangeCard" style="display:none">
-    <div class="lc-title">Choisissez votre mot de passe</div>
-    <form id="pwChangeForm">
-      <div class="lc-field">
-        <label for="newPw">Nouveau mot de passe</label>
-        <input type="password" id="newPw" placeholder="••••••••" autocomplete="new-password"/>
-      </div>
-      <div class="lc-field">
-        <label for="newPw2">Confirmer</label>
-        <input type="password" id="newPw2" placeholder="••••••••" autocomplete="new-password"/>
-      </div>
-      <ul id="pwRules" style="list-style:none;font-size:.78rem;color:#94a3b8;margin:-.4rem 0 1.1rem;padding:0;display:flex;flex-direction:column;gap:.3rem">
-        <li data-rule="len">○ Au moins 8 caractères</li>
-        <li data-rule="upper">○ Une majuscule</li>
-        <li data-rule="digit">○ Un chiffre</li>
-        <li data-rule="special">○ Un caractère spécial (! ? @ # …)</li>
+<main id="main-content">
+
+<!-- ── Hero Association ─────────────────────────────── -->
+<section class="hero hero-asso" id="hero">
+  <div class="container hero-inner">
+    <div class="hero-tag">Depuis 1963 · 60 ans d'engagement</div>
+    <h1>Association <span class="accent">LEILA</span> — accompagner avec dignité.</h1>
+    <p class="hero-lead">
+      L'association LEILA gère 4 établissements et services pour adultes et enfants
+      en situation de handicap mental et/ou psychique, à Stains, en Seine-Saint-Denis.
+      Quatre établissements distincts, une seule association : le <strong>Foyer Les Trois Rivières</strong>,
+      le <strong>SAJ</strong>, le <strong>SAVS</strong>
+      et l'<strong>EMP Henri Wallon</strong>. Chaque service a sa propre mission, son équipe, ses agréments.
+    </p>
+    <div class="hero-actions">
+      <a href="#nos-services" class="btn btn-primary">Découvrir nos services</a>
+      <a href="contact.html" class="btn btn-ghost">Nous contacter</a>
+    </div>
+    <div class="hero-stats" aria-label="Chiffres clés de l'association">
+      <div><strong>4</strong><span>établissements</span></div>
+      <div><strong>60+</strong><span>années d'engagement</span></div>
+      <div><strong>100+</strong><span>personnes accompagnées</span></div>
+      <div><strong>93240</strong><span>Stains, Seine-Saint-Denis</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Présentation Association ─────────────────────── -->
+<section class="section" id="presentation-asso" aria-labelledby="asso-title">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Une histoire associative engagée</span>
+      <h2 id="asso-title">L'association LEILA en quelques mots</h2>
+      <p class="lead">
+        Créée en 1963, l'association LEILA accompagne adultes et enfants en situation de handicap
+        mental et/ou psychique à Stains, en Seine-Saint-Denis. Quatre établissements et services,
+        une équipe pluridisciplinaire, et un même engagement : la dignité, l'autonomie et l'inclusion.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Nos services ─────────────────────────────────── -->
+<section class="section section-alt" id="nos-services" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">4 établissements et services — Association LEILA</span>
+      <h2 id="services-title">Des services distincts, un engagement commun</h2>
+      <p class="lead">Le Foyer, le SAJ, le SAVS et L'EMP Henri Wallon sont trois services, chacun avec sa propre mission. </p>
+    </div>
+
+    <div class="services-grid">
+      <article class="service-card service-foyer">
+        <div class="service-card-icon" aria-hidden="true">🏡</div>
+        <span class="service-card-tag">Hébergement</span>
+        <h3>Foyer Les Trois Rivières</h3>
+        <p class="service-card-meta"><strong>45 places</strong> · depuis 2005 · 365j/365</p>
+        <p>Hébergement pour adultes en situation de handicap travaillant en ESAT.
+          Cadre de vie sécurisant, structurant, accompagnement éducatif global.</p>
+        <ul class="service-card-list">
+          <li>30 chambres + 15 studios</li>
+          <li>Service éducatif 7h-22h</li>
+          <li>Veilleur de nuit + astreinte</li>
+        </ul>
+        <a href="foyer-accueil.html" class="btn btn-primary">Découvrir le Foyer →</a>
+      </article>
+
+      <article class="service-card service-saj">
+        <div class="service-card-icon" aria-hidden="true">🎨</div>
+        <span class="service-card-tag">Accueil de jour</span>
+        <h3>SAJ</h3>
+        <p class="service-card-meta"><strong>15 places</strong> · depuis 2018 · L-V 9h-16h</p>
+        <p>Service d'Accueil de Jour pour adultes en situation de handicap psychique et/ou mental.
+          Démarche collaborative, ateliers créatifs, projets ouverts sur le territoire.</p>
+        <ul class="service-card-list">
+          <li>Ateliers : musique, cuisine, écriture, jardin…</li>
+          <li>Méthodes actives et participatives</li>
+          <li>Projets : Kiosque, La Comète, séjours</li>
+        </ul>
+        <a href="saj-accueil.html" class="btn btn-primary">Découvrir le SAJ →</a>
+      </article>
+
+      <article class="service-card service-savs">
+        <div class="service-card-icon" aria-hidden="true">🤝</div>
+        <span class="service-card-tag">Accompagnement</span>
+        <h3>SAVS</h3>
+        <p class="service-card-meta"><strong>42 places</strong> · depuis 2016 · sur RDV</p>
+        <p>Service d'Accompagnement à la Vie Sociale pour adultes en situation de handicap
+          psychique et/ou mental vivant à domicile. Visites, entretiens, démarches, temps collectifs.</p>
+        <ul class="service-card-list">
+          <li>Accompagnement individuel + collectif</li>
+          <li>3 logements en sous-location</li>
+          <li>Accompagnement à la parentalité</li>
+        </ul>
+        <a href="savs-accueil.html" class="btn btn-primary">Découvrir le SAVS →</a>
+      </article>
+
+      <article class="service-card service-emp">
+        <div class="service-card-icon" aria-hidden="true">🎒</div>
+        <span class="service-card-tag">Externat médico-pédagogique</span>
+        <h3>EMP Henri Wallon</h3>
+        <p class="service-card-meta"><strong>Pour les enfants</strong> · à Stains</p>
+        <p>L'Externat Médico-Pédagogique Henri Wallon accueille des enfants en situation
+          de handicap mental et/ou psychique. Une approche pluridisciplinaire alliant
+          pédagogie, soin et socialisation.</p>
+        <ul class="service-card-list">
+          <li>Enfants en situation de handicap</li>
+          <li>Approche médico-pédagogique</li>
+          <li>Détails à compléter prochainement</li>
+        </ul>
+        <a href="emp-accueil.html" class="btn btn-primary">Découvrir l'EMP →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── Valeurs & engagement ─────────────────────────── -->
+<section class="section" id="valeurs" aria-labelledby="valeurs-title">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Nos engagements</span>
+      <h2 id="valeurs-title">Des valeurs partagées entre tous nos services</h2>
+    </div>
+    <div class="grid-3">
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">🫶</div>
+        <h3>Dignité & bienveillance</h3>
+        <p>Une posture professionnelle qui place la personne au cœur, dans le respect de ses choix et de son histoire.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">🌱</div>
+        <h3>Autodétermination</h3>
+        <p>Soutenir l'expression, la participation et les choix des personnes accompagnées dans leur quotidien.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">🤝</div>
+        <h3>Inclusion</h3>
+        <p>Tisser des liens avec le territoire, les partenaires et les acteurs du droit commun pour favoriser l'inclusion sociale.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">📚</div>
+        <h3>Formation continue</h3>
+        <p>Une équipe pluridisciplinaire qui se forme, se questionne et accueille des stagiaires comme un vivier.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">👥</div>
+        <h3>Travail en réseau</h3>
+        <p>Liens avec les ESAT, le CMP, les bailleurs, les institutions, les associations partenaires.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">🔍</div>
+        <h3>Amélioration continue</h3>
+        <p>Démarche qualité, recherche participative (CapDroits), CPOM, évaluations régulières.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── Actualités tous services ─────────────────────── -->
+<section class="section section-alt" id="actualites" aria-labelledby="actu-title">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Actualités</span>
+      <h2 id="actu-title">Les dernières nouvelles de l'association</h2>
+      <p class="lead">Toutes les actualités, tous services confondus.</p>
+    </div>
+    <div class="news-grid" id="news-list" aria-live="polite"></div>
+    <div style="text-align:center; margin-top:3rem;">
+      <a href="actualites.html" class="btn btn-ghost">Voir toutes les actualités →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Témoignages tous services ────────────────────── -->
+<section class="section" id="temoignages" aria-labelledby="temoignages-title">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Témoignages</span>
+      <h2 id="temoignages-title">Ils parlent de l'association</h2>
+      <p class="lead">Personnes accueillies, familles, professionnels et stagiaires partagent leur expérience.</p>
+    </div>
+    <div class="testimonials-grid" id="testimonials-list" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ── Localisation ─────────────────────────────────── -->
+<section class="section section-alt" id="localisation">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Localisation</span>
+      <h2>Tous nos services à Stains</h2>
+      <p class="lead">Le Foyer, le SAJ et le SAVS sont implantés au quartier du Moulin Neuf, à Stains.</p>
+    </div>
+    <div class="map-wrapper">
+      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=2.3750%2C48.9490%2C2.4060%2C48.9630&layer=mapnik&marker=48.9562%2C2.3905"
+        width="100%" height="420" style="border:0;display:block;" loading="lazy"
+        title="Plan d'accès aux services de l'Association LEILA"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ──────────────────────────────────────────── -->
+<section class="cta-section" id="cta">
+  <div class="container cta-inner">
+    <h2>Une question, une demande, un projet ?</h2>
+    <p>Notre équipe est à votre écoute pour toute information sur nos services, une admission ou un partenariat.</p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="contact.html" class="btn btn-white">Nous contacter</a>
+      <a href="candidater.html" class="btn btn-accent">Candidater à un stage</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="footer footer-asso" role="contentinfo">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-logo"><span aria-hidden="true">🌊</span><strong>Association LEILA</strong></div>
+      <p>4 établissements et services pour adultes et enfants en situation de handicap mental et/ou psychique.</p>
+      <p style="margin-top:0.8rem; font-size:0.88rem;">Depuis 1963 · Stains, Seine-Saint-Denis</p>
+    </div>
+    <div>
+      <h4>Nos services</h4>
+      <ul class="footer-links">
+        <li><a href="foyer-accueil.html">Foyer Les Trois Rivières</a></li>
+        <li><a href="saj-accueil.html">SAJ Les Trois Rivières</a></li>
+        <li><a href="savs-accueil.html">SAVS Les Trois Rivières</a></li>
+        <li><a href="emp-accueil.html">EMP Henri Wallon</a></li>
       </ul>
-      <button type="submit" class="lc-btn">Valider et continuer</button>
-      <div id="pwChangeError" class="lc-error"></div>
-    </form>
+    </div>
+    <div>
+      <h4>Adresse</h4>
+      <p>Mail des Trois Rivières<br>Moulin Neuf<br>93240 STAINS</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><a href="tel:0149462440" style="color:rgba(255,255,255,0.75)">01 49 46 24 40</a></p>
+      <p><a href="mailto:contact@asso-leila.org" style="color:rgba(255,255,255,0.75)">contact@asso-leila.org</a></p>
+    </div>
   </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© 2026 Association LEILA · Tous droits réservés</p>
+      <ul class="footer-legal">
+        <li><a href="documents.html">Documents</a></li>
+        <li><a href="page.html?slug=mentions-legales">Mentions légales</a></li>
+        <li><a href="page.html?slug=accessibilite">Accessibilité</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
 
-  <div class="lc-footer">© INTERNALIS</div>
+<!-- ===== Tweaks Panel ===== -->
+<div id="tweaks-panel" class="tweaks-panel" role="dialog" aria-label="Réglages d'accessibilité" aria-modal="true">
+  <div class="tweaks-panel-header">
+    <span class="tweaks-panel-title">Accessibilité & affichage</span>
+    <button id="tweaks-close" class="tweaks-close" aria-label="Fermer">✕</button>
+  </div>
+  <div class="tweak-group">
+    <span class="tweak-label">Taille du texte</span>
+    <div class="tweak-btns">
+      <button class="tweak-btn" data-tweak-key="fontSize" data-tweak-val="normal">Normal</button>
+      <button class="tweak-btn" data-tweak-key="fontSize" data-tweak-val="large">Grand</button>
+    </div>
+  </div>
+  <div class="tweak-group">
+    <span class="tweak-label">Contraste</span>
+    <div class="tweak-btns">
+      <button class="tweak-btn" data-tweak-key="contrast" data-tweak-val="normal">Normal</button>
+      <button class="tweak-btn" data-tweak-key="contrast" data-tweak-val="high">Élevé</button>
+    </div>
+  </div>
+  <div class="tweak-group">
+    <span class="tweak-label">Mode sombre</span>
+    <div class="tweak-btns">
+      <button class="tweak-btn" data-tweak-key="theme" data-tweak-val="light">Clair</button>
+      <button class="tweak-btn" data-tweak-key="theme" data-tweak-val="dark">Sombre</button>
+    </div>
+  </div>
 </div>
 
-<script src="js/app.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-client.js"></script>
-<script src="js/config-supabase.js"></script>
+<script src="js/db.js"></script>
+<script src="js/section-styles.js"></script>
+<script src="js/branding.js"></script>
+<script src="js/asso-content.js"></script>
+<script src="js/script.js"></script>
+<script src="js/leila.js"></script>
 <script>
-  sessionStorage.removeItem('ftr_current_etab');
-  initDefaults();
-  if (Auth.getSession()) window.location.href = 'accueil.html';
-  if (sessionStorage.getItem('ftr_lock_reason') === 'idle') {
-    const li = document.getElementById('lockInfo'); if (li) li.style.display = 'block';
-    sessionStorage.removeItem('ftr_lock_reason');
+(function () {
+  'use strict';
+  if (typeof FoyerDB === 'undefined') return;
+
+  const escapeHtml = (s) => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}); } catch(_) { return iso; }};
+  const darken = (hex, amt = 24) => {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex||''); if(!m) return hex||'#1d4f64';
+    const adj = v => Math.max(0, parseInt(v,16)-amt).toString(16).padStart(2,'0');
+    return '#' + adj(m[1]) + adj(m[2]) + adj(m[3]);
+  };
+  const SERVICE_BADGE = { foyer: '🏡 Foyer', saj: '🎨 SAJ', savs: '🤝 SAVS' };
+
+  function renderNews() {
+    const grid = document.getElementById('news-list');
+    if (!grid) return;
+    const items = FoyerDB.getArticles({ published: true }).slice(0, 6);
+    if (!items.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);">Aucune actualité publiée pour le moment.</p>'; return; }
+    grid.innerHTML = items.map(a => `
+      <article class="news-card">
+        <div class="news-image">
+          <img src="${escapeHtml(a.img || 'https://picsum.photos/seed/'+a.id+'/600/400')}" alt="${escapeHtml(a.title)}" loading="lazy">
+          <span class="news-category">${escapeHtml(a.catLabel || a.cat || '')}</span>
+          <span class="news-service-badge svc-${escapeHtml(a.service||'foyer')}">${SERVICE_BADGE[a.service]||''}</span>
+        </div>
+        <div class="news-body">
+          <div class="news-meta">
+            <time datetime="${escapeHtml(a.date||'')}">${escapeHtml(fmtDate(a.date))}</time>
+            ${a.readTime ? `<span>${escapeHtml(a.readTime)} min</span>` : ''}
+          </div>
+          <h3>${escapeHtml(a.title)}</h3>
+          <p>${escapeHtml(a.excerpt||'')}</p>
+          <a href="actualites.html#${escapeHtml(a.id)}" class="news-link">Lire la suite →</a>
+        </div>
+      </article>`).join('');
   }
 
-  let _pending = null; // { user, profile, email } en attente de changement de mot de passe
-
-  async function finishLogin(user, profile, email) {
-    DB.set(DB.keys.session, {
-      userId: user.id, username: email, role: profile.role || 'employe',
-      super: profile.role === 'admin', prenom: profile.prenom || '', nom: profile.nom || '',
-      fonction: profile.fonction || '', mustChangePassword: false
-    });
-    logConnexion('login', { username: email, prenom: profile.prenom, nom: profile.nom, role: profile.role });
-    // Récupère la config partagée (permissions, majoration paie) depuis Supabase → localStorage
-    if (typeof hydrateConfigFromCloud === 'function') await hydrateConfigFromCloud();
-    window.location.href = 'accueil.html';
+  function renderTestimonials() {
+    const grid = document.getElementById('testimonials-list');
+    if (!grid) return;
+    const items = FoyerDB.getTestimonials({ published: true }).slice(0, 6);
+    if (!items.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);">Aucun témoignage publié pour le moment.</p>'; return; }
+    grid.innerHTML = items.map(t => {
+      const c1 = t.color || '#256880';
+      const c2 = darken(c1, 26);
+      const ini = (t.avatar || (t.name||'?').charAt(0)).toUpperCase();
+      return `<article class="testimonial${t.featured?' featured':''}">
+        <div class="testimonial-quote" aria-hidden="true">"</div>
+        <p class="testimonial-text">${escapeHtml(t.text)}</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg, ${c1}, ${c2});">${escapeHtml(ini)}</div>
+          <div>
+            <strong>${escapeHtml(t.name)}</strong>
+            <span>${escapeHtml(t.role||'')} · <em class="svc-${escapeHtml(t.service||'foyer')}">${SERVICE_BADGE[t.service]||''}</em></span>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
   }
 
-  document.getElementById('loginForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const email = document.getElementById('login').value.trim();
-    const password = document.getElementById('pw').value;
-    try {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      const { data: profile, error: profileErr } = await supabaseClient
-        .from('profiles').select('*').eq('id', data.user.id).single();
-      if (profileErr) throw profileErr;
-      // Première connexion : mot de passe à changer obligatoirement
-      if (data.user.user_metadata?.must_change_password) {
-        _pending = { user: data.user, profile, email };
-        document.getElementById('loginCard').style.display = 'none';
-        document.getElementById('pwChangeCard').style.display = '';
-        document.getElementById('newPw').focus();
-        return;
-      }
-      finishLogin(data.user, profile, email);
-    } catch (err) {
-      console.error(err);
-      document.getElementById('loginError').textContent = 'Email ou mot de passe incorrect.';
-      document.getElementById('loginError').style.display = 'block';
-      document.getElementById('pw').value = '';
-      document.getElementById('pw').focus();
-    }
-  });
-
-  ['login','pw'].forEach(id => {
-    document.getElementById(id).addEventListener('input', () => {
-      document.getElementById('loginError').style.display = 'none';
-    });
-  });
-
-  // ── Changement de mot de passe obligatoire ──
-  function pwChecks(pw) {
-    return {
-      len: pw.length >= 8,
-      upper: /[A-Z]/.test(pw),
-      digit: /[0-9]/.test(pw),
-      special: /[^A-Za-z0-9]/.test(pw)
-    };
+  function renderAlertBanner() {
+    const banner = document.getElementById('alert-banner');
+    if (!banner) return;
+    const alerts = (FoyerDB.getAlerts ? FoyerDB.getAlerts({ published: true, service: 'global' }) : []);
+    if (!alerts.length) { banner.hidden = true; return; }
+    const a = alerts[0];
+    banner.innerHTML = `<span>📣 <strong>${escapeHtml(a.title||'Information')}</strong> — ${escapeHtml(a.message||'')}</span>`;
+    banner.hidden = false;
   }
 
-  document.getElementById('newPw').addEventListener('input', () => {
-    const checks = pwChecks(document.getElementById('newPw').value);
-    document.querySelectorAll('#pwRules li').forEach(li => {
-      const ok = checks[li.dataset.rule];
-      li.style.color = ok ? '#16a34a' : '#94a3b8';
-      li.textContent = (ok ? '● ' : '○ ') + li.textContent.replace(/^[○●]\s/, '');
-    });
-  });
+  function renderAll() { renderNews(); renderTestimonials(); renderAlertBanner(); }
+  renderAll();
 
-  document.getElementById('pwChangeForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const errEl = document.getElementById('pwChangeError');
-    errEl.style.display = 'none';
-    const pw = document.getElementById('newPw').value;
-    const pw2 = document.getElementById('newPw2').value;
-    const c = pwChecks(pw);
-    if (!c.len || !c.upper || !c.digit || !c.special) {
-      errEl.textContent = 'Le mot de passe doit respecter les 4 règles ci-dessus.';
-      errEl.style.display = 'block'; return;
-    }
-    if (pw !== pw2) {
-      errEl.textContent = 'Les deux mots de passe ne correspondent pas.';
-      errEl.style.display = 'block'; return;
-    }
-    try {
-      const { error } = await supabaseClient.auth.updateUser({ password: pw, data: { must_change_password: false } });
-      if (error) throw error;
-      finishLogin(_pending.user, _pending.profile, _pending.email);
-    } catch (err) {
-      console.error(err);
-      errEl.textContent = 'Erreur : ' + (err?.message || 'réessayez.');
-      errEl.style.display = 'block';
-    }
+  window.addEventListener('storage', e => {
+    if (e.key === FoyerDB.KEYS.articles)     renderNews();
+    if (e.key === FoyerDB.KEYS.testimonials) renderTestimonials();
+    if (e.key === FoyerDB.KEYS.alerts)       renderAlertBanner();
   });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) renderAll(); });
+  window.addEventListener('focus', renderAll);
+})();
 </script>
 </body>
 </html>

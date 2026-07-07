@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidater à un stage — Association LEILA</title>
+<meta name="description" content="Candidatez à un stage au sein des établissements de l'Association LEILA : Foyer, SAJ, SAVS ou EMP Henri Wallon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/leila.css">
+<style>
+/* ── Variables service actif (surchargées par JS) ── */
+:root {
+  --svc-active: var(--svc-foyer);
+  --svc-active-dark: var(--svc-foyer-dark);
+  --svc-active-faint: rgba(37,104,128,.10);
+}
+
+/* ── Page header dynamique ── */
+.page-header.svc-foyer { background: linear-gradient(155deg, #edf4f8 0%, #deedf5 50%, #e9f4f9 100%); }
+.page-header.svc-saj   { background: linear-gradient(155deg, #fff5e8 0%, #fbe5cc 50%, #fff8f0 100%); }
+.page-header.svc-savs  { background: linear-gradient(155deg, #ecf3e8 0%, #d4e6cc 50%, #f0f7ec 100%); }
+.page-header.svc-emp   { background: linear-gradient(155deg, #f3ebfa 0%, #e2d0f0 50%, #f8f0fc 100%); }
+
+/* ── Grille candidature ── */
+.cand-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .cand-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+/* ── Colonne info ── */
+.cand-info {
+  background: var(--svc-active-faint, rgba(37,104,128,.08));
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(0,0,0,.06);
+  transition: background .3s;
+}
+
+.cand-info h3 {
+  margin: 1.4rem 0 .5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  color: var(--svc-active);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.cand-info ul { margin: 0; padding: 0; }
+
+.cand-info li {
+  padding: .35rem 0 .35rem 1.5rem;
+  position: relative;
+  font-size: .94rem;
+  color: var(--text);
+}
+
+.cand-info li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--svc-active);
+  font-weight: 700;
+}
+
+.cand-contact {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  background: white;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--svc-active);
+}
+
+.cand-contact a { color: var(--svc-active); }
+
+.service-intro-text {
+  font-size: .97rem;
+  color: var(--text-light);
+  line-height: 1.65;
+  margin-bottom: .5rem;
+}
+
+/* ── Formulaire ── */
+.cand-form {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Bouton dynamique ── */
+.btn-svc {
+  background: var(--svc-active);
+  color: white;
+  box-shadow: 0 4px 14px rgba(0,0,0,.15);
+  border: none;
+}
+.btn-svc:hover {
+  background: var(--svc-active-dark);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.2);
+}
+
+/* ── Focus inputs colorés par service ── */
+.cand-form .form-group input:focus,
+.cand-form .form-group textarea:focus,
+.cand-form .form-group select:focus {
+  border-color: var(--svc-active);
+  box-shadow: 0 0 0 3px var(--svc-active-faint);
+}
+
+/* ── Zones de dépôt ── */
+.file-zone {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 1.4rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  background: #fafcfd;
+  display: block;
+}
+.file-zone:hover,
+.file-zone.drag-over { border-color: var(--svc-active); background: var(--svc-active-faint); }
+.file-zone.has-file  { border-color: var(--svc-active); background: var(--svc-active-faint); border-style: solid; }
+
+.file-zone-icon { font-size: 1.8rem; display: block; margin-bottom: .4rem; }
+.file-zone-label { font-weight: 600; color: var(--svc-active); }
+.file-zone-hint  { font-size: .82rem; color: var(--text-light); margin-top: .3rem; }
+.file-zone input[type="file"] { display: none; }
+.file-zone-name  { font-size: .88rem; color: var(--text); margin-top: .5rem; word-break: break-all; }
+
+/* ── Messages ── */
+.success-message {
+  background: #e8f5e9;
+  border-left: 4px solid #2e7d32;
+  padding: 1.4rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  display: none;
+}
+.success-message.show { display: block; }
+
+.error-message {
+  background: #fdecea;
+  border-left: 4px solid #c62828;
+  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  color: #b71c1c;
+  display: none;
+}
+.error-message.show { display: block; }
+
+/* ── Eyebrow dynamique ── */
+.page-header .eyebrow-svc { color: var(--svc-active); font-weight: 700; }
+
+/* ── Service icon badge ── */
+.svc-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  background: white;
+  border: 1.5px solid var(--border);
+  padding: .5rem 1.2rem;
+  border-radius: 30px;
+  font-size: .9rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow-xs);
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+<!-- Bandeau service dynamique -->
+<div class="service-bar svc-foyer" id="service-bar">
+  <div class="container">
+    <span id="bar-label">Foyer Les Trois Rivières — Stages et candidatures</span>
+    <div class="service-switcher">
+      <a href="?service=foyer" id="sw-foyer" class="active" aria-label="Foyer">🏡 Foyer</a>
+      <a href="?service=saj"   id="sw-saj"                   aria-label="SAJ">🎨 SAJ</a>
+      <a href="?service=savs"  id="sw-savs"                  aria-label="SAVS">🤝 SAVS</a>
+      <a href="?service=emp"   id="sw-emp"                   aria-label="EMP">🎒 EMP</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header association -->
+<header class="header header-asso" role="banner">
+  <div class="container nav-container">
+    <a href="index.html" class="logo logo-asso" aria-label="Association LEILA — accueil">
+      <span class="logo-icon" aria-hidden="true">🌊</span>
+      <div>
+        <span class="logo-name" data-logo-asso="true">Association LEILA</span>
+        <span class="logo-sub" data-logo-asso="true">Foyer · SAJ · SAVS · EMP — Stains</span>
+      </div>
+    </a>
+    <nav class="nav nav-asso" id="nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Association ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="page.html?slug=association"><strong>L'association LEILA</strong><span>Notre histoire, nos valeurs</span></a>
+          <a href="page.html?slug=gouvernance"><strong>Gouvernance</strong><span>Direction et conseil d'administration</span></a>
+          <a href="partenaires.html"><strong>Partenaires</strong><span>Réseau et collaborations</span></a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Nos services ▾</button>
+        <div class="nav-dropdown-menu nav-services-menu">
+          <a href="foyer-accueil.html" class="nav-service-link" data-svc="foyer">
+            <span class="nav-service-icon">🏡</span>
+            <span class="nav-service-text"><strong>Foyer Les Trois Rivières</strong><span>Hébergement · 45 places</span></span>
+          </a>
+          <a href="saj-accueil.html" class="nav-service-link" data-svc="saj">
+            <span class="nav-service-icon">🎨</span>
+            <span class="nav-service-text"><strong>SAJ Les Trois Rivières</strong><span>Accueil de jour · 15 places</span></span>
+          </a>
+          <a href="savs-accueil.html" class="nav-service-link" data-svc="savs">
+            <span class="nav-service-icon">🤝</span>
+            <span class="nav-service-text"><strong>SAVS Les Trois Rivières</strong><span>Accompagnement · 42 places</span></span>
+          </a>
+          <a href="emp-accueil.html" class="nav-service-link" data-svc="emp">
+            <span class="nav-service-icon">🎒</span>
+            <span class="nav-service-text"><strong>EMP Henri Wallon</strong><span>Externat médico-pédagogique</span></span>
+          </a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Ressources ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="actualites.html"><strong>Actualités</strong><span>Tous services confondus</span></a>
+          <a href="agenda.html"><strong>Agenda</strong><span>Activités, sorties, événements</span></a>
+          <a href="documents.html"><strong>Documents</strong><span>Rapports, projets, livrets</span></a>
+          <a href="candidater.html" class="active"><strong>Candidater à un stage</strong><span>CV + lettre de motivation</span></a>
+        </div>
+      </div>
+      <a href="contact.html" class="nav-cta">Contact</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main-content">
+
+<!-- Hero page-header dynamique -->
+<section class="page-header svc-foyer" id="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Accueil</a> · <span id="bc-service">Foyer</span> · Candidater à un stage
+    </div>
+    <span class="eyebrow eyebrow-svc" id="hero-eyebrow">Stages et formation</span>
+    <h1 id="hero-title">Candidater à un stage au Foyer</h1>
+    <p id="hero-desc">Le Foyer accueille des stagiaires en formation d'éducateur spécialisé, moniteur éducateur, AMP/AES et gestion administrative.</p>
+  </div>
+</section>
+
+<!-- Section principale : grille 2 colonnes -->
+<section class="section">
+  <div class="container">
+    <div class="cand-grid">
+
+      <!-- Colonne info contextuelle -->
+      <div class="cand-info" id="cand-info">
+
+        <div class="svc-icon-badge" id="svc-badge">
+          <span id="badge-icon">🏡</span>
+          <span id="badge-name">Foyer Les Trois Rivières</span>
+        </div>
+
+        <p class="service-intro-text" id="svc-intro">
+          Le Foyer accueille des stagiaires en formation d'éducateur spécialisé, moniteur éducateur, AMP/AES et gestion administrative. En 2025, 16 stagiaires ont été accueillis.
+        </p>
+
+        <h3>Profils recherchés</h3>
+        <ul id="svc-profiles">
+          <li>Éducateur spécialisé</li>
+          <li>Moniteur éducateur</li>
+          <li>AMP / AES</li>
+          <li>Gestion administrative</li>
+          <li>Stage 3ème (découverte)</li>
+          <li>Autre</li>
+        </ul>
+
+        <h3>Comment candidater</h3>
+        <p style="font-size:.94rem;color:var(--text-light);">
+          Remplissez le formulaire en joignant votre <strong>CV</strong> et votre <strong>lettre de motivation</strong>
+          (PDF de préférence, max 2 Mo par fichier). Notre équipe vous répondra dans les meilleurs délais.
+        </p>
+
+        <div class="cand-contact">
+          <h3 style="margin-top:0;">Contact direct</h3>
+          <p style="font-size:.92rem;margin-bottom:.3rem;">
+            📞 <a href="tel:" id="svc-phone-link" style="color:var(--svc-active);font-weight:600;">01 49 46 24 40</a>
+          </p>
+          <p style="font-size:.92rem;margin:0;">
+            ✉ <a href="mailto:" id="svc-email-link" style="color:var(--svc-active);">residence@asso-leila.org</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Colonne formulaire -->
+      <div class="cand-form">
+        <h2 style="margin:0 0 1.5rem;font-size:1.4rem;">Votre candidature</h2>
+
+        <div id="cand-success" class="success-message" role="alert">
+          <strong>✓ Candidature envoyée !</strong>
+          <p style="margin:.4rem 0 0;">
+            Merci pour votre candidature. Nous avons bien reçu votre dossier et nous vous répondrons dans les meilleurs délais.
+          </p>
+        </div>
+        <div id="cand-error" class="error-message" role="alert"></div>
+
+        <form id="cand-form" novalidate>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label for="cand-firstname">Prénom *</label>
+              <input type="text" id="cand-firstname" placeholder="Votre prénom" required>
+            </div>
+            <div class="form-group">
+              <label for="cand-lastname">Nom *</label>
+              <input type="text" id="cand-lastname" placeholder="Votre nom" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cand-email">Email *</label>
+            <input type="email" id="cand-email" placeholder="vous@exemple.fr" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cand-phone">Téléphone</label>
+            <input type="tel" id="cand-phone" placeholder="06 00 00 00 00">
+          </div>
+
+          <div class="form-group">
+            <label for="cand-training">Formation / parcours *</label>
+            <select id="cand-training" required>
+              <option value="">— Choisir —</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cand-school">École / établissement de formation</label>
+            <input type="text" id="cand-school" placeholder="Nom de votre école ou centre de formation">
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label for="cand-period">Période souhaitée *</label>
+              <input type="text" id="cand-period" placeholder="Ex : sept. 2026 – fév. 2027" required>
+            </div>
+            <div class="form-group">
+              <label for="cand-duration">Durée du stage</label>
+              <input type="text" id="cand-duration" placeholder="Ex : 3 mois">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cand-message">Message / motivation *</label>
+            <textarea id="cand-message" rows="5" required
+              placeholder="Présentez votre projet, vos motivations et ce que vous espérez apporter…"></textarea>
+          </div>
+
+          <!-- Upload CV -->
+          <div class="form-group">
+            <label>CV * <small style="font-weight:400;color:var(--text-faint)">(PDF, DOC, DOCX — max 2 Mo)</small></label>
+            <label class="file-zone" id="zone-cv">
+              <input type="file" id="cand-cv"
+                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                required>
+              <span class="file-zone-icon">📎</span>
+              <span class="file-zone-label">Cliquez pour sélectionner votre CV</span>
+              <span class="file-zone-hint">ou glissez-déposez le fichier ici</span>
+              <span class="file-zone-name" id="cv-name"></span>
+            </label>
+          </div>
+
+          <!-- Upload lettre de motivation -->
+          <div class="form-group">
+            <label>Lettre de motivation * <small style="font-weight:400;color:var(--text-faint)">(PDF, DOC, DOCX — max 2 Mo)</small></label>
+            <label class="file-zone" id="zone-lm">
+              <input type="file" id="cand-lm"
+                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                required>
+              <span class="file-zone-icon">📄</span>
+              <span class="file-zone-label">Cliquez pour sélectionner votre lettre</span>
+              <span class="file-zone-hint">ou glissez-déposez le fichier ici</span>
+              <span class="file-zone-name" id="lm-name"></span>
+            </label>
+          </div>
+
+          <p style="font-size:.82rem;color:var(--text-faint);margin-bottom:1rem;">
+            * Champs obligatoires. Les données sont conservées de manière sécurisée et utilisées uniquement pour étudier votre candidature.
+          </p>
+
+          <button type="submit" id="cand-submit" class="btn btn-svc" style="width:100%;justify-content:center;">
+            Envoyer ma candidature
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer" role="contentinfo">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-logo"><span aria-hidden="true">🌊</span><strong>Association LEILA</strong></div>
+      <p>Accompagner avec dignité, soutenir l'autonomie. 4 établissements à Stains depuis 1963.</p>
+    </div>
+    <div>
+      <h4>Nos services</h4>
+      <ul class="footer-links">
+        <li><a href="foyer-accueil.html">🏡 Foyer Les Trois Rivières</a></li>
+        <li><a href="saj-accueil.html">🎨 SAJ Les Trois Rivières</a></li>
+        <li><a href="savs-accueil.html">🤝 SAVS Les Trois Rivières</a></li>
+        <li><a href="emp-accueil.html">🎒 EMP Henri Wallon</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Candidater</h4>
+      <ul class="footer-links">
+        <li><a href="candidater.html?service=foyer">Stage au Foyer</a></li>
+        <li><a href="candidater.html?service=saj">Stage au SAJ</a></li>
+        <li><a href="candidater.html?service=savs">Stage au SAVS</a></li>
+        <li><a href="candidater.html?service=emp">Stage à l'EMP</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p>Mail des 3 Rivières<br>93240 Stains</p>
+      <p style="margin-top:.5rem;">
+        <a href="mailto:contact@asso-leila.org" style="color:rgba(255,255,255,.75)">contact@asso-leila.org</a>
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© 2026 Association LEILA · Stains, Seine-Saint-Denis</p>
+      <ul class="footer-legal">
+        <li><a href="documents.html">Documents</a></li>
+        <li><a href="page.html?slug=mentions-legales">Mentions légales</a></li>
+        <li><a href="page.html?slug=accessibilite">Accessibilité</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="js/db.js"></script>
+<script src="js/section-styles.js"></script>
+<script src="js/branding.js"></script>
+<script src="js/leila.js"></script>
+<script src="js/script.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ── Données par service ── */
+  const SERVICE_DATA = {
+    foyer: {
+      color: '#256880', colorDark: '#1d4f64', faintRgb: '37,104,128',
+      icon: '🏡', name: 'Foyer Les Trois Rivières', sub: 'Foyer d\'hébergement',
+      intro: 'Le Foyer accueille des stagiaires en formation d\'éducateur spécialisé, moniteur éducateur, AMP/AES et gestion administrative. En 2025, 16 stagiaires ont été accueillis.',
+      profiles: ['Éducateur spécialisé','Moniteur éducateur','AMP / AES','Gestion administrative','Stage 3ème (découverte)','Autre'],
+      phone: '01 49 46 24 40', phoneTel: '0149462440',
+      email: 'residence@asso-leila.org'
+    },
+    saj: {
+      color: '#d9924a', colorDark: '#b97331', faintRgb: '217,146,74',
+      icon: '🎨', name: 'SAJ Les Trois Rivières', sub: 'Service d\'Accueil de Jour',
+      intro: 'Le SAJ accueille des stagiaires dans ses équipes éducatives créatives. Une expérience unique au cœur d\'une démarche participative et artistique.',
+      profiles: ['Éducateur spécialisé','Moniteur éducateur','Psychologue','Ergothérapeute','Stage 3ème (découverte)','Autre'],
+      phone: '01 85 58 68 14', phoneTel: '0185586814',
+      email: 'saj@asso-leila.org'
+    },
+    savs: {
+      color: '#5b8c4a', colorDark: '#406935', faintRgb: '91,140,74',
+      icon: '🤝', name: 'SAVS Les Trois Rivières', sub: 'Service d\'Accompagnement à la Vie Sociale',
+      intro: 'Le SAVS propose des stages orientés travail social et accompagnement à domicile. Découvrez l\'intervention sociale en milieu ordinaire.',
+      profiles: ['Éducateur spécialisé','Assistant de service social','CESF','AES / AMP','Stage 3ème (découverte)','Autre'],
+      phone: '01 85 58 68 14', phoneTel: '0185586814',
+      email: 'savs@asso-leila.org'
+    },
+    emp: {
+      color: '#9b6dc4', colorDark: '#6e4690', faintRgb: '155,109,196',
+      icon: '🎒', name: 'EMP Henri Wallon', sub: 'Externat Médico-Pédagogique',
+      intro: 'L\'EMP Henri Wallon accueille des stagiaires dans le secteur médico-éducatif auprès d\'enfants en situation de handicap.',
+      profiles: ['Éducateur spécialisé','Éducateur jeunes enfants','AES / AMP','Psychomotricien·ne','Orthophoniste','Stage 3ème (découverte)','Autre'],
+      phone: 'À compléter', phoneTel: '',
+      email: 'emp@asso-leila.org'
+    }
+  };
+
+  /* ── Détection du service depuis URL ── */
+  function getServiceFromUrl() {
+    const p = new URLSearchParams(window.location.search).get('service') || '';
+    return SERVICE_DATA[p] ? p : 'foyer';
+  }
+
+  let currentService = getServiceFromUrl();
+  let cvFile  = null;
+  let lmFile  = null;
+
+  /* ── Application du thème service ── */
+  function applyTheme(svc) {
+    const d = SERVICE_DATA[svc];
+    const root = document.documentElement;
+
+    root.style.setProperty('--svc-active',       d.color);
+    root.style.setProperty('--svc-active-dark',  d.colorDark);
+    root.style.setProperty('--svc-active-faint', `rgba(${d.faintRgb},.10)`);
+
+    // Bandeau
+    const bar = document.getElementById('service-bar');
+    bar.className = 'service-bar svc-' + svc;
+
+    document.getElementById('bar-label').textContent = d.name + ' — Stages et candidatures';
+
+    // Switcher : actif
+    ['foyer','saj','savs','emp'].forEach(s => {
+      const el = document.getElementById('sw-' + s);
+      el.classList.toggle('active', s === svc);
+    });
+
+    // Page header
+    const ph = document.getElementById('page-header');
+    ph.className = 'page-header svc-' + svc;
+
+    document.getElementById('bc-service').textContent       = d.name;
+    document.getElementById('hero-eyebrow').textContent     = d.sub + ' · Stages';
+    document.getElementById('hero-title').textContent       = 'Candidater à un stage — ' + d.name;
+    document.getElementById('hero-desc').textContent        = d.intro;
+
+    // Bloc info
+    document.getElementById('badge-icon').textContent       = d.icon;
+    document.getElementById('badge-name').textContent       = d.name;
+    document.getElementById('svc-intro').textContent        = d.intro;
+
+    // Profils
+    const ul = document.getElementById('svc-profiles');
+    ul.innerHTML = d.profiles.map(p => `<li>${p}</li>`).join('');
+
+    // Contact
+    const phoneLink = document.getElementById('svc-phone-link');
+    phoneLink.textContent = d.phone;
+    phoneLink.href = d.phoneTel ? 'tel:' + d.phoneTel : '#';
+
+    const emailLink = document.getElementById('svc-email-link');
+    emailLink.textContent = d.email;
+    emailLink.href = 'mailto:' + d.email;
+
+    // Dropdown formation
+    const sel = document.getElementById('cand-training');
+    sel.innerHTML = '<option value="">— Choisir —</option>' +
+      d.profiles.map(p => `<option value="${p}">${p}</option>`).join('');
+
+    // Titre page
+    document.title = 'Candidater à un stage — ' + d.name;
+  }
+
+  /* ── Gestion des zones drag & drop ── */
+  function bindFileZone(zoneId, inputId, nameId, setter) {
+    const zone  = document.getElementById(zoneId);
+    const input = document.getElementById(inputId);
+    const name  = document.getElementById(nameId);
+
+    function setFile(f) {
+      if (!f) { setter(null); name.textContent = ''; zone.classList.remove('has-file'); return; }
+      if (f.size > FoyerDB.MAX_FILE_BYTES) {
+        showError(`Fichier "${f.name}" trop volumineux (${FoyerDB.fmtSize(f.size)}). Max autorisé : ${FoyerDB.fmtSize(FoyerDB.MAX_FILE_BYTES)}.`);
+        input.value = ''; setter(null); name.textContent = ''; zone.classList.remove('has-file');
+        return;
+      }
+      setter(f);
+      name.textContent = `✓ ${f.name} · ${FoyerDB.fmtSize(f.size)}`;
+      zone.classList.add('has-file');
+    }
+
+    input.addEventListener('change', () => setFile(input.files[0] || null));
+
+    ['dragenter','dragover'].forEach(ev =>
+      zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('drag-over'); }));
+    ['dragleave'].forEach(ev =>
+      zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('drag-over'); }));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      if (e.dataTransfer.files[0]) {
+        input.files = e.dataTransfer.files;
+        setFile(input.files[0]);
+      }
+    });
+  }
+
+  /* ── Messages ── */
+  function showError(msg) {
+    const el = document.getElementById('cand-error');
+    el.textContent = msg;
+    el.classList.add('show');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(() => el.classList.remove('show'), 7000);
+  }
+
+  function hideError() {
+    document.getElementById('cand-error').classList.remove('show');
+  }
+
+  /* ── Soumission du formulaire ── */
+  document.getElementById('cand-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError();
+
+    const v = id => document.getElementById(id).value.trim();
+
+    const required = ['cand-firstname','cand-lastname','cand-email','cand-training','cand-period','cand-message'];
+    for (const id of required) {
+      if (!v(id)) {
+        showError('Merci de remplir tous les champs obligatoires (*).');
+        document.getElementById(id).focus();
+        return;
+      }
+    }
+    if (!cvFile) { showError('Veuillez joindre votre CV.'); return; }
+    if (!lmFile) { showError('Veuillez joindre votre lettre de motivation.'); return; }
+
+    const btn = document.getElementById('cand-submit');
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours…';
+
+    try {
+      const [cvData, lmData] = await Promise.all([
+        FoyerDB.fileToDataUrl(cvFile),
+        FoyerDB.fileToDataUrl(lmFile)
+      ]);
+
+      const app = {
+        id:               FoyerDB.genId(),
+        service:          currentService,
+        firstName:        v('cand-firstname'),
+        lastName:         v('cand-lastname'),
+        email:            v('cand-email'),
+        phone:            v('cand-phone'),
+        training:         v('cand-training'),
+        school:           v('cand-school'),
+        period:           v('cand-period'),
+        duration:         v('cand-duration'),
+        message:          v('cand-message'),
+        cvData,
+        cvName:           cvFile.name,
+        cvSize:           cvFile.size,
+        coverLetterData:  lmData,
+        coverLetterName:  lmFile.name,
+        coverLetterSize:  lmFile.size,
+        status:           'new',
+        submittedAt:      new Date().toISOString()
+      };
+
+      const ok = FoyerDB.saveApplication(app);
+      if (!ok) throw new Error('Stockage local saturé. Réduisez la taille de vos fichiers ou contactez-nous par email.');
+
+      // Reset
+      document.getElementById('cand-form').reset();
+      cvFile = lmFile = null;
+      document.getElementById('cv-name').textContent = '';
+      document.getElementById('lm-name').textContent = '';
+      document.querySelectorAll('.file-zone').forEach(z => z.classList.remove('has-file'));
+
+      document.getElementById('cand-success').classList.add('show');
+      document.getElementById('cand-success').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (err) {
+      showError('⚠ ' + (err.message || 'Une erreur est survenue, veuillez réessayer.'));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Envoyer ma candidature';
+    }
+  });
+
+  /* ── Nav dropdown ── */
+  const ddServices = document.getElementById('dd-services');
+  if (ddServices) {
+    ddServices.querySelector('.nav-dropdown-btn').addEventListener('click', function () {
+      const open = ddServices.classList.toggle('open');
+      this.setAttribute('aria-expanded', open);
+    });
+    document.addEventListener('click', e => {
+      if (!ddServices.contains(e.target)) ddServices.classList.remove('open');
+    });
+  }
+
+  /* ── Init ── */
+  bindFileZone('zone-cv', 'cand-cv', 'cv-name', f => cvFile = f);
+  bindFileZone('zone-lm', 'cand-lm', 'lm-name', f => lmFile = f);
+  applyTheme(currentService);
+
+})();
+</script>
+</body>
+</html>

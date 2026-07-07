@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Équipe — Les Trois Rivières</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/leila.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="header header-asso" role="banner">
+  <div class="container nav-container">
+    <a href="index.html" class="logo logo-asso" aria-label="Association LEILA — accueil">
+      <span class="logo-icon" aria-hidden="true">🌊</span>
+      <div>
+        <span class="logo-name" data-logo-asso="true">Association LEILA</span>
+        <span class="logo-sub" data-logo-asso="true">Foyer · SAJ · SAVS · EMP — Stains</span>
+      </div>
+    </a>
+    <nav class="nav nav-asso" id="nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Association ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="page.html?slug=association"><strong>L'association LEILA</strong><span>Notre histoire, nos valeurs</span></a>
+          <a href="page.html?slug=gouvernance"><strong>Gouvernance</strong><span>Direction et conseil d'administration</span></a>
+          <a href="partenaires.html"><strong>Partenaires</strong><span>Réseau et collaborations</span></a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Nos services ▾</button>
+        <div class="nav-dropdown-menu nav-services-menu">
+          <a href="foyer-accueil.html" class="nav-service-link" data-svc="foyer">
+            <span class="nav-service-icon">🏡</span>
+            <span class="nav-service-text"><strong>Foyer Les Trois Rivières</strong><span>Hébergement · 45 places</span></span>
+          </a>
+          <a href="saj-accueil.html" class="nav-service-link" data-svc="saj">
+            <span class="nav-service-icon">🎨</span>
+            <span class="nav-service-text"><strong>SAJ Les Trois Rivières</strong><span>Accueil de jour · 15 places</span></span>
+          </a>
+          <a href="savs-accueil.html" class="nav-service-link" data-svc="savs">
+            <span class="nav-service-icon">🤝</span>
+            <span class="nav-service-text"><strong>SAVS Les Trois Rivières</strong><span>Accompagnement · 42 places</span></span>
+          </a>
+          <a href="emp-accueil.html" class="nav-service-link" data-svc="emp">
+            <span class="nav-service-icon">🎒</span>
+            <span class="nav-service-text"><strong>EMP Henri Wallon</strong><span>Externat médico-pédagogique</span></span>
+          </a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" aria-expanded="false">Ressources ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="actualites.html"><strong>Actualités</strong><span>Tous services confondus</span></a>
+          <a href="agenda.html"><strong>Agenda</strong><span>Activités, sorties, événements</span></a>
+          <a href="documents.html"><strong>Documents</strong><span>Rapports, projets, livrets</span></a>
+          <a href="candidater.html"><strong>Candidater à un stage</strong><span>CV + lettre de motivation</span></a>
+        </div>
+      </div>
+      <a href="contact.html" class="nav-cta">Contact</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Accueil</a> · Équipe</div>
+    <span class="eyebrow">Une équipe pluridisciplinaire</span>
+    <h1>Au service des personnes accompagnées</h1>
+    <p>L'équipe du foyer se compose d'une équipe pluridisciplinaire de seize personnes garantissant la continuité, la stabilité et la qualité de la prise en charge.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Notre organisation</span>
+      <h2>L'organigramme du foyer</h2>
+      <p class="lead">Une équipe pluridisciplinaire répartie sur plusieurs métiers, au service d'un accompagnement global et cohérent.</p>
+    </div>
+
+    <div class="team-grid" id="team-list" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Coordination</span>
+      <h2>Une dynamique d'équipe structurée</h2>
+    </div>
+
+    <div class="grid-2">
+      <article class="card">
+        <div class="card-icon">📅</div>
+        <h3>Réunions d'équipe hebdomadaires</h3>
+        <p>Chaque mardi de 13h45 à 17h00, l'ensemble de l'équipe éducative se réunit pour un temps structurant : réflexion thématique, organisation, suivi des projets personnalisés, point sur les situations individuelles, informations institutionnelles.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">🔍</div>
+        <h3>Analyse des pratiques (GAPP)</h3>
+        <p>Toutes les six semaines, une intervention extérieure spécialisée garantit un regard neutre et distancié sur les situations. 10 séances en 2025 pour soutenir l'analyse des pratiques professionnelles.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">🎓</div>
+        <h3>Formations en 2025</h3>
+        <p>Formation au logiciel IMAGO pour l'ensemble des salariés, formation Santé Mentale et VASI pour une éducatrice, formation collective Sécurité Incendie en février 2025.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">🤝</div>
+        <h3>Partenariats institutionnels</h3>
+        <p>Lien régulier avec les ESAT, le CMP de Stains, les curateurs et curatrices, les familles et les structures de soins, pour garantir la cohérence du parcours de chaque résident.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">Accueil de stagiaires</span>
+      <h2>Un engagement pour la formation des futurs professionnels</h2>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-block">
+        <strong>16</strong>
+        <span>Stagiaires accueillis en 2025</span>
+      </div>
+      <div class="stat-block">
+        <strong>4</strong>
+        <span>Éducateurs spécialisés</span>
+      </div>
+      <div class="stat-block">
+        <strong>2</strong>
+        <span>Moniteurs éducateurs</span>
+      </div>
+      <div class="stat-block">
+        <strong>5</strong>
+        <span>Gestion administrative</span>
+      </div>
+    </div>
+
+    <div class="content-block" style="margin-top: 3rem;">
+      <p>
+        L'année 2025 a été marquée par un engagement soutenu du foyer en faveur de la formation
+        professionnelle. Chaque stagiaire bénéficie d'un accompagnement individualisé, assuré par
+        un tuteur référent au sein de l'établissement.
+      </p>
+      <p>
+        Le foyer est de plus en plus sollicité pour l'accueil de stagiaires, considérant cet
+        accueil comme une opportunité de transmission des savoirs, de questionnement des pratiques
+        professionnelles et d'enrichissement mutuel.
+      </p>
+      <p>
+        L'accueil de stagiaires constitue également, dans certains cas, un véritable
+        <strong>vivier de recrutement</strong> pour l'établissement, contribuant à la continuité
+        et à la stabilité du fonctionnement du foyer.
+      </p>
+
+      <div style="margin-top: 2rem; text-align: center;">
+        <a href="candidater.html" class="btn btn-primary" style="font-size: 1.05rem; padding: 1rem 2rem;">
+          🎓 Candidater à un stage
+        </a>
+        <p style="margin-top: .8rem; font-size: .9rem; color: var(--text-light);">
+          Envoyez votre CV et lettre de motivation directement en ligne.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container two-col">
+    <div class="two-col-text">
+      <span class="eyebrow">Partenariats</span>
+      <h2>Un réseau d'acteurs au service du parcours</h2>
+      <p>
+        En 2025, la dynamique partenariale s'est renforcée et concrétisée. Une convention de
+        prestation a notamment été signée avec le <strong>GAPAS</strong>, formalisant une volonté
+        commune de coopération et de mutualisation des ressources.
+      </p>
+      <ul class="check-list" id="partners-list"></ul>
+    </div>
+    <div class="two-col-visual" style="grid-template-columns: 1fr;">
+      <div class="visual-card" style="transform: none; padding: 2.5rem; text-align: left; background: white;">
+        <h3 style="font-family: 'Inter', sans-serif; margin-bottom: 1rem; color: var(--primary);">Coordination avec les ESAT</h3>
+        <p style="text-align: left;">
+          Un travail de renforcement partenarial a été mené avec les différents ESAT accueillant
+          les résidents. L'objectif : un accompagnement éducatif plus fluide, plus cohérent et
+          davantage ajusté aux besoins singuliers de chaque résident.
+        </p>
+        <p style="text-align: left; margin-top: 0.8rem;">
+          Pour les personnes accompagnées, le foyer et le travail constituent deux dimensions
+          centrales de leur quotidien, étroitement liées dans leur équilibre global.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container cta-inner">
+    <h2>Une question ? Un projet ?</h2>
+    <p>Notre équipe est à votre écoute pour toute demande d'information ou de partenariat.</p>
+    <a href="contact.html" class="btn btn-white">Nous contacter</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-logo"><span>🌊</span><strong>Les Trois Rivières</strong></div>
+      <p>Foyer d'hébergement pour adultes en situation de handicap travaillant en ESAT.</p>
+    </div>
+    <div>
+      <h4>Adresse</h4>
+      <p>Mail des 3 Rivières<br>93240 Stains</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p>01 49 46 24 40<br>residence@asso-leila.org</p>
+    </div>
+    <div>
+      <h4>Liens</h4>
+      <ul class="footer-links">
+        <li><a href="presentation.html">Le foyer</a></li>
+        <li><a href="accompagnement.html">Accompagnement</a></li>
+        <li><a href="activites.html">Activités</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© 2026 Foyer d'hébergement Les Trois Rivières · Association Leïla</p>
+      <ul class="footer-legal">
+        <li><a href="documents.html">Documents</a></li>
+        <li><a href="page.html?slug=mentions-legales">Mentions légales</a></li>
+        <li><a href="page.html?slug=accessibilite">Accessibilité</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="js/db.js"></script>
+<script src="js/section-styles.js"></script>
+<script src="js/branding.js"></script>
+<script src="js/leila.js"></script>
+<script src="js/script.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (typeof FoyerDB === 'undefined') return;
+
+  const escapeHtml = (s) => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+  function renderTeam() {
+    const grid = document.getElementById('team-list');
+    if (!grid) return;
+    const items = (FoyerDB.getTeam ? FoyerDB.getTeam({ published: true }) : []);
+    if (!items.length) {
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);">Composition de l\'équipe en cours de mise à jour.</p>';
+      return;
+    }
+    grid.innerHTML = items.map(t => `
+      <article class="team-card">
+        <div class="team-avatar">${escapeHtml(t.icon || '👥')}</div>
+        ${t.count ? `<span class="team-count">${escapeHtml(t.count)}</span>` : ''}
+        <div class="team-role">${escapeHtml(t.role || '')}</div>
+        ${t.description ? `<p>${escapeHtml(t.description)}</p>` : ''}
+      </article>
+    `).join('');
+  }
+
+  function renderPartners() {
+    const list = document.getElementById('partners-list');
+    if (!list) return;
+    const items = (FoyerDB.getPartners ? FoyerDB.getPartners({ published: true }) : []);
+    if (!items.length) {
+      list.innerHTML = '<li>Liste des partenaires en cours de mise à jour.</li>';
+      return;
+    }
+    list.innerHTML = items.map(p => {
+      const label = p.name + (p.relation ? ' — ' + p.relation : '');
+      return `<li>${escapeHtml(label)}</li>`;
+    }).join('');
+  }
+
+  function renderAll() { renderTeam(); renderPartners(); }
+  renderAll();
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === FoyerDB.KEYS.team)     renderTeam();
+    if (e.key === FoyerDB.KEYS.partners) renderPartners();
+  });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) renderAll(); });
+  window.addEventListener('focus', renderAll);
+})();
+</script>
+</body>
+</html>
