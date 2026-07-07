@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; padding: 18px clamp(20px, 4vw, 56px); background: rgba(14,12,9,0.86); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(200,150,62,0.2); font-family: 'Public Sans', sans-serif;">
+  <a href="Accueil LEILA.dc.html" style="display: flex; flex-direction: column; gap: 2px; text-decoration: none;">
+    <span style="font: 800 22px 'Archivo'; letter-spacing: 4px; color: #F5EFE3;">LEILA</span>
+    <span style="font: 500 10px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">FOYER · SAJ · SAVS · EMP — STAINS</span>
+  </a>
+  <div style="display: flex; flex-wrap: wrap; gap: 10px clamp(12px, 1.8vw, 28px); font: 500 12px 'Archivo'; letter-spacing: 1.2px;">
+    <a href="Accueil LEILA.dc.html" style="text-decoration: none; color: {{ cAccueil }}; transition: color 0.3s;" style-hover="color: #C8963E;">ACCUEIL</a>
+    <a href="Association.dc.html" style="text-decoration: none; color: {{ cAssociation }}; transition: color 0.3s;" style-hover="color: #C8963E;">L'ASSOCIATION</a>
+    <a href="Foyer.dc.html" style="text-decoration: none; color: {{ cFoyer }}; transition: color 0.3s;" style-hover="color: #C8963E;">FOYER</a>
+    <a href="SAJ.dc.html" style="text-decoration: none; color: {{ cSaj }}; transition: color 0.3s;" style-hover="color: #C8963E;">SAJ</a>
+    <a href="SAVS.dc.html" style="text-decoration: none; color: {{ cSavs }}; transition: color 0.3s;" style-hover="color: #C8963E;">SAVS</a>
+    <a href="EMP.dc.html" style="text-decoration: none; color: {{ cEmp }}; transition: color 0.3s;" style-hover="color: #C8963E;">EMP</a>
+    <a href="Actualites.dc.html" style="text-decoration: none; color: {{ cActualites }}; transition: color 0.3s;" style-hover="color: #C8963E;">ACTUALITÉS</a>
+    <a href="Contact.dc.html" style="text-decoration: none; color: {{ cContact }}; transition: color 0.3s;" style-hover="color: #C8963E;">CONTACT</a>
+  </div>
+  <a href="Candidater.dc.html" style="text-decoration: none; border: 1px solid #C8963E; color: #C8963E; font: 600 12px 'Archivo'; letter-spacing: 2px; padding: 11px 24px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">CANDIDATER</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1400px&quot;,&quot;height&quot;:&quot;80px&quot;},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;accueil&quot;,&quot;association&quot;,&quot;foyer&quot;,&quot;saj&quot;,&quot;savs&quot;,&quot;emp&quot;,&quot;actualites&quot;,&quot;contact&quot;],&quot;default&quot;:&quot;accueil&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const active = this.props.active || '';
+    const c = (k) => (k === active ? '#C8963E' : '#D8CFBC');
+    return {
+      cAccueil: c('accueil'),
+      cAssociation: c('association'),
+      cFoyer: c('foyer'),
+      cSaj: c('saj'),
+      cSavs: c('savs'),
+      cEmp: c('emp'),
+      cActualites: c('actualites'),
+      cContact: c('contact'),
+    };
+  }
+}
+</script>
+</body>
+</html>

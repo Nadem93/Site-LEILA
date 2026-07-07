@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
+  a { color: #F5EFE3; text-decoration: none; }
+  a:hover { color: #C8963E; }
+  @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+
+<div data-screen-label="Actualités" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+
+  <dc-import name="Nav" active="actualites" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+
+  <!-- ═══ EN-TÊTE ═══ -->
+  <div style="padding: 100px 56px 60px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; border-bottom: 1px solid rgba(200,150,62,0.25);">
+    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">ACTUALITÉS &amp; AGENDA</span>
+    <h1 style="font: 800 56px/1.05 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">La vie de l'association</h1>
+    <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 620px; animation: fadeUp 0.9s 0.6s ease both;">Toutes les actualités et les prochains événements, tous services confondus.</p>
+    <div style="display: flex; gap: 10px; animation: fadeUp 0.9s 0.8s ease both;">
+      <span style="border: 1px solid #C8963E; color: #C8963E; font: 600 12px 'Archivo'; letter-spacing: 1.5px; padding: 9px 20px; border-radius: 999px;">TOUS</span>
+      <span style="border: 1px solid rgba(200,150,62,0.35); color: #9A8F79; font: 600 12px 'Archivo'; letter-spacing: 1.5px; padding: 9px 20px; border-radius: 999px; transition: color 0.3s, border-color 0.3s;" style-hover="color: #C8963E; border-color: #C8963E;">FOYER</span>
+      <span style="border: 1px solid rgba(200,150,62,0.35); color: #9A8F79; font: 600 12px 'Archivo'; letter-spacing: 1.5px; padding: 9px 20px; border-radius: 999px; transition: color 0.3s, border-color 0.3s;" style-hover="color: #C8963E; border-color: #C8963E;">SAJ</span>
+      <span style="border: 1px solid rgba(200,150,62,0.35); color: #9A8F79; font: 600 12px 'Archivo'; letter-spacing: 1.5px; padding: 9px 20px; border-radius: 999px; transition: color 0.3s, border-color 0.3s;" style-hover="color: #C8963E; border-color: #C8963E;">SAVS</span>
+      <span style="border: 1px solid rgba(200,150,62,0.35); color: #9A8F79; font: 600 12px 'Archivo'; letter-spacing: 1.5px; padding: 9px 20px; border-radius: 999px; transition: color 0.3s, border-color 0.3s;" style-hover="color: #C8963E; border-color: #C8963E;">EMP</span>
+    </div>
+  </div>
+
+  <!-- ═══ ACTUALITÉS ═══ -->
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; padding: 70px 56px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+    <div data-reveal style="border: 1px solid rgba(200,150,62,0.25); display: flex; flex-direction: column; transition: transform 0.35s, border-color 0.35s;" style-hover="transform: translateY(-6px); border-color: rgba(200,150,62,0.6);">
+      <div style="height: 200px; background: repeating-linear-gradient(45deg, #1A1610, #1A1610 12px, #14110B 12px, #14110B 24px); display: grid; place-items: center;">
+        <span style="font: 400 12px monospace; color: #9A8F79;">[ photo actualité ]</span>
+      </div>
+      <div style="padding: 26px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">SAJ · VIE DU SERVICE</span>
+          <span style="font: 400 12px 'Public Sans'; color: #9A8F79;">Juin 2026</span>
+        </div>
+        <span style="font: 700 19px/1.3 'Archivo';">Le Kiosque ouvre ses portes au quartier</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Le projet du SAJ investit le Moulin Neuf avec un espace ouvert à tous.</span>
+        <a href="#" style="color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px;">Lire la suite →</a>
+      </div>
+    </div>
+    <div data-reveal style="border: 1px solid rgba(200,150,62,0.25); display: flex; flex-direction: column; transition: transform 0.35s, border-color 0.35s;" style-hover="transform: translateY(-6px); border-color: rgba(200,150,62,0.6);">
+      <div style="height: 200px; background: repeating-linear-gradient(45deg, #1A1610, #1A1610 12px, #14110B 12px, #14110B 24px); display: grid; place-items: center;">
+        <span style="font: 400 12px monospace; color: #9A8F79;">[ photo actualité ]</span>
+      </div>
+      <div style="padding: 26px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">FOYER · ÉVÉNEMENT</span>
+          <span style="font: 400 12px 'Public Sans'; color: #9A8F79;">Juin 2026</span>
+        </div>
+        <span style="font: 700 19px/1.3 'Archivo';">Fête d'été des Trois Rivières</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Résidents, familles et équipes réunis pour la grande fête annuelle du Foyer.</span>
+        <a href="#" style="color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px;">Lire la suite →</a>
+      </div>
+    </div>
+    <div data-reveal style="border: 1px solid rgba(200,150,62,0.25); display: flex; flex-direction: column; transition: transform 0.35s, border-color 0.35s;" style-hover="transform: translateY(-6px); border-color: rgba(200,150,62,0.6);">
+      <div style="height: 200px; background: repeating-linear-gradient(45deg, #1A1610, #1A1610 12px, #14110B 12px, #14110B 24px); display: grid; place-items: center;">
+        <span style="font: 400 12px monospace; color: #9A8F79;">[ photo actualité ]</span>
+      </div>
+      <div style="padding: 26px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">SAVS · PROJET</span>
+          <span style="font: 400 12px 'Public Sans'; color: #9A8F79;">Mai 2026</span>
+        </div>
+        <span style="font: 700 19px/1.3 'Archivo';">CapDroits : la recherche participative continue</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Les personnes accompagnées participent à la démarche sur l'exercice des droits.</span>
+        <a href="#" style="color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px;">Lire la suite →</a>
+      </div>
+    </div>
+  </div>
+  <div data-reveal style="padding: 0 56px 40px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+    <div style="border: 1px dashed rgba(200,150,62,0.4); padding: 22px 28px; font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Les actualités sont gérées depuis l'espace admin du site — cette grille affichera automatiquement les articles publiés.</div>
+  </div>
+
+  <!-- ═══ AGENDA ═══ -->
+  <div style="border-top: 1px solid rgba(200,150,62,0.25);">
+    <div data-reveal style="padding: 90px 56px 40px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">AGENDA</span>
+      <h2 style="font: 800 40px/1.15 'Archivo'; margin: 0; text-transform: uppercase;">Prochains événements</h2>
+    </div>
+    <div style="padding: 0 56px 100px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column;">
+      <div data-reveal style="display: grid; grid-template-columns: 140px 1fr auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
+        <span style="font: 800 20px 'Archivo'; color: #C8963E;">12 JUIL.</span>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font: 700 19px 'Archivo';">Fête d'été des Trois Rivières</span>
+          <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Foyer · Mail des Trois Rivières, Stains · dès 14h</span>
+        </div>
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E; border: 1px solid rgba(200,150,62,0.4); padding: 8px 16px; border-radius: 999px;">FOYER</span>
+      </div>
+      <div data-reveal style="display: grid; grid-template-columns: 140px 1fr auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
+        <span style="font: 800 20px 'Archivo'; color: #C8963E;">23 SEPT.</span>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font: 700 19px 'Archivo';">Portes ouvertes du Kiosque</span>
+          <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">SAJ · Quartier du Moulin Neuf · 10h – 17h</span>
+        </div>
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E; border: 1px solid rgba(200,150,62,0.4); padding: 8px 16px; border-radius: 999px;">SAJ</span>
+      </div>
+      <div data-reveal style="display: grid; grid-template-columns: 140px 1fr auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
+        <span style="font: 800 20px 'Archivo'; color: #C8963E;">14 OCT.</span>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font: 700 19px 'Archivo';">Rencontre familles &amp; tuteurs</span>
+          <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">SAVS · Sur inscription · 18h</span>
+        </div>
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E; border: 1px solid rgba(200,150,62,0.4); padding: 8px 16px; border-radius: 999px;">SAVS</span>
+      </div>
+    </div>
+  </div>
+
+  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    if (this._revealDone) return;
+    this._revealDone = true;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = document.querySelectorAll('[data-reveal]');
+    if (reduced || !('IntersectionObserver' in window)) return;
+    els.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.9) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.9s ease, transform 0.9s ease';
+      }
+    });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

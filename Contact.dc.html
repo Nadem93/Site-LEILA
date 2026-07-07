@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
+  a { color: #F5EFE3; text-decoration: none; }
+  a:hover { color: #C8963E; }
+  @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
+  input, textarea, select { outline: none; }
+  input:focus, textarea:focus, select:focus { border-color: #C8963E !important; }
+</style>
+</helmet>
+
+<div data-screen-label="Contact" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+
+  <dc-import name="Nav" active="contact" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+
+  <!-- ═══ EN-TÊTE ═══ -->
+  <div style="padding: 100px 56px 60px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; border-bottom: 1px solid rgba(200,150,62,0.25);">
+    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">CONTACT</span>
+    <h1 style="font: 800 56px/1.05 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">Parlons de votre demande</h1>
+    <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 620px; animation: fadeUp 0.9s 0.6s ease both;">Information, admission, partenariat : notre équipe vous répond.</p>
+  </div>
+
+  <!-- ═══ FORMULAIRE + COORDONNÉES ═══ -->
+  <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 72px; padding: 70px 56px 100px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+    <div data-reveal style="display: flex; flex-direction: column; gap: 22px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
+        <label style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">NOM</span>
+          <input type="text" placeholder="Votre nom" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+        </label>
+        <label style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">EMAIL</span>
+          <input type="email" placeholder="vous@exemple.fr" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+        </label>
+      </div>
+      <label style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">SERVICE CONCERNÉ</span>
+        <select style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px 'Public Sans'; padding: 15px 18px; transition: border-color 0.3s;">
+          <option>Association LEILA (général)</option>
+          <option>Foyer Les Trois Rivières</option>
+          <option>SAJ Les Trois Rivières</option>
+          <option>SAVS Les Trois Rivières</option>
+          <option>EMP Henri Wallon</option>
+        </select>
+      </label>
+      <label style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">VOTRE MESSAGE</span>
+        <textarea rows="6" placeholder="Décrivez votre demande…" style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); color: #F5EFE3; font: 400 16px/1.6 'Public Sans'; padding: 15px 18px; resize: vertical; transition: border-color 0.3s;"></textarea>
+      </label>
+      <button onClick="{{ envoyer }}" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; letter-spacing: 1px; padding: 16px 34px; border: none; border-radius: 999px; cursor: pointer; align-self: flex-start; transition: transform 0.3s, box-shadow 0.3s;" style-hover="transform: translateY(-3px); box-shadow: 0 12px 28px rgba(200,150,62,0.35);">{{ btnLabel }}</button>
+    </div>
+    <div data-reveal style="display: flex; flex-direction: column; gap: 0; align-self: start;">
+      <div style="border-top: 1px solid rgba(200,150,62,0.35); padding: 24px 0; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">ADRESSE</span>
+        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">Mail des Trois Rivières<br>Moulin Neuf, 93240 Stains</span>
+      </div>
+      <div style="border-top: 1px solid rgba(200,150,62,0.35); padding: 24px 0; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">TÉLÉPHONE</span>
+        <a href="tel:0149462440" style="font: 400 16px 'Public Sans'; color: #CFC5B0;">01 49 46 24 40</a>
+      </div>
+      <div style="border-top: 1px solid rgba(200,150,62,0.35); padding: 24px 0; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">EMAIL</span>
+        <a href="mailto:contact@asso-leila.org" style="font: 400 16px 'Public Sans'; color: #CFC5B0;">contact@asso-leila.org</a>
+        <a href="mailto:residence@asso-leila.org" style="font: 400 16px 'Public Sans'; color: #CFC5B0;">residence@asso-leila.org (Foyer)</a>
+      </div>
+      <div style="border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35); padding: 24px 0; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">HORAIRES</span>
+        <span style="font: 400 16px/1.6 'Public Sans'; color: #CFC5B0;">Foyer : 7j/7, 365 jours par an<br>SAJ : lundi – vendredi, 9h – 16h<br>SAVS : sur rendez-vous</span>
+      </div>
+    </div>
+  </div>
+
+  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { sent: false };
+
+  componentDidMount() {
+    if (this._revealDone) return;
+    this._revealDone = true;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = document.querySelectorAll('[data-reveal]');
+    if (reduced || !('IntersectionObserver' in window)) return;
+    els.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.9) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.9s ease, transform 0.9s ease';
+      }
+    });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+  }
+
+  renderVals() {
+    return {
+      btnLabel: this.state.sent ? 'Message envoyé ✦' : 'Envoyer le message',
+      envoyer: () => {
+        this.setState({ sent: true });
+        setTimeout(() => this.setState({ sent: false }), 3000);
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

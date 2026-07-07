@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
+  a { color: #F5EFE3; text-decoration: none; }
+  a:hover { color: #C8963E; }
+  @keyframes kenburns { 0% { transform: scale(1) translateX(0); } 100% { transform: scale(1.14) translateX(-2%); } }
+  @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+
+<div data-screen-label="Foyer" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+
+  <dc-import name="Nav" active="foyer" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+
+  <!-- ═══ HERO ═══ -->
+  <div style="position: relative; height: 560px; overflow: hidden;">
+    <img src="images/foyer-batiment.jpeg" alt="Le bâtiment du Foyer Les Trois Rivières" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kenburns 18s ease-in-out infinite alternate;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,12,9,0.55) 0%, rgba(14,12,9,0.3) 40%, rgba(14,12,9,0.95) 100%);"></div>
+    <div style="position: absolute; left: 56px; right: 56px; bottom: 64px; display: flex; flex-direction: column; gap: 18px;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">01 — HÉBERGEMENT · DEPUIS 2005</span>
+      <h1 style="font: 800 58px/1.05 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">Foyer Les Trois Rivières</h1>
+      <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 620px; animation: fadeUp 0.9s 0.6s ease both;">Un foyer où chacun trouve sa place. 45 adultes en situation de handicap travaillant en ESAT, accueillis dans un cadre de vie sécurisé, bienveillant et structurant, 7 jours sur 7.</p>
+      <div style="display: flex; gap: 14px; animation: fadeUp 0.9s 0.8s ease both;">
+        <a href="#mission" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; padding: 14px 28px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Découvrir le Foyer</a>
+        <a href="Candidater.dc.html" style="border: 1px solid rgba(245,239,227,0.45); color: #F5EFE3; font: 700 15px 'Archivo'; padding: 14px 28px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Candidater à un stage</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STATS ═══ -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(200,150,62,0.25); border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35);">
+    <div style="background: #0E0C09; padding: 34px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
+      <span style="font: 800 40px 'Archivo'; color: #C8963E;">45</span><span style="font: 500 13px 'Public Sans'; color: #9A8F79;">places</span>
+    </div>
+    <div style="background: #0E0C09; padding: 34px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
+      <span style="font: 800 40px 'Archivo'; color: #C8963E;">98,5 %</span><span style="font: 500 13px 'Public Sans'; color: #9A8F79;">taux d'occupation</span>
+    </div>
+    <div style="background: #0E0C09; padding: 34px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
+      <span style="font: 800 40px 'Archivo'; color: #C8963E;">365j/365</span><span style="font: 500 13px 'Public Sans'; color: #9A8F79;">d'ouverture</span>
+    </div>
+    <div style="background: #0E0C09; padding: 34px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
+      <span style="font: 800 40px 'Archivo'; color: #C8963E;">2005</span><span style="font: 500 13px 'Public Sans'; color: #9A8F79;">ouverture</span>
+    </div>
+  </div>
+
+  <!-- ═══ MISSION ═══ -->
+  <div id="mission" data-reveal style="padding: 100px 56px 70px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px;">
+    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">NOTRE MISSION</span>
+    <h2 style="font: 800 40px/1.15 'Archivo'; margin: 0; text-transform: uppercase; max-width: 760px;">Accompagner avec dignité, soutenir l'autonomie</h2>
+    <p style="font: 400 17px/1.7 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 820px;">Le Foyer accueille des adultes (hommes et femmes, à partir de 18 ans) présentant une déficience intellectuelle et/ou des troubles psychiques, titulaires d'une RQTH et engagés dans une activité professionnelle en ESAT, entreprise adaptée ou milieu ordinaire.</p>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; padding: 0 56px 90px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+    <div data-reveal style="border: 1px solid rgba(200,150,62,0.3); padding: 34px; display: flex; flex-direction: column; gap: 12px; transition: background 0.4s;" style-hover="background: #1A1610;">
+      <span style="font: 600 12px 'Archivo'; letter-spacing: 3px; color: #C8963E;">UN LIEU DE VIE</span>
+      <span style="font: 400 15px/1.65 'Public Sans'; color: #CFC5B0;">30 chambres individuelles meublées et 15 studios équipés dans un cadre résidentiel à Stains, intégré au cœur de la cité.</span>
+    </div>
+    <div data-reveal style="border: 1px solid rgba(200,150,62,0.3); padding: 34px; display: flex; flex-direction: column; gap: 12px; transition: background 0.4s;" style-hover="background: #1A1610;">
+      <span style="font: 600 12px 'Archivo'; letter-spacing: 3px; color: #C8963E;">UN ACCOMPAGNEMENT INDIVIDUALISÉ</span>
+      <span style="font: 400 15px/1.65 'Public Sans'; color: #CFC5B0;">Une équipe pluridisciplinaire dédiée à l'épanouissement, à l'autonomie et à l'inclusion sociale et professionnelle de chacun.</span>
+    </div>
+    <div data-reveal style="border: 1px solid rgba(200,150,62,0.3); padding: 34px; display: flex; flex-direction: column; gap: 12px; transition: background 0.4s;" style-hover="background: #1A1610;">
+      <span style="font: 600 12px 'Archivo'; letter-spacing: 3px; color: #C8963E;">UN PARCOURS ÉVOLUTIF</span>
+      <span style="font: 400 15px/1.65 'Public Sans'; color: #CFC5B0;">Du logement collectif vers le studio, jusqu'à un logement extérieur lorsque c'est possible — grâce à des stages progressifs.</span>
+    </div>
+  </div>
+
+  <!-- ═══ PUBLIC ACCUEILLI ═══ -->
+  <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.25); display: grid; grid-template-columns: 1fr 1fr; gap: 72px; padding: 100px 56px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">PUBLIC ACCUEILLI</span>
+      <h2 style="font: 800 36px/1.15 'Archivo'; margin: 0; text-transform: uppercase;">45 adultes du Nord-Ouest de la Seine-Saint-Denis</h2>
+      <p style="font: 400 16px/1.7 'Public Sans'; color: #CFC5B0; margin: 0;">Le Foyer accueille des adultes reconnus en situation de handicap, résidant prioritairement dans le département du 93. L'accueil est subordonné à une activité professionnelle en ESAT, entreprise adaptée ou milieu ordinaire.</p>
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.5 'Public Sans'; color: #CFC5B0;">Capacité : 45 places (30 chambres + 15 studios)</span></div>
+        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.5 'Public Sans'; color: #CFC5B0;">Service éducatif : 7h–22h, 7j/7</span></div>
+        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.5 'Public Sans'; color: #CFC5B0;">Veilleur de nuit + astreinte éducative</span></div>
+        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.5 'Public Sans'; color: #CFC5B0;">Projet personnalisé pour chaque résident</span></div>
+        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="color: #C8963E;">✦</span><span style="font: 400 15px/1.5 'Public Sans'; color: #CFC5B0;">Liens maintenus avec familles et tuteurs</span></div>
+      </div>
+    </div>
+    <div style="background: #1A1610; border: 1px solid rgba(200,150,62,0.3); padding: 44px; display: flex; flex-direction: column; gap: 16px; align-self: start;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 3px; color: #C8963E;">PROJET D'ÉTABLISSEMENT</span>
+      <p style="font: 400 16px/1.7 'Public Sans'; color: #CFC5B0; margin: 0;">L'accompagnement éducatif est flexible, attentif aux besoins spécifiques et aux aspirations de chaque résident. Notre équipe garantit un environnement convivial, structurant et sécurisé.</p>
+      <p style="font: 400 16px/1.7 'Public Sans'; color: #CFC5B0; margin: 0;"><strong style="color: #F5EFE3;">Les 5 axes :</strong> épanouissement personnel, maintien de l'autonomie, valorisation des compétences, développement des liens sociaux, inclusion sociale et professionnelle.</p>
+    </div>
+  </div>
+
+  <!-- ═══ VIE AU FOYER ═══ -->
+  <div style="border-top: 1px solid rgba(200,150,62,0.25);">
+    <div data-reveal style="padding: 90px 56px 50px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">LA VIE AU FOYER</span>
+      <h2 style="font: 800 40px/1.15 'Archivo'; margin: 0; text-transform: uppercase; max-width: 720px;">Un cadre de vie structurant et bienveillant</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 32px; padding: 0 56px 100px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+      <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 17px 'Archivo';">Chambres individuelles</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">30 chambres meublées avec espace personnel, au sein de la résidence collective.</span>
+      </div>
+      <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 17px 'Archivo';">Studios équipés</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">15 studios avec cuisine, pour favoriser l'autonomie dans un cadre semi-autonome.</span>
+      </div>
+      <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 17px 'Archivo';">Cuisine pédagogique</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Espace rénové pour l'apprentissage autour des repas et du quotidien.</span>
+      </div>
+      <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 17px 'Archivo';">Ateliers créatifs</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Peinture, danse, musique, couture inter-services — expression au quotidien.</span>
+      </div>
+      <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 17px 'Archivo';">Activités sportives</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Piscine, sport collectif, sorties — bien-être physique et socialisation.</span>
+      </div>
+      <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 17px 'Archivo';">Bien-être &amp; sorties</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Sorties culturelles, séjours, transferts éducatifs — ouverture sur le monde.</span>
+      </div>
+      <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 17px 'Archivo';">Présence 24h/24</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Veilleur de nuit et astreinte éducative, tous les jours de l'année.</span>
+      </div>
+      <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 17px 'Archivo';">Projet personnalisé</span>
+        <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Chaque résident co-construit son projet de vie avec l'équipe et ses proches.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CONTACT ═══ -->
+  <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding: 100px 56px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 22px; background: radial-gradient(ellipse at 50% 100%, rgba(200,150,62,0.14), transparent 65%);">
+    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">CONTACTER LE FOYER</span>
+    <h2 style="font: 800 44px/1.1 'Archivo'; margin: 0; text-transform: uppercase;">Une admission, une question ?</h2>
+    <div style="display: flex; gap: 40px; font: 400 16px/1.6 'Public Sans'; color: #CFC5B0; flex-wrap: wrap; justify-content: center;">
+      <span>Mail des Trois Rivières, 93240 Stains</span>
+      <a href="tel:0149462440" style="color: #C8963E;">01 49 46 24 40</a>
+      <a href="mailto:residence@asso-leila.org" style="color: #C8963E;">residence@asso-leila.org</a>
+      <span>Ouvert 365 jours par an</span>
+    </div>
+    <div style="display: flex; gap: 14px;">
+      <a href="Contact.dc.html" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; padding: 15px 30px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Formulaire de contact</a>
+      <a href="Candidater.dc.html" style="border: 1px solid rgba(245,239,227,0.45); color: #F5EFE3; font: 700 15px 'Archivo'; padding: 15px 30px; border-radius: 999px; transition: transform 0.3s;" style-hover="transform: translateY(-3px);">Candidater à un stage</a>
+    </div>
+  </div>
+
+  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    if (this._revealDone) return;
+    this._revealDone = true;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = document.querySelectorAll('[data-reveal]');
+    if (reduced || !('IntersectionObserver' in window)) return;
+    els.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.9) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.9s ease, transform 0.9s ease';
+      }
+    });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

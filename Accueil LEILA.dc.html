@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
+  a { color: #F5EFE3; text-decoration: none; }
+  a:hover { color: #C8963E; }
+  @keyframes kenburns { 0% { transform: scale(1) translateX(0); } 100% { transform: scale(1.14) translateX(-2%); } }
+  @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  @keyframes spinSlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  @keyframes bounceDown { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+</style>
+</helmet>
+
+<div data-screen-label="Accueil" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <dc-import name="Nav" active="accueil" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+
+  <!-- ═══ HERO ═══ -->
+  <div style="position: relative; height: calc(100vh - 78px); min-height: 620px; overflow: hidden;">
+    <img data-anim src="images/foyer-batiment.jpeg" alt="Le Foyer Les Trois Rivières à Stains" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kenburns 18s ease-in-out infinite alternate;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,12,9,0.55) 0%, rgba(14,12,9,0.25) 40%, rgba(14,12,9,0.95) 100%);"></div>
+    <div style="position: absolute; left: 56px; right: 56px; bottom: 96px; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;">
+      <div style="display: flex; flex-direction: column; gap: 22px; max-width: 760px;">
+        <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">DEPUIS 1963 · STAINS, SEINE-SAINT-DENIS</span>
+        <h1 style="font: 800 68px/1.04 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">Ici, chaque vie<br>écrit son histoire.</h1>
+        <p style="font: 400 19px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 560px; animation: fadeUp 0.9s 0.6s ease both;">L'association LEILA accompagne adultes et enfants en situation de handicap mental et/ou psychique, à travers quatre établissements et services : le Foyer Les Trois Rivières, le SAJ, le SAVS et l'EMP Henri Wallon.</p>
+        <div style="display: flex; gap: 14px; animation: fadeUp 0.9s 0.8s ease both;">
+          <a href="#etablissements" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; padding: 15px 30px; border-radius: 999px; transition: transform 0.3s, box-shadow 0.3s;" style-hover="transform: translateY(-3px); box-shadow: 0 12px 28px rgba(200,150,62,0.35);">Découvrir nos services</a>
+          <a href="#contact" style="border: 1px solid rgba(245,239,227,0.45); color: #F5EFE3; font: 700 15px 'Archivo'; padding: 15px 30px; border-radius: 999px; transition: transform 0.3s, border-color 0.3s;" style-hover="transform: translateY(-3px); border-color: #C8963E;">Nous contacter</a>
+        </div>
+      </div>
+      <div data-anim style="flex-shrink: 0; width: 124px; height: 124px; animation: spinSlow 22s linear infinite;">
+        <div style="width: 124px; height: 124px; border: 1px solid #C8963E; border-radius: 50%; display: grid; place-items: center; font: 600 11px/1.5 'Archivo'; letter-spacing: 2px; color: #C8963E; text-align: center;">60 ANS<br>D'ACCUEIL<br>✦</div>
+      </div>
+    </div>
+    <div style="position: absolute; bottom: 26px; left: 50%; margin-left: -12px; color: #C8963E; font-size: 22px; animation: bounceDown 2s ease-in-out infinite;">↓</div>
+  </div>
+
+  <!-- ═══ MARQUEE ═══ -->
+  <div data-anim style="border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35); overflow: hidden; padding: 20px 0;">
+    <div style="display: flex; gap: 64px; width: max-content; animation: marquee 26s linear infinite; font: 600 17px 'Archivo'; letter-spacing: 2px; color: #D8CFBC; white-space: nowrap;">
+      <span>FOYER LES TROIS RIVIÈRES</span><span style="color: #C8963E;">✦</span><span>SAJ — ACCUEIL DE JOUR</span><span style="color: #C8963E;">✦</span><span>SAVS — VIE SOCIALE</span><span style="color: #C8963E;">✦</span><span>EMP HENRI WALLON</span><span style="color: #C8963E;">✦</span>
+      <span>FOYER LES TROIS RIVIÈRES</span><span style="color: #C8963E;">✦</span><span>SAJ — ACCUEIL DE JOUR</span><span style="color: #C8963E;">✦</span><span>SAVS — VIE SOCIALE</span><span style="color: #C8963E;">✦</span><span>EMP HENRI WALLON</span><span style="color: #C8963E;">✦</span>
+    </div>
+  </div>
+
+  <!-- ═══ PRÉSENTATION + CHIFFRES ═══ -->
+  <div data-reveal style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 72px; padding: 110px 56px; align-items: center; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">UNE HISTOIRE ASSOCIATIVE ENGAGÉE</span>
+      <h2 style="font: 800 42px/1.15 'Archivo'; margin: 0; text-transform: uppercase;">L'association LEILA en quelques mots</h2>
+      <p style="font: 400 18px/1.7 'Public Sans'; color: #CFC5B0; margin: 0;">Créée en 1963, l'association LEILA accompagne adultes et enfants en situation de handicap mental et/ou psychique à Stains, en Seine-Saint-Denis. Quatre établissements et services, une équipe pluridisciplinaire, et un même engagement : la dignité, l'autonomie et l'inclusion.</p>
+      <a href="#valeurs" style="color: #C8963E; font: 700 15px 'Archivo'; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;">Nos valeurs →</a>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(200,150,62,0.3); border: 1px solid rgba(200,150,62,0.3);">
+      <div style="background: #0E0C09; padding: 36px 30px; display: flex; flex-direction: column; gap: 4px;">
+        <span style="font: 800 44px 'Archivo'; color: #C8963E;">4</span>
+        <span style="font: 500 14px 'Public Sans'; color: #9A8F79;">établissements et services</span>
+      </div>
+      <div style="background: #0E0C09; padding: 36px 30px; display: flex; flex-direction: column; gap: 4px;">
+        <span style="font: 800 44px 'Archivo'; color: #C8963E;">60+</span>
+        <span style="font: 500 14px 'Public Sans'; color: #9A8F79;">années d'engagement</span>
+      </div>
+      <div style="background: #0E0C09; padding: 36px 30px; display: flex; flex-direction: column; gap: 4px;">
+        <span style="font: 800 44px 'Archivo'; color: #C8963E;">100+</span>
+        <span style="font: 500 14px 'Public Sans'; color: #9A8F79;">personnes accompagnées</span>
+      </div>
+      <div style="background: #0E0C09; padding: 36px 30px; display: flex; flex-direction: column; gap: 4px;">
+        <span style="font: 800 44px 'Archivo'; color: #C8963E;">93240</span>
+        <span style="font: 500 14px 'Public Sans'; color: #9A8F79;">Stains, Seine-Saint-Denis</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ÉTABLISSEMENTS ═══ -->
+  <div id="etablissements" style="border-top: 1px solid rgba(200,150,62,0.25);">
+    <div data-reveal style="padding: 90px 56px 50px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">4 ÉTABLISSEMENTS ET SERVICES</span>
+      <h2 style="font: 800 42px/1.15 'Archivo'; margin: 0; text-transform: uppercase; max-width: 700px;">Des services distincts, un engagement commun</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(200,150,62,0.25); border-top: 1px solid rgba(200,150,62,0.25); border-bottom: 1px solid rgba(200,150,62,0.25);">
+      <div data-reveal style="background: #0E0C09; padding: 52px 56px; display: flex; flex-direction: column; gap: 16px; transition: background 0.4s;" style-hover="background: #1A1610;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 13px 'Archivo'; letter-spacing: 3px; color: #C8963E;">01 — HÉBERGEMENT</span>
+          <span style="font: 500 13px 'Public Sans'; color: #9A8F79;">45 places · 365j/365</span>
+        </div>
+        <h3 style="font: 800 28px 'Archivo'; margin: 0;">Foyer Les Trois Rivières</h3>
+        <p style="font: 400 16px/1.65 'Public Sans'; color: #CFC5B0; margin: 0;">Hébergement pour adultes en situation de handicap travaillant en ESAT. Cadre de vie sécurisant et structurant : 30 chambres, 15 studios, service éducatif de 7h à 22h, veilleur de nuit et astreinte.</p>
+        <a href="Foyer.dc.html" style="color: #C8963E; font: 700 14px 'Archivo'; letter-spacing: 1px;">Découvrir le Foyer →</a>
+      </div>
+      <div data-reveal style="background: #0E0C09; padding: 52px 56px; display: flex; flex-direction: column; gap: 16px; transition: background 0.4s;" style-hover="background: #1A1610;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 13px 'Archivo'; letter-spacing: 3px; color: #C8963E;">02 — ACCUEIL DE JOUR</span>
+          <span style="font: 500 13px 'Public Sans'; color: #9A8F79;">15 places · L-V 9h-16h</span>
+        </div>
+        <h3 style="font: 800 28px 'Archivo'; margin: 0;">SAJ Les Trois Rivières</h3>
+        <p style="font: 400 16px/1.65 'Public Sans'; color: #CFC5B0; margin: 0;">Service d'Accueil de Jour pour adultes en situation de handicap psychique et/ou mental. Ateliers musique, cuisine, écriture, jardin ; projets ouverts sur le territoire : le Kiosque, La Comète, séjours.</p>
+        <a href="SAJ.dc.html" style="color: #C8963E; font: 700 14px 'Archivo'; letter-spacing: 1px;">Découvrir le SAJ →</a>
+      </div>
+      <div data-reveal style="background: #0E0C09; padding: 52px 56px; display: flex; flex-direction: column; gap: 16px; transition: background 0.4s;" style-hover="background: #1A1610;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 13px 'Archivo'; letter-spacing: 3px; color: #C8963E;">03 — VIE SOCIALE</span>
+          <span style="font: 500 13px 'Public Sans'; color: #9A8F79;">42 places · sur RDV</span>
+        </div>
+        <h3 style="font: 800 28px 'Archivo'; margin: 0;">SAVS Les Trois Rivières</h3>
+        <p style="font: 400 16px/1.65 'Public Sans'; color: #CFC5B0; margin: 0;">Service d'Accompagnement à la Vie Sociale pour adultes vivant à domicile : visites, entretiens, démarches, temps collectifs, 3 logements en sous-location, accompagnement à la parentalité.</p>
+        <a href="SAVS.dc.html" style="color: #C8963E; font: 700 14px 'Archivo'; letter-spacing: 1px;">Découvrir le SAVS →</a>
+      </div>
+      <div data-reveal style="background: #0E0C09; padding: 52px 56px; display: flex; flex-direction: column; gap: 16px; transition: background 0.4s;" style-hover="background: #1A1610;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 13px 'Archivo'; letter-spacing: 3px; color: #C8963E;">04 — ENFANCE</span>
+          <span style="font: 500 13px 'Public Sans'; color: #9A8F79;">Enfants · Stains</span>
+        </div>
+        <h3 style="font: 800 28px 'Archivo'; margin: 0;">EMP Henri Wallon</h3>
+        <p style="font: 400 16px/1.65 'Public Sans'; color: #CFC5B0; margin: 0;">L'Externat Médico-Pédagogique accueille des enfants en situation de handicap mental et/ou psychique. Une approche pluridisciplinaire alliant pédagogie, soin et socialisation.</p>
+        <a href="EMP.dc.html" style="color: #C8963E; font: 700 14px 'Archivo'; letter-spacing: 1px;">Découvrir l'EMP →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ VALEURS ═══ -->
+  <div id="valeurs" style="padding: 110px 56px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+    <div data-reveal style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 56px;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">NOS ENGAGEMENTS</span>
+      <h2 style="font: 800 42px/1.15 'Archivo'; margin: 0; text-transform: uppercase; max-width: 720px;">Des valeurs partagées entre tous nos services</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 48px;">
+      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
+        <span style="font: 700 19px 'Archivo'; color: #F5EFE3;">Dignité &amp; bienveillance</span>
+        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Une posture professionnelle qui place la personne au cœur, dans le respect de ses choix et de son histoire.</span>
+      </div>
+      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
+        <span style="font: 700 19px 'Archivo'; color: #F5EFE3;">Autodétermination</span>
+        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Soutenir l'expression, la participation et les choix des personnes accompagnées dans leur quotidien.</span>
+      </div>
+      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
+        <span style="font: 700 19px 'Archivo'; color: #F5EFE3;">Inclusion</span>
+        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Tisser des liens avec le territoire, les partenaires et les acteurs du droit commun.</span>
+      </div>
+      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
+        <span style="font: 700 19px 'Archivo'; color: #F5EFE3;">Formation continue</span>
+        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Une équipe pluridisciplinaire qui se forme, se questionne et accueille des stagiaires.</span>
+      </div>
+      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
+        <span style="font: 700 19px 'Archivo'; color: #F5EFE3;">Travail en réseau</span>
+        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Liens avec les ESAT, le CMP, les bailleurs, les institutions et les associations partenaires.</span>
+      </div>
+      <div data-reveal style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(200,150,62,0.35); padding-top: 22px;">
+        <span style="font: 700 19px 'Archivo'; color: #F5EFE3;">Amélioration continue</span>
+        <span style="font: 400 15px/1.6 'Public Sans'; color: #9A8F79;">Démarche qualité, recherche participative (CapDroits), CPOM, évaluations régulières.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ACTUALITÉS ═══ -->
+  <div id="actualites" style="border-top: 1px solid rgba(200,150,62,0.25); padding: 110px 56px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+    <div data-reveal style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; gap: 24px;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">ACTUALITÉS</span>
+        <h2 style="font: 800 42px/1.15 'Archivo'; margin: 0; text-transform: uppercase;">Les dernières nouvelles</h2>
+      </div>
+      <a href="Actualites.dc.html" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1.5px; padding: 12px 24px; border-radius: 999px; white-space: nowrap; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">TOUTES LES ACTUALITÉS →</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
+      <div data-reveal style="display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(200,150,62,0.25); transition: transform 0.35s, border-color 0.35s;" style-hover="transform: translateY(-6px); border-color: rgba(200,150,62,0.6);">
+        <div style="height: 200px; background: repeating-linear-gradient(45deg, #1A1610, #1A1610 12px, #14110B 12px, #14110B 24px); display: grid; place-items: center;">
+          <span style="font: 400 12px monospace; color: #9A8F79; letter-spacing: 1px;">[ photo actualité ]</span>
+        </div>
+        <div style="padding: 26px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">SAJ · VIE DU SERVICE</span>
+          <span style="font: 700 19px/1.3 'Archivo'; color: #F5EFE3;">Le Kiosque ouvre ses portes au quartier</span>
+          <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Le projet du SAJ investit le Moulin Neuf avec un espace ouvert à tous.</span>
+        </div>
+      </div>
+      <div data-reveal style="display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(200,150,62,0.25); transition: transform 0.35s, border-color 0.35s;" style-hover="transform: translateY(-6px); border-color: rgba(200,150,62,0.6);">
+        <div style="height: 200px; background: repeating-linear-gradient(45deg, #1A1610, #1A1610 12px, #14110B 12px, #14110B 24px); display: grid; place-items: center;">
+          <span style="font: 400 12px monospace; color: #9A8F79; letter-spacing: 1px;">[ photo actualité ]</span>
+        </div>
+        <div style="padding: 26px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">FOYER · ÉVÉNEMENT</span>
+          <span style="font: 700 19px/1.3 'Archivo'; color: #F5EFE3;">Fête d'été des Trois Rivières</span>
+          <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Résidents, familles et équipes réunis pour la grande fête annuelle du Foyer.</span>
+        </div>
+      </div>
+      <div data-reveal style="display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(200,150,62,0.25); transition: transform 0.35s, border-color 0.35s;" style-hover="transform: translateY(-6px); border-color: rgba(200,150,62,0.6);">
+        <div style="height: 200px; background: repeating-linear-gradient(45deg, #1A1610, #1A1610 12px, #14110B 12px, #14110B 24px); display: grid; place-items: center;">
+          <span style="font: 400 12px monospace; color: #9A8F79; letter-spacing: 1px;">[ photo actualité ]</span>
+        </div>
+        <div style="padding: 26px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #C8963E;">SAVS · PROJET</span>
+          <span style="font: 700 19px/1.3 'Archivo'; color: #F5EFE3;">CapDroits : la recherche participative continue</span>
+          <span style="font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Les personnes accompagnées participent à la démarche sur l'exercice des droits.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ LOCALISATION ═══ -->
+  <div data-reveal style="border-top: 1px solid rgba(200,150,62,0.25); display: grid; grid-template-columns: 1fr 1.4fr; align-items: stretch;">
+    <div style="padding: 90px 56px; display: flex; flex-direction: column; gap: 20px; justify-content: center;">
+      <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">LOCALISATION</span>
+      <h2 style="font: 800 38px/1.15 'Archivo'; margin: 0; text-transform: uppercase;">Tous nos services à Stains</h2>
+      <p style="font: 400 16px/1.65 'Public Sans'; color: #CFC5B0; margin: 0;">Le Foyer, le SAJ et le SAVS sont implantés au quartier du Moulin Neuf, à Stains.</p>
+      <div style="display: flex; flex-direction: column; gap: 6px; font: 400 16px/1.6 'Public Sans'; color: #9A8F79;">
+        <span>Mail des Trois Rivières — Moulin Neuf</span>
+        <span>93240 STAINS</span>
+        <a href="tel:0149462440" style="color: #C8963E;">01 49 46 24 40</a>
+        <a href="mailto:contact@asso-leila.org" style="color: #C8963E;">contact@asso-leila.org</a>
+      </div>
+    </div>
+    <div style="min-height: 440px; filter: grayscale(1) invert(0.92) sepia(0.3) saturate(1.4) hue-rotate(-10deg);">
+      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=2.3750%2C48.9490%2C2.4060%2C48.9630&amp;layer=mapnik&amp;marker=48.9562%2C2.3905" width="100%" height="100%" style="border: 0; display: block; min-height: 440px;" loading="lazy" title="Plan d'accès aux services de l'Association LEILA"></iframe>
+    </div>
+  </div>
+
+  <!-- ═══ CTA ═══ -->
+  <div id="contact" data-reveal style="border-top: 1px solid rgba(200,150,62,0.35); padding: 120px 56px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; background: radial-gradient(ellipse at 50% 100%, rgba(200,150,62,0.14), transparent 65%);">
+    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E;">PARLONS-EN</span>
+    <h2 style="font: 800 52px/1.1 'Archivo'; margin: 0; text-transform: uppercase; max-width: 800px;">Une question, une demande, un projet ?</h2>
+    <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 560px;">Notre équipe est à votre écoute pour toute information sur nos services, une admission ou un partenariat.</p>
+    <div style="display: flex; gap: 14px;">
+      <a href="mailto:contact@asso-leila.org" style="background: #C8963E; color: #14110B; font: 700 15px 'Archivo'; padding: 16px 32px; border-radius: 999px; transition: transform 0.3s, box-shadow 0.3s;" style-hover="transform: translateY(-3px); box-shadow: 0 12px 28px rgba(200,150,62,0.35);">Nous contacter</a>
+      <a href="Candidater.dc.html" style="border: 1px solid rgba(245,239,227,0.45); color: #F5EFE3; font: 700 15px 'Archivo'; padding: 16px 32px; border-radius: 999px; transition: transform 0.3s, border-color 0.3s;" style-hover="transform: translateY(-3px); border-color: #C8963E;">Candidater à un stage</a>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;animations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Animations&quot;},&quot;vitesseDefilement&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:26,&quot;min&quot;:8,&quot;max&quot;:60,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Animations&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this.applyAnimations();
+    this.setupReveal();
+  }
+
+  componentDidUpdate() {
+    this.applyAnimations();
+  }
+
+  applyAnimations() {
+    const on = this.props.animations ?? true;
+    const speed = this.props.vitesseDefilement ?? 26;
+    document.querySelectorAll('[data-anim]').forEach(el => {
+      el.style.animationPlayState = on ? 'running' : 'paused';
+    });
+    document.querySelectorAll('[data-anim] > div').forEach(() => {});
+    const marquees = document.querySelectorAll('[data-anim] + * , [data-anim]');
+    document.querySelectorAll('div').forEach(el => {
+      if (el.style.animationName === 'marquee' || (el.getAttribute('style') || '').includes('marquee')) {
+        el.style.animationDuration = speed + 's';
+        el.style.animationPlayState = on ? 'running' : 'paused';
+      }
+    });
+  }
+
+  setupReveal() {
+    if (this._revealDone) return;
+    this._revealDone = true;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = document.querySelectorAll('[data-reveal]');
+    if (reduced || !('IntersectionObserver' in window)) return;
+    els.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.9) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.9s ease, transform 0.9s ease';
+      }
+    });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+  }
+
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

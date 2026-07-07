@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0E0C09; font-family: 'Public Sans', sans-serif; }
+  a { color: #F5EFE3; text-decoration: none; }
+  a:hover { color: #C8963E; }
+  @keyframes fadeUp { 0% { opacity: 0; transform: translateY(28px); } 100% { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+
+<div data-screen-label="Documents" style="background: #0E0C09; color: #F5EFE3; min-height: 100vh;">
+
+  <dc-import name="Nav" style="position: sticky; top: 0; z-index: 50;" hint-size="100%,80px"></dc-import>
+
+  <!-- ═══ EN-TÊTE ═══ -->
+  <div style="padding: 100px 56px 60px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; border-bottom: 1px solid rgba(200,150,62,0.25);">
+    <span style="font: 600 13px 'Archivo'; letter-spacing: 4px; color: #C8963E; animation: fadeUp 0.9s 0.2s ease both;">RESSOURCES</span>
+    <h1 style="font: 800 56px/1.05 'Archivo'; margin: 0; text-transform: uppercase; animation: fadeUp 0.9s 0.4s ease both;">Documents</h1>
+    <p style="font: 400 18px/1.6 'Public Sans'; color: #CFC5B0; margin: 0; max-width: 620px; animation: fadeUp 0.9s 0.6s ease both;">Rapports, projets d'établissement, livrets d'accueil et documents officiels de l'association.</p>
+  </div>
+
+  <!-- ═══ LISTE ═══ -->
+  <div style="padding: 70px 56px 100px; max-width: 1400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column;">
+    <div data-reveal style="display: grid; grid-template-columns: 1fr auto auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font: 700 19px 'Archivo';">Livret d'accueil — Foyer Les Trois Rivières</span>
+        <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Présentation du Foyer, règles de vie, droits des résidents</span>
+      </div>
+      <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">PDF</span>
+      <a href="#" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px; padding: 10px 22px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">Télécharger ↓</a>
+    </div>
+    <div data-reveal style="display: grid; grid-template-columns: 1fr auto auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font: 700 19px 'Archivo';">Projet d'établissement</span>
+        <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Les 5 axes de l'accompagnement éducatif</span>
+      </div>
+      <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">PDF</span>
+      <a href="#" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px; padding: 10px 22px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">Télécharger ↓</a>
+    </div>
+    <div data-reveal style="display: grid; grid-template-columns: 1fr auto auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font: 700 19px 'Archivo';">Rapport d'activité</span>
+        <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Bilan annuel de l'association et de ses services</span>
+      </div>
+      <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">PDF</span>
+      <a href="#" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px; padding: 10px 22px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">Télécharger ↓</a>
+    </div>
+    <div data-reveal style="display: grid; grid-template-columns: 1fr auto auto; gap: 32px; align-items: center; padding: 26px 0; border-top: 1px solid rgba(200,150,62,0.35); border-bottom: 1px solid rgba(200,150,62,0.35); transition: background 0.3s;" style-hover="background: #1A1610;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font: 700 19px 'Archivo';">Dossier de demande d'admission</span>
+        <span style="font: 400 14px 'Public Sans'; color: #9A8F79;">Formulaire à compléter pour toute demande d'admission</span>
+      </div>
+      <span style="font: 600 12px 'Archivo'; letter-spacing: 2px; color: #9A8F79;">PDF</span>
+      <a href="#" style="border: 1px solid rgba(200,150,62,0.5); color: #C8963E; font: 700 13px 'Archivo'; letter-spacing: 1px; padding: 10px 22px; border-radius: 999px; transition: background 0.3s, color 0.3s;" style-hover="background: #C8963E; color: #14110B;">Télécharger ↓</a>
+    </div>
+    <div data-reveal style="margin-top: 40px; border: 1px dashed rgba(200,150,62,0.4); padding: 22px 28px; font: 400 14px/1.6 'Public Sans'; color: #9A8F79;">Les documents sont gérés depuis l'espace admin — cette liste affichera automatiquement les fichiers publiés.</div>
+  </div>
+
+  <dc-import name="Footer" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    if (this._revealDone) return;
+    this._revealDone = true;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = document.querySelectorAll('[data-reveal]');
+    if (reduced || !('IntersectionObserver' in window)) return;
+    els.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.9) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.9s ease, transform 0.9s ease';
+      }
+    });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
